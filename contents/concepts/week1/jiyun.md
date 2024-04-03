@@ -190,6 +190,8 @@ Servlet 객체를 관리해주는 Container (= Web Container, WAS)
 
   - 위에서 아래로 스캔해서 파일에 등록된 Bean을 생성
 
+<br>
+
 - Spring Boot
 
   - Annotation을 이용해 Bean 등록
