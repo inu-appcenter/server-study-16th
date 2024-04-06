@@ -93,7 +93,7 @@ Servlet 객체를 관리해주는 Container (= Web Container, WAS)
 
 <br>
 
-![servletMapping](servletMapping.png)
+![servletMapping](../Img/servletMapping.png)
 
 > 위의 사진은 servlet 설정을 하는 web.xml파일의 일부분이다.
 > <br> `<servlet-mapping>` 단락을 보면 `/hello` 라는 클라이언트의 요청이 들어왔을 때, `HelloServlet` 서블릿에서 처리한다고 설정해놓음.
@@ -101,7 +101,7 @@ Servlet 객체를 관리해주는 Container (= Web Container, WAS)
    <br>
 
 **Servlet 생명주기 메소드**
-![servlet_life_cycle](servletLifeCycle.png)
+![servlet_life_cycle](../Img/servletLifeCycle.png)
 
 - init() <br>
 
@@ -126,7 +126,7 @@ Servlet 객체를 관리해주는 Container (= Web Container, WAS)
 
 ## :sparkles: Servlet Container 동작 과정
 
-![servlet_container](servletContainer.png)
+![servlet_container](../Img/servletContainer.png)
 
 1. 웹서버가 HTTP 요청을 받고 서블릿 컨테이너에게 전달 (동적 컨텐츠에 관련된 요청)
 
@@ -206,7 +206,7 @@ Servlet 객체를 관리해주는 Container (= Web Container, WAS)
 
 **Bean 생명 주기**
 
-![bean_life_cycle](beanLifeCycle.png)
+![bean_life_cycle](../Img/beanLifeCycle.png)
 
 1. Spring Container가 생성됨
 2. Spring Bean 생성
@@ -222,12 +222,12 @@ Servlet 객체를 관리해주는 Container (= Web Container, WAS)
 
 ## :sparkles: Front Controller?
 
-![before_frontController](beforeFrontController.png)
+![before_frontController](../Img/beforeFrontController.png)
 
 Servlet을 이용해 클라이언트의 요청을 처리한다는 것을 위에서 배웠다. Servlet이 각각의 요청을 처리할 때, 공통적으로 처리하는 부분이 존재한다. 공통 처리부분이라 함은 인증과 인가, 받은 요청을 컨트롤러가 처리하기 쉽도록 변환, 처리 결과를 클라이언트에게 전달하기 위한 데이터 변환 등이 있다.
 <br> 위의 그림처럼 공통 로직을 여러 컨트롤러에 중복 작성돼있는 것은 비효율! 이를 보완하고자 Front Controller가 등장했다.
 
-![after_frontController](afterFrontController.png)
+![after_frontController](../Img/afterFrontController.png)
 
 Front Controller는 이름 그대로 컨트롤러 앞에 있는 서블릿이다.
 <br>비즈니스 로직을 처리하는 Handler 즉, Controller 앞에 위치해 공통 로직을 수행한 뒤 Controller에게 결과를 보내준다. 이 때문에 개발자는 공통 로직을 매번 작성해야 하는 번거로움이 덜게 돼 핵심 로직에만 집중이 가능해짐
@@ -257,7 +257,7 @@ _(비즈니스 로직, 예외처리와 같은 실제 작업은 컨트롤러를 �
 
 **DispatcherServlet 동작 과정**
 
-![servletWork](servletWork.png)
+![servletWork](../Img/servletWork.png)
 
 1. DispatcherServlet이 서블릿 컨테이너에서 클라이언트의 모든 요청을 받음
 
