@@ -9,6 +9,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface TodoRepository extends JpaRepository<Todo, Long> {
-    List<Todo> findAllByUserAndProgressAndDeletedOrderByDeadlineAscPriorityAsc(User user, Progress progress, boolean isDeleted);
-    List<Todo> findAllByFolderAndProgressAndDeletedOrderByDeadlineAscPriorityAsc(Folder folder, Progress progress, boolean isDeleted);
+    List<Todo> findAllByUserAndProgressAndIsDeletedOrderByDeadlineAscPriorityAsc(User user, Progress progress, Boolean isDeleted);
+    List<Todo> findAllByFolderAndProgressAndIsDeletedOrderByDeadlineAscPriorityAsc(Folder folder, Progress progress, Boolean isDeleted);
 }

@@ -32,7 +32,7 @@ public class Todo {
     @NotNull
     private Progress progress;
 
-    private boolean isDeleted;
+    private Boolean isDeleted;
 
     private LocalDateTime deletedTime;
 
