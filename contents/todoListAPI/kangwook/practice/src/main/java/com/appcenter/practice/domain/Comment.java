@@ -3,10 +3,9 @@ package com.appcenter.practice.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,8 +28,7 @@ public class Comment extends BaseEntity{
     //삭제 여부에 따라 "삭제된 댓글입니다." 작성
     private boolean deleted;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "member_id",nullable = false)
     private Member member;
 
@@ -46,15 +44,15 @@ public class Comment extends BaseEntity{
     private List<Comment> child=new ArrayList<>();
 
 
+    @Builder
     public Comment(String content, int level, Member member, ToDo toDo, Comment parent) {
         this.content = content;
         this.level = level;
         this.member = member;
         this.toDo = toDo;
         this.parent=parent;
-
     }
 
-    public void changwDeleted(boolean deleted){ this.deleted=true;}
+    public void changeDeleted(boolean deleted){ this.deleted=true;}
     public void changeContent(String content){ this.content=content; }
 }

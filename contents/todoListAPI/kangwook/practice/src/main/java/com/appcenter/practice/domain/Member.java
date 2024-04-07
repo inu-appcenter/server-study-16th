@@ -31,7 +31,7 @@ public class Member extends BaseEntity{
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "member",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ToDo> toDoList=new ArrayList<>();
 
     @Builder

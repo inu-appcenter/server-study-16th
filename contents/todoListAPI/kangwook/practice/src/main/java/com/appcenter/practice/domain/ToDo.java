@@ -31,7 +31,7 @@ public class ToDo extends BaseEntity{
     @JoinColumn(name = "member_id",nullable = false)
     private Member member;
 
-    @OneToMany(mappedBy = "toDo",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "toDo",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Comment> commentList= new ArrayList<>();
 
     @Builder
