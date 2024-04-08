@@ -178,7 +178,7 @@ Servlet 객체를 관리해주는 Container (= Web Container, WAS)
 
 - 수동 등록
 
-  - .xml(설정파일)에 직접 Bean 객체 등록
+  - .xml(설정파일) 에 직접 Bean 객체 등록
   - `<beans:beans>` 태그 이용
     <br> <span style="color:gray"> ~~잘 사용하지 않는 방법~~ </span>
 
@@ -190,7 +190,6 @@ Servlet 객체를 관리해주는 Container (= Web Container, WAS)
 
   - 위에서 아래로 스캔해서 파일에 등록된 Bean을 생성
 
-<br>
 
 - Spring Boot
 
