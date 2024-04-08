@@ -246,4 +246,4 @@ amanda가 star와 lovely_bear를 출판했다. 이때 공통 저자로 Tom이 �
 
 <img  src='../Img/manytomany2.png'>
 
-authors&books 엔티티를 따로 만든 뒤, authors, books 엔티티와 `@OnetoMany` 관계를 지어준다 (이때 관계의 주인 = author&books)
+authors&books 엔티티를 추가로 만든 뒤, authors, books 엔티티와 `@OnetoMany` 관계를 지어준다 (이때 관계의 주인 = author&books)
