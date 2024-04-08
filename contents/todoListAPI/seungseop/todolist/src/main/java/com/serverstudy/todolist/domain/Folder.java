@@ -26,7 +26,7 @@ public class Folder {
     private User user;
 
     @Builder
-    public Folder(String name, User user) {
+    protected Folder(String name, User user) {
         this.name = name;
         this.user = user;
     }

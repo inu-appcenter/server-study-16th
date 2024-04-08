@@ -38,7 +38,7 @@ public class User {
     private Set<Role> roles;
 
     @Builder
-    public User(String email, String password, String nickname) {
+    protected User(String email, String password, String nickname) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;

@@ -21,7 +21,7 @@ public class Todo {
     private String title;
 
     @Column(columnDefinition="text")
-    private String describtion;
+    private String description;
 
     private LocalDateTime deadline;
 
@@ -45,9 +45,9 @@ public class Todo {
     private Folder folder;
 
     @Builder
-    public Todo(String title, String describtion, LocalDateTime deadline, Priority priority, Progress progress, User user, Folder folder) {
+    protected Todo(String title, String description, LocalDateTime deadline, Priority priority, Progress progress, User user, Folder folder) {
         this.title = title;
-        this.describtion = describtion;
+        this.description = description;
         this.deadline = deadline;
         this.priority = priority;
         this.progress = progress;
@@ -60,8 +60,8 @@ public class Todo {
         this.title = title;
     }
 
-    public void changeDescribtion(String describtion) {
-       this.describtion = describtion;
+    public void changeDescription(String description) {
+       this.description = description;
     }
 
     public void changeDeadline(LocalDateTime deadline) {
@@ -73,14 +73,14 @@ public class Todo {
     }
 
     public void changeProgress() {
-        if (progress.equals(Progress.Todo)) progress = Progress.Doing;
-        else if (progress.equals(Progress.Doing)) progress = Progress.Done;
-        else progress = Progress.Todo;
+        if (this.progress.equals(Progress.Todo)) this.progress = Progress.Doing;
+        else if (this.progress.equals(Progress.Doing)) this.progress = Progress.Done;
+        else this.progress = Progress.Todo;
     }
 
     public void moveToTrash() {
-        isDeleted = true;
-        deletedTime = LocalDateTime.now();
+        this.isDeleted = true;
+        this.deletedTime = LocalDateTime.now();
     }
 
     public void changeFolder(Folder folder) {
