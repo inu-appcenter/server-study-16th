@@ -36,12 +36,12 @@ public class Comment extends BaseEntity{
     @JoinColumn(name = "toDo_Id",nullable = false)
     private ToDo toDo;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
     private Comment parent;
 
-    @OneToMany(mappedBy = "parent")
-    private List<Comment> child=new ArrayList<>();
+    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
+    private List<Comment> children= new ArrayList<>();
 
 
     @Builder
@@ -53,6 +53,6 @@ public class Comment extends BaseEntity{
         this.parent=parent;
     }
 
-    public void changeDeleted(boolean deleted){ this.deleted=true;}
+    public void changeDeleted(){ this.deleted=true;}
     public void changeContent(String content){ this.content=content; }
 }

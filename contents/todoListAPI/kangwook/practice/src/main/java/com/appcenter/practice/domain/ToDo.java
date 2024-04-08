@@ -31,7 +31,7 @@ public class ToDo extends BaseEntity{
     @JoinColumn(name = "member_id",nullable = false)
     private Member member;
 
-    @OneToMany(mappedBy = "toDo",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "toDo",cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Comment> commentList= new ArrayList<>();
 
     @Builder
@@ -40,7 +40,7 @@ public class ToDo extends BaseEntity{
         this.member = member;
     }
 
-    public void changeCompleted(boolean completed){
+    public void changeCompleted(){
         this.completed = true;
     }
     public void changeContent(String content){
