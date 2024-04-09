@@ -14,7 +14,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ToDo extends BaseEntity{
+public class Todo extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,7 +35,7 @@ public class ToDo extends BaseEntity{
     private List<Comment> commentList= new ArrayList<>();
 
     @Builder
-    public ToDo(String content, Member member) {
+    private Todo(String content, Member member) {
         this.content = content;
         this.member = member;
     }

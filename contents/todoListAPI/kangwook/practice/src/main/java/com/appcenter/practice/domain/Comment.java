@@ -7,9 +7,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -22,9 +19,6 @@ public class Comment extends BaseEntity{
     @Column(nullable = false)
     private String content;
 
-    @Column(nullable = false)
-    private int level;
-
     //삭제 여부에 따라 "삭제된 댓글입니다." 작성
     private boolean deleted;
 
@@ -34,23 +28,14 @@ public class Comment extends BaseEntity{
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "toDo_Id",nullable = false)
-    private ToDo toDo;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_id")
-    private Comment parent;
-
-    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
-    private List<Comment> children= new ArrayList<>();
+    private Todo toDo;
 
 
     @Builder
-    public Comment(String content, int level, Member member, ToDo toDo, Comment parent) {
+    private Comment(String content, Member member, Todo toDo) {
         this.content = content;
-        this.level = level;
         this.member = member;
         this.toDo = toDo;
-        this.parent=parent;
     }
 
     public void changeDeleted(){ this.deleted=true;}

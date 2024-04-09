@@ -32,10 +32,10 @@ public class Member extends BaseEntity{
     private Role role;
 
     @OneToMany(mappedBy = "member",cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    private List<ToDo> toDoList=new ArrayList<>();
+    private List<Todo> todoList =new ArrayList<>();
 
     @Builder
-    public Member(String email, String password, String nickname) {
+    private Member(String email, String password, String nickname) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
