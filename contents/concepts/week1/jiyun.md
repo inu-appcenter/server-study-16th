@@ -93,7 +93,7 @@ Servlet 객체를 관리해주는 Container (= Web Container, WAS)
 
 <br>
 
-![servletMapping](../Img/servletMapping.png)
+![servletMapping](../Img/week1/servletMapping.png)
 
 > 위의 사진은 servlet 설정을 하는 web.xml파일의 일부분이다.
 > <br> `<servlet-mapping>` 단락을 보면 `/hello` 라는 클라이언트의 요청이 들어왔을 때, `HelloServlet` 서블릿에서 처리한다고 설정해놓음.
@@ -101,7 +101,7 @@ Servlet 객체를 관리해주는 Container (= Web Container, WAS)
    <br>
 
 **Servlet 생명주기 메소드**
-![servlet_life_cycle](../Img/servletLifeCycle.png)
+![servlet_life_cycle](../Img/week1/servletLifeCycle.png)
 
 - init() <br>
 
@@ -126,7 +126,7 @@ Servlet 객체를 관리해주는 Container (= Web Container, WAS)
 
 ## :sparkles: Servlet Container 동작 과정
 
-![servlet_container](../Img/servletContainer.png)
+![servlet_container](../Img/week1/servletContainer.png)
 
 1. 웹서버가 HTTP 요청을 받고 서블릿 컨테이너에게 전달 (동적 컨텐츠에 관련된 요청)
 
@@ -190,7 +190,6 @@ Servlet 객체를 관리해주는 Container (= Web Container, WAS)
 
   - 위에서 아래로 스캔해서 파일에 등록된 Bean을 생성
 
-
 - Spring Boot
 
   - Annotation을 이용해 Bean 등록
@@ -205,7 +204,7 @@ Servlet 객체를 관리해주는 Container (= Web Container, WAS)
 
 **Bean 생명 주기**
 
-![bean_life_cycle](../Img/beanLifeCycle.png)
+![bean_life_cycle](../Img/week1/beanLifeCycle.png)
 
 1. Spring Container가 생성됨
 2. Spring Bean 생성
@@ -221,12 +220,12 @@ Servlet 객체를 관리해주는 Container (= Web Container, WAS)
 
 ## :sparkles: Front Controller?
 
-![before_frontController](../Img/beforeFrontController.png)
+![before_frontController](../Img/week1/beforeFrontController.png)
 
 Servlet을 이용해 클라이언트의 요청을 처리한다는 것을 위에서 배웠다. Servlet이 각각의 요청을 처리할 때, 공통적으로 처리하는 부분이 존재한다. 공통 처리부분이라 함은 인증과 인가, 받은 요청을 컨트롤러가 처리하기 쉽도록 변환, 처리 결과를 클라이언트에게 전달하기 위한 데이터 변환 등이 있다.
 <br> 위의 그림처럼 공통 로직을 여러 컨트롤러에 중복 작성돼있는 것은 비효율! 이를 보완하고자 Front Controller가 등장했다.
 
-![after_frontController](../Img/afterFrontController.png)
+![after_frontController](../Img/week1/afterFrontController.png)
 
 Front Controller는 이름 그대로 컨트롤러 앞에 있는 서블릿이다.
 <br>비즈니스 로직을 처리하는 Handler 즉, Controller 앞에 위치해 공통 로직을 수행한 뒤 Controller에게 결과를 보내준다. 이 때문에 개발자는 공통 로직을 매번 작성해야 하는 번거로움이 덜게 돼 핵심 로직에만 집중이 가능해짐
@@ -256,7 +255,7 @@ _(비즈니스 로직, 예외처리와 같은 실제 작업은 컨트롤러를 �
 
 **DispatcherServlet 동작 과정**
 
-![servletWork](../Img/servletWork.png)
+![ifController](../Img/week1/ifController.png)
 
 1. DispatcherServlet이 서블릿 컨테이너에서 클라이언트의 모든 요청을 받음
 
@@ -277,6 +276,8 @@ _(비즈니스 로직, 예외처리와 같은 실제 작업은 컨트롤러를 �
 
 7. DispatcherServlet은 View에게 Model을 전달하고 화면 표시 요청
 8. 최종적으로 서버의 응답을 클라이언트에게 반환
+
+![ifRestController](../Img/week1/ifRestController.png)
 
 <br>
 
@@ -302,13 +303,17 @@ _(비즈니스 로직, 예외처리와 같은 실제 작업은 컨트롤러를 �
 <br>
 
 **Spring Container 동작 과정**
+<img src='../Img/week1/howtoworkSpringContainer.png'></img>
 
 1. Web Application이 실행되면 web.xml을 맨 처음에 읽음
 
-2. web.xml에서 정의된 모든 서블릿과 필터가 공유되는 루트 스프링 컨테이너(=RootContainer, ApplicationContext)를 생성
-3. Application Context에 등록돼있는 설정에 따라 컨테이너가 작동하고 이때 개발자가 작성한 비즈니스 로직, Repository(DAO), VO 등의 객체가 생성
-4. 요청이 오게 되면 서블릿 컨테이너에선 Heap 영역에서 적절한 서블릿을 찾게 되고 없다면 새로 생성하여 DispatcherServlet에게 요청
-5. 이후 데이터 처리를 한다.
+2. ContextLoaderListener가 생성된 다음, ServletContext와 ApplicationContext(=BeanFactory) 생성
+3. ContextLoaderListener가 root-context.xml 로딩
+4. root-context.xml에 등록돼있는 설정에 따라 Spring Container(ROOT) 구동
+5. Client가 Web Application 생성 & 요청
+6. Client가 요청할 때만 DispatcherServlet 생성
+7. DispatcherServlet을 생성하면 Servlet-Context.xml 로딩 & Spring Container 구동
+8. Spring Container가 구동되면서 Web Page에 맞는 화면을 Controller을 Container에 등록
 
 > :dizzy: **web.xml** <br>모든 서블릿 컨테이너에 대한 기본적인 설정과 정보가 적혀 있음.
 > <br>(들어온 모든 요청을 DispatcherServlet으로 가도록 설정함)
