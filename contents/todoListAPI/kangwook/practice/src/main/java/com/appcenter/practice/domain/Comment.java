@@ -20,11 +20,8 @@ public class Comment extends BaseEntity{
     private String content;
 
     //삭제 여부에 따라 "삭제된 댓글입니다." 작성
-    private boolean deleted;
+    private Boolean deleted;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "member_id",nullable = false)
-    private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "toDo_Id",nullable = false)
@@ -32,12 +29,12 @@ public class Comment extends BaseEntity{
 
 
     @Builder
-    private Comment(String content, Member member, Todo toDo) {
+    private Comment(String content,Boolean deleted, Todo toDo) {
         this.content = content;
-        this.member = member;
+        this.deleted = deleted;
         this.toDo = toDo;
     }
 
-    public void changeDeleted(){ this.deleted=true;}
+    public void changeDeleted(Boolean deleted){ this.deleted=deleted;}
     public void changeContent(String content){ this.content=content; }
 }
