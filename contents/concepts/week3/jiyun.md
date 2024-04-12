@@ -22,7 +22,7 @@ HTTP 프로토콜 요청 메시지 (클라이언트 :arrow_right: 서버)
   - Http Request Message의 시작 라인
   - `HTTP Method` `Request target` `HTTP version` 의 3가지 부분으로 구성
 
-    - HTTP Method : 요청의 의도 (GET, POST, PUT, FETCH, DELETE)
+    - HTTP Method : 요청의 의도 (GET, POST, PUT, Patch, DELETE)
 
     - Request targer : HTTP Request가 정송되는 목표 주소
     - HTTP version : HTTP의 version에 따라 Request 메시지의 구조 또는 데이터가 다를 수 있기 때문에 명시
