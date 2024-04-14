@@ -31,6 +31,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 //	implementation 'org.springframework.boot:spring-boot-starter-jdbc' // Jdbc, Driver -> JPA에 포함됨
 	runtimeOnly 'com.h2database:h2' // h2 : runtimeOnly
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0' // 접속 url: localhost:8080/swagger-ui/index.html
 
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
