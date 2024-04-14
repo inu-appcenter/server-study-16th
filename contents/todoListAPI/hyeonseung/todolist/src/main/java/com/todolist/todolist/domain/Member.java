@@ -37,4 +37,16 @@ public class Member extends BaseEntity{
         this.loginId = loginId;
         this.password = password;
     }
+
+    public void updateLoginId(String loginId){
+        this.loginId = loginId;
+    }
+
+    public void updatePassword(String Password){
+        this.password = password;
+    }
+
+    public void updateName(String name){
+        this.name = name;
+    }
 }
