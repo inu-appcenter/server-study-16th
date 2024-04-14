@@ -3,7 +3,7 @@ package com.todolist.todolist.service;
 import com.todolist.todolist.domain.Member;
 import com.todolist.todolist.dto.member.MemberMapper;
 import com.todolist.todolist.dto.member.MemberRequestDto;
-import com.todolist.todolist.dto.member.MemberResponse;
+import com.todolist.todolist.dto.member.MemberResponseDto;
 import com.todolist.todolist.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ public class MemberService {
      */
 
     // 1. 회원가입
-    public MemberResponse create(MemberRequestDto request) {
+    public MemberResponseDto create(MemberRequestDto request) {
        Member member = MemberMapper.INSTANCE.toEntity(request);
        memberRepository.save(member);
 
@@ -41,7 +41,7 @@ public class MemberService {
     }
 
 
-    public MemberResponse searchId(Long id){
+    public MemberResponseDto searchId(Long id){
         Member member =  memberRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
@@ -49,7 +49,7 @@ public class MemberService {
     }
 
     // 4. 정보수정
-    public MemberResponse update(Long id, MemberRequestDto request){
+    public MemberResponseDto update(Long id, MemberRequestDto request){
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         member.updateLoginId(request.getLoginId()); ;

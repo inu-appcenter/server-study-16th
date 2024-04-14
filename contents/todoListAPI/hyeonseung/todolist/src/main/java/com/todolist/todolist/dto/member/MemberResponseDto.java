@@ -1,6 +1,5 @@
 package com.todolist.todolist.dto.member;
 
-import com.todolist.todolist.domain.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,7 +10,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Getter
 @Builder
-public class MemberResponse {
+public class MemberResponseDto {
 
     private Long id;
     private String name;
