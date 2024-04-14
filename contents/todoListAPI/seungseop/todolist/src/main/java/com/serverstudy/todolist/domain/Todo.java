@@ -1,5 +1,6 @@
 package com.serverstudy.todolist.domain;
 
+import com.serverstudy.todolist.dto.TodoDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -36,43 +37,29 @@ public class Todo {
 
     private LocalDateTime deletedTime;
 
-    @ManyToOne(fetch = FetchType.LAZY)    // 안에 들어가는게 무슨 용도인지 확인
-    @JoinColumn(name = "user_id")
-    private User user;
+    private Long userId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "folder_id")
     private Folder folder;
 
     @Builder
-    protected Todo(String title, String description, LocalDateTime deadline, Priority priority, Progress progress, User user, Folder folder) {
-        this.title = title;
+    protected Todo(String title, String description, LocalDateTime deadline, Priority priority, Progress progress, long userId, Folder folder) {
+        if (title == null) this.title = "";
+        else this.title = title;
+
+        if (description == null) this.description = "";
         this.description = description;
+
         this.deadline = deadline;
         this.priority = priority;
         this.progress = progress;
         this.isDeleted = false;
-        this.user = user;
+        this.userId = userId;
         this.folder = folder;
     }
 
-    public void changeTitle(String title) {
-        this.title = title;
-    }
-
-    public void changeDescription(String description) {
-       this.description = description;
-    }
-
-    public void changeDeadline(LocalDateTime deadline) {
-        this.deadline = deadline;
-    }
-
-    public void changePriority(Priority priority) {
-        this.priority = priority;
-    }
-
-    public void changeProgress() {
+    public void switchProgress() {
         if (this.progress.equals(Progress.Todo)) this.progress = Progress.Doing;
         else if (this.progress.equals(Progress.Doing)) this.progress = Progress.Done;
         else this.progress = Progress.Todo;
@@ -86,4 +73,36 @@ public class Todo {
     public void changeFolder(Folder folder) {
         this.folder = folder;
     }
+
+    public void updateTodo(TodoDto.PutReq putReq, Folder folder) {
+        changeTitle(putReq.getTitle());
+        changeDescription(putReq.getDescription());
+        changeDeadline(putReq.getDeadline());
+        changePriority(putReq.getPriority());
+        changeProgress(putReq.getProgress().name());
+        changeFolder(folder);
+    }
+
+    private void changeTitle(String title) {
+        if (title == null) this.title = "";
+        else this.title = title;
+    }
+
+    private void changeDescription(String description) {
+        if (description == null) this.description = "";
+        this.description = description;
+    }
+
+    private void changeDeadline(LocalDateTime deadline) {
+        this.deadline = deadline;
+    }
+
+    private void changePriority(Integer priority) {
+        this.priority = priority == null ? null : Priority.getPriority(priority);
+    }
+
+    private void changeProgress(String progress) {
+        this.progress = progress == null ? null : Progress.getProgress(progress);
+    }
+
 }
