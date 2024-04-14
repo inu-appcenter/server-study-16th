@@ -45,12 +45,15 @@ public interface UserDto {
     @Getter
     class Response {
 
+        private final long id;
+
         private final String email;
 
         private final String nickname;
 
         @Builder
-        private Response(String email, String nickname) {
+        private Response(long id, String email, String nickname) {
+            this.id = id;
             this.email = email;
             this.nickname = nickname;
         }

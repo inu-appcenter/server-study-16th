@@ -21,14 +21,12 @@ public class Folder {
     @NotNull
     private String name;    // TODO 사용자별 폴더명 중복 검사는 로직에서
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    private Long userId;
 
     @Builder
-    protected Folder(String name, User user) {
+    protected Folder(String name, long userId) {
         this.name = name;
-        this.user = user;
+        this.userId = userId;
     }
 
     public void changeName(String name) {

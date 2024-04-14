@@ -2,6 +2,8 @@ package com.serverstudy.todolist.service;
 
 import com.serverstudy.todolist.domain.User;
 import com.serverstudy.todolist.dto.UserDto;
+import com.serverstudy.todolist.repository.FolderRepository;
+import com.serverstudy.todolist.repository.TodoRepository;
 import com.serverstudy.todolist.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,8 @@ import java.util.NoSuchElementException;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final TodoRepository todoRepository;
+    private final FolderRepository folderRepository;
 
     @Transactional
     public long join(UserDto.PostReq postReq) {
@@ -38,6 +42,7 @@ public class UserService {
         User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException("해당하는 유저가 존재하지 않습니다."));
 
         return UserDto.Response.builder()
+                .id(user.getId())
                 .email(user.getEmail())
                 .nickname(user.getNickname())
                 .build();
@@ -65,6 +70,10 @@ public class UserService {
     public long delete(long userId) {
 
         User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException("해당하는 유저가 존재하지 않습니다."));
+
+        // 투두 리스트와 폴더 삭제
+        todoRepository.deleteAll(todoRepository.findAllByUserId(userId));
+        folderRepository.deleteAll(folderRepository.findAllByUserId(userId));
 
         userRepository.delete(user);
 

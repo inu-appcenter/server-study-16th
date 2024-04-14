@@ -1,7 +1,6 @@
 package com.serverstudy.todolist.dto;
 
 import com.serverstudy.todolist.domain.Folder;
-import com.serverstudy.todolist.domain.User;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -17,10 +16,10 @@ public interface FolderDto {
         @NotNull
         private String name;
 
-        public Folder toEntity(User user) {
+        public Folder toEntity(long userId) {
             return Folder.builder()
                     .name(name)
-                    .user(user)
+                    .userId(userId)
                     .build();
         }
     }
@@ -36,12 +35,15 @@ public interface FolderDto {
     @Getter
     class Response {
 
+        private final long folderId;
+
         private final String name;
 
         private final int todoCount;
 
         @Builder
-        private Response(String name, int todoCount) {
+        private Response(long folderId, String name, int todoCount) {
+            this.folderId = folderId;
             this.name = name;
             this.todoCount = todoCount;
         }
