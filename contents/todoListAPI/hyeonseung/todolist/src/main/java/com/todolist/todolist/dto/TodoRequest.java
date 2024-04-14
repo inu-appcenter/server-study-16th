@@ -17,6 +17,7 @@ public class TodoRequest {
     private boolean isCompleted;
     private LocalDateTime dueAt;
     private Member member;
+
     public Todo createTodo() {
         return Todo.builder()
                 .title(title)

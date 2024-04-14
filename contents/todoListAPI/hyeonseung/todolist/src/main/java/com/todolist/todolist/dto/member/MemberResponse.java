@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 @Builder
 public class MemberResponse {
 
-
     private Long id;
     private String name;
     private String loginId;
@@ -22,12 +21,4 @@ public class MemberResponse {
     private LocalDateTime modifiedAt;
 
 
-    public MemberResponse(Member member) {
-        this.id = member.getId();
-        this.loginId = member.getLoginId();
-        this.name = member.getName();
-        this.password = member.getPassword();
-        this.createdAt = member.getCreatedAt();
-        this.modifiedAt = member.getModifiedAt();
-    }
 }
