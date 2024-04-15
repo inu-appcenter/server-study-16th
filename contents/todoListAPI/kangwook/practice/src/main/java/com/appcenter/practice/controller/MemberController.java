@@ -16,9 +16,11 @@ public class MemberController {
     private final MemberService memberService;
 
 
-    @PostMapping(value = "/")
+    @PostMapping
     public ResponseEntity<?> signup(@RequestBody SignupMemberReq reqDto){
-        return ResponseEntity.ok(memberService.signup(reqDto));
+        return ResponseEntity
+                .status(201)
+                .body(memberService.signup(reqDto));
     }
 
 }

@@ -1,50 +1,54 @@
 package com.appcenter.practice.service;
 
 
+import com.appcenter.practice.domain.Comment;
 import com.appcenter.practice.domain.Todo;
 import com.appcenter.practice.dto.reqeust.AddCommentReq;
 import com.appcenter.practice.dto.reqeust.UpdateCommentReq;
 import com.appcenter.practice.dto.response.ReadCommentRes;
 import com.appcenter.practice.repository.CommentRepository;
 import com.appcenter.practice.repository.TodoRepository;
-import com.querydsl.core.types.Projections;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
-import static com.appcenter.practice.domain.QComment.comment;
+import java.util.stream.Collectors;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class CommentService {
     private final CommentRepository commentRepository;
     private final TodoRepository todoRepository;
-    private final JPAQueryFactory queryFactory;
 
-    @Transactional(readOnly = true)
+
     public List<ReadCommentRes> getCommentList(){
-        List<ReadCommentRes> commentList=queryFactory
-                .select(Projections.constructor(ReadCommentRes.class,comment.id,comment.content,comment.deleted))
-                .from(comment)
-                .fetch();
-        return commentList;
-    }
-    public void saveComment(Long todoId, AddCommentReq reqDto){
-        Todo todo= todoRepository.findById(todoId).get();
-        commentRepository.save(reqDto.toEntity(todo));
+        return commentRepository.findAll().stream()
+                .map(comment->ReadCommentRes.from(comment))
+                .collect(Collectors.toList());
     }
 
-    public Long updateComment(UpdateCommentReq reqDto){
-        commentRepository.findById(reqDto.getId()).get().changeContent(reqDto.getContent());
-        return reqDto.getId();
+    @Transactional
+    public long saveComment(Long todoId, AddCommentReq reqDto){
+        Todo todo= todoRepository.findById(todoId)
+                .orElseThrow(()-> new IllegalArgumentException("존재하지 않는 할일 입니다."));
+        return commentRepository.save(reqDto.toEntity(todo)).getId();
     }
 
-    public Long deletedTrue(Long id){
-        commentRepository.findById(id).get().changeDeleted(true);
+    @Transactional
+    public long updateComment(Long id, UpdateCommentReq reqDto){
+        Comment comment= commentRepository.findById(id)
+                .orElseThrow(()-> new IllegalArgumentException("존재하지 않는 댓글입니다."));
+        comment.changeContent(reqDto.getContent());
+        return id;
+    }
+
+    @Transactional
+    public long deleteComment(Long id){
+        Comment comment=commentRepository.findById(id)
+                .orElseThrow(()->new IllegalArgumentException("존재하지 않는 댓글입니다."));
+        comment.changeDeleted(true);
         return id;
     }
 }

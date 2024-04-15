@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class AddTodoReq {
+    private String email;
     private String content;
 
     public Todo toEntity(Member member){

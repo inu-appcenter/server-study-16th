@@ -17,26 +17,26 @@ import java.util.List;
 public class CommentController {
     private final CommentService commentService;
 
-    @GetMapping(value = "/")
+    @GetMapping
     public ResponseEntity<List<ReadCommentRes>>getCommentList(){
         return ResponseEntity.ok(commentService.getCommentList());
     }
 
 
-
-    @PostMapping(value = "/")
+    @PostMapping
     public ResponseEntity<?> addComment(Long todoId, @RequestBody AddCommentReq reqDto){
-        commentService.saveComment(todoId,reqDto);
-        return ResponseEntity.ok(reqDto);
-    }
-
-    @PatchMapping(value = "/")
-    public ResponseEntity<?> updateComment(UpdateCommentReq reqDto){
-        return ResponseEntity.ok(commentService.updateComment(reqDto));
+        return ResponseEntity
+                .status(201)
+                .body(commentService.saveComment(todoId,reqDto));
     }
 
     @PatchMapping(value = "/{id}")
-    public ResponseEntity<?> deletedTrue(@PathVariable Long id){
-        return ResponseEntity.ok(commentService.deletedTrue(id));
+    public ResponseEntity<?> updateComment(@PathVariable Long id, UpdateCommentReq reqDto){
+        return ResponseEntity.ok(commentService.updateComment(id,reqDto));
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<?> deleteComment(@PathVariable Long id){
+        return ResponseEntity.ok(commentService.deleteComment(id));
     }
 }

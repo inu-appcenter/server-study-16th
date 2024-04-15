@@ -9,14 +9,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
 
-    public Long signup(SignupMemberReq reqDto){
+    @Transactional
+    public long signup(SignupMemberReq reqDto){
+        if(memberRepository.existsByEmail(reqDto.getEmail()))
+            throw new IllegalArgumentException("이미 존재하는 유저입니다.");
         Member member=reqDto.toEntity();
-        memberRepository.save(member);
-        return member.getId();
+        return memberRepository.save(member).getId();
     }
 }

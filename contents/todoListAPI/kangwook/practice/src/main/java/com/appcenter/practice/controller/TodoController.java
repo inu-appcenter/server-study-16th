@@ -17,23 +17,24 @@ import java.util.List;
 public class TodoController {
     private final TodoService todoService;
 
-    @GetMapping(value = "/")
+    @GetMapping
     public ResponseEntity<List<ReadTodoRes>> getTodoList(){
         return ResponseEntity.ok(todoService.getTodoList());
     }
 
-    @PostMapping(value = "/")
-    public ResponseEntity<AddTodoReq> addTodo(String email, @RequestBody AddTodoReq reqDto){
-        todoService.saveTodo(email,reqDto);
-        return ResponseEntity.ok(reqDto);
-    }
-
-    @PatchMapping(value = "/")
-    public ResponseEntity<?> updateTodo(UpdateTodoReq reqDto){
-        return ResponseEntity.ok(todoService.updateTodo(reqDto));
+    @PostMapping
+    public ResponseEntity<?> addTodo(@RequestBody AddTodoReq reqDto){
+        return ResponseEntity
+                .status(201)
+                .body(todoService.saveTodo(reqDto));
     }
 
     @PatchMapping(value = "/{id}")
+    public ResponseEntity<?> updateTodo(@PathVariable Long id, UpdateTodoReq reqDto){
+        return ResponseEntity.ok(todoService.updateTodo(id,reqDto));
+    }
+
+    @PatchMapping(value = "/{id}/complete")
     public ResponseEntity<?> completeTodo(@PathVariable Long id){
         return ResponseEntity.ok(todoService.completeTodo(id));
     }
