@@ -1,12 +1,10 @@
-package com.appcenter.practice.dto.reqeust;
+package com.appcenter.practice.dto.reqeust.todo;
 
 import com.appcenter.practice.domain.Member;
 import com.appcenter.practice.domain.Todo;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
 public class AddTodoReq {
     private String email;
     private String content;

@@ -1,13 +1,11 @@
-package com.appcenter.practice.dto.reqeust;
+package com.appcenter.practice.dto.reqeust.comment;
 
 
 import com.appcenter.practice.domain.Comment;
 import com.appcenter.practice.domain.Todo;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
 public class AddCommentReq {
     private String content;
 
