@@ -1,12 +1,10 @@
-package com.appcenter.practice.dto.reqeust;
+package com.appcenter.practice.dto.reqeust.member;
 
 
 import com.appcenter.practice.domain.Member;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
 public class SignupMemberReq {
     private String email;
     private String password;
