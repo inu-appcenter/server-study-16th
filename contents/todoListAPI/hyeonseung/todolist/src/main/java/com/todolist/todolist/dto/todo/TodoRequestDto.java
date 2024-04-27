@@ -13,14 +13,8 @@ import java.time.LocalDateTime;
 @Getter
 @Builder
 public class TodoRequestDto {
-    private Long id;
     private String title;
     private String contents;
     private boolean isCompleted;
     private LocalDateTime dueAt;
-  //  private Member member;
-
-    public boolean getIsCompleted() {
-        return isCompleted;
-    }
 }

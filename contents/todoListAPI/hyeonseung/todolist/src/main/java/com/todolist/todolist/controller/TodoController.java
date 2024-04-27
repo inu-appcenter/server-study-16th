@@ -16,24 +16,42 @@ import java.util.List;
 public class TodoController {
     private final TodoService todoService;
 
+    // 회원에 따른 Todo 추가
     @PostMapping("/{memberId}")
-    public ResponseEntity<TodoResponseDto> addTodo(@PathVariable(value="memberId") Long id,@RequestBody TodoRequestDto request){
-        TodoResponseDto responseDto = todoService.add(id, request);
+    public ResponseEntity<TodoResponseDto> addTodo(@PathVariable Long memberId,@RequestBody TodoRequestDto request){
+        TodoResponseDto responseDto = todoService.add(memberId, request);
 
         return new ResponseEntity<TodoResponseDto>(responseDto, HttpStatus.CREATED);
     }
 
+    // Todo 전체 목록 조회
     @GetMapping
     public List<TodoResponseDto> readAll(){
-        List<TodoResponseDto>  responseDto_list = todoService.findAll();
+        List<TodoResponseDto>  responseDto = todoService.searchAll();
 
-        return responseDto_list;
+        return responseDto;
        // return new ResponseEntity<TodoResponseDto>(responseDto_list,HttpStatus.OK);
     }
 
+    // 회원-> Todo 목록 조회
     @GetMapping("/{memberId}")
-    public ResponseEntity<List<TodoResponseDto>> readMemberTodo (@PathVariable(value = "memberId") Long id){
-        List<TodoResponseDto> responseDto = todoService.findById(id);
+    public ResponseEntity<List<TodoResponseDto>> readMemberTodo (@PathVariable Long memberId){
+        List<TodoResponseDto> responseDto = todoService.searchById(memberId);
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
+    }
+
+    // Todo 수정
+    @PatchMapping("/{memberId}/{todoId}")
+    public ResponseEntity<TodoResponseDto> update(@PathVariable Long memberId, @PathVariable Long todoId, @RequestBody TodoRequestDto request){
+        TodoResponseDto responseDto = todoService.update(memberId,todoId,request);
+
+        return ResponseEntity.status(200).body(responseDto);
+    }
+
+    // Todo 단일 삭제
+    @DeleteMapping("/{todoId}")
+    public ResponseEntity<Void> deleteOne(@PathVariable Long todoId){
+        todoService.delete(todoId);
+        return ResponseEntity.noContent().build();
     }
 }

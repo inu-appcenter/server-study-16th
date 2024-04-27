@@ -45,19 +45,19 @@ public class Todo extends BaseEntity {
     }
 
     public void updateTitle(String title) {
-        this.title = title;
+        if(title != null) this.title = title;
     }
 
     public void updateContents(String contents) {
-        this.contents = contents;
+        if(contents != null) this.contents = contents;
     }
 
     public void updateIsCompleted(Boolean isCompleted) {
-        this.isCompleted = isCompleted;
+        if(isCompleted != null) this.isCompleted = isCompleted;
     }
 
     public void updateDueAt(LocalDateTime dueAt) {
-        this.dueAt = dueAt;
+        if(dueAt != null) this.dueAt = dueAt;
     }
 
 }
