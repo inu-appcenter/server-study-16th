@@ -40,7 +40,7 @@ public class MemberService {
        return member.getPassword().equals(request.getPassword());
     }
 
-
+    // 3. 회원 검색\
     public MemberResponseDto searchId(Long id){
         Member member =  memberRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));

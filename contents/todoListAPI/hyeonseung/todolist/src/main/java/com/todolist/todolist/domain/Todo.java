@@ -22,7 +22,7 @@ public class Todo extends BaseEntity {
 
     private String contents;
 
-    private Boolean isCompleted ;
+    private Boolean isCompleted;
 
     private LocalDateTime dueAt;
 
@@ -32,12 +32,32 @@ public class Todo extends BaseEntity {
     private Member member;
 
     @Builder
-    protected Todo(String title, String contents, Boolean isCompleted, LocalDateTime dueAt, Member member){
+    protected Todo(String title, String contents, Boolean isCompleted, LocalDateTime dueAt, Member member) {
         this.title = title;
         this.contents = contents;
         this.isCompleted = isCompleted;
         this.dueAt = dueAt;
         this.member = member;
+    }
+
+    public void matchMember(Member member){
+        this.member = member;
+    }
+
+    public void updateTitle(String title) {
+        this.title = title;
+    }
+
+    public void updateContents(String contents) {
+        this.contents = contents;
+    }
+
+    public void updateIsCompleted(Boolean isCompleted) {
+        this.isCompleted = isCompleted;
+    }
+
+    public void updateDueAt(LocalDateTime dueAt) {
+        this.dueAt = dueAt;
     }
 
 }
