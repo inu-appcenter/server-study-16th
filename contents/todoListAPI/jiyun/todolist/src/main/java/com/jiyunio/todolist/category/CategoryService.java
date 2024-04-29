@@ -10,7 +10,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class CategoryService extends Category {
+public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final MemberRepository memberRepository;
 
@@ -25,12 +25,12 @@ public class CategoryService extends Category {
 
     public List<String> getCategory(Long memberId) {
         List<Category> categories = categoryRepository.findByMemberId(memberId);
-        List<String> categoryDtos = new ArrayList<>();
-        for (Category category : categories
-        ) {
-            categoryDtos.add(category.getCategory());
+        List<String> returnCategory = new ArrayList<>();
+
+        for (Category category : categories) {
+            returnCategory.add(category.getCategory());
         }
-        return categoryDtos;
+        return returnCategory;
     }
 
     public void updateCategory(Long categoryId, String categoryName) {

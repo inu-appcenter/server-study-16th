@@ -13,7 +13,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class TodoService extends Todo {
+public class TodoService {
     private final MemberRepository memberRepository;
     private final TodoRepository todoRepository;
 

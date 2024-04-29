@@ -17,7 +17,7 @@ public class Category {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "Member_id")
+    @JoinColumn(name = "memberId")
     private Member member;
 
     private String category;

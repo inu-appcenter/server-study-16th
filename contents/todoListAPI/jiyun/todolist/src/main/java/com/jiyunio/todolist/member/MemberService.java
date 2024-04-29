@@ -1,6 +1,6 @@
 package com.jiyunio.todolist.member;
 
-import com.jiyunio.todolist.member.dto.ChangeUserPw;
+import com.jiyunio.todolist.member.dto.ChangeUserPwDto;
 import com.jiyunio.todolist.member.dto.SignInDto;
 import com.jiyunio.todolist.member.dto.SignUpDto;
 import lombok.RequiredArgsConstructor;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class MemberService extends Member {
+public class MemberService {
     private final MemberRepository memberRepository;
 
     public boolean signUp(SignUpDto signUpDto) {
@@ -37,12 +37,12 @@ public class MemberService extends Member {
         return false;
     }
 
-    public boolean updateUserPw(Long id, ChangeUserPw changeUserPw) {
+    public boolean updateUserPw(Long id, ChangeUserPwDto changeUserPwDto) {
         Member member = memberRepository.findById(id).get();
-        if (member.getUserPw().equals(changeUserPw.getUserPw())) { // 회원 비밀번호 확인
-            if (changeUserPw.getChangePw().equals(changeUserPw.getConfirmChangePw())) {
+        if (member.getUserPw().equals(changeUserPwDto.getUserPw())) { // 회원 비밀번호 확인
+            if (changeUserPwDto.getChangePw().equals(changeUserPwDto.getConfirmChangePw())) {
                 // confirm password
-                member.updateUserPw(changeUserPw.getChangePw());
+                member.updateUserPw(changeUserPwDto.getChangePw());
                 memberRepository.save(member);
                 return true;
             }

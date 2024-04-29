@@ -1,6 +1,6 @@
 package com.jiyunio.todolist.member;
 
-import com.jiyunio.todolist.member.dto.ChangeUserPw;
+import com.jiyunio.todolist.member.dto.ChangeUserPwDto;
 import com.jiyunio.todolist.member.dto.SignInDto;
 import com.jiyunio.todolist.member.dto.SignUpDto;
 import lombok.RequiredArgsConstructor;
@@ -26,8 +26,8 @@ public class MemberController {
     }
 
     @PutMapping("/{id}/update")
-    public ResponseEntity<String> updateUserPw(@PathVariable Long id, @RequestBody ChangeUserPw changeUserPw) {
-        if (memberService.updateUserPw(id, changeUserPw)) return ResponseEntity.ok("비밀번호 변경 성공");
+    public ResponseEntity<String> updateUserPw(@PathVariable Long id, @RequestBody ChangeUserPwDto changeUserPwDto) {
+        if (memberService.updateUserPw(id, changeUserPwDto)) return ResponseEntity.ok("비밀번호 변경 성공");
         return new ResponseEntity<>("비밀번호 변경 실패", HttpStatus.BAD_REQUEST);
     }
 

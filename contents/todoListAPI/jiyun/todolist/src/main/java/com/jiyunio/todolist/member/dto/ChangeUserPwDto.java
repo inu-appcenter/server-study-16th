@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ChangeUserPw {
+public class ChangeUserPwDto {
     @NotBlank
     private String userPw;
 

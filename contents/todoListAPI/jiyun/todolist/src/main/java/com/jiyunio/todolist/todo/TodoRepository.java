@@ -7,7 +7,5 @@ import java.util.Optional;
 
 public interface TodoRepository extends JpaRepository<Todo, Long> {
     List<Todo> findByMemberId(Long memberId);
-
-    @Override
     Optional<Todo> findById(Long todoId);
 }
