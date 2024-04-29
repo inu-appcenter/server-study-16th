@@ -13,6 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -58,12 +59,15 @@ public class MemberService {
         List<Member> members = memberRepository.findAll();
         List<MemberResponseDto>  memberList = new ArrayList<>();
 
-        for (Member member : members){
-            MemberResponseDto responseDto = MemberMapper.INSTANCE.toDto(member);
-            memberList.add(responseDto);
-        }
+        return members.stream()
+                .map(MemberMapper.INSTANCE::toDto)
+                .collect(Collectors.toList());
 
-        return memberList;
+//        for (Member member : members){
+//            MemberResponseDto responseDto = MemberMapper.INSTANCE.toDto(member);
+//            memberList.add(responseDto);
+//        }
+//        return memberList;
     }
 
     // 5. 정보수정

@@ -14,6 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -66,13 +67,18 @@ public class TodoService {
 
     // 3. Todo 전체 조회
     public List<TodoResponseDto> searchAll() {
-        List<Todo> todo = todoRepository.findAll();
-        List<TodoResponseDto> todoList = new ArrayList<>();
-        for (Todo todo_one : todo){
-            TodoResponseDto responseDto = TodoMapper.INSTANCE.toDto(todo_one);
-            todoList.add(responseDto);
-        }
-        return todoList;
+        List<Todo> todos = todoRepository.findAll();
+
+        return todos.stream()
+                .map(TodoMapper.INSTANCE::toDto)
+                .collect(Collectors.toList());
+
+//        List<TodoResponseDto> todoList = new ArrayList<>();
+//        for (Todo todo : todos){
+//            TodoResponseDto responseDto = TodoMapper.INSTANCE.toDto(todo);
+//            todoList.add(responseDto);
+//        }
+//        return todoList;
     }
 
     // 4. Todo 리스트 조회 (memberId로 조회)
