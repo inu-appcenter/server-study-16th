@@ -5,9 +5,9 @@ import lombok.Getter;
 
 @Getter
 public class ReadTodoRes {
-    private Long id;
-    private String content;
-    private Boolean completed;
+    private final Long id;
+    private final String content;
+    private final Boolean completed;
 
 
     private ReadTodoRes(Long id, String content, Boolean completed) {

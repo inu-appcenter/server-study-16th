@@ -3,6 +3,8 @@ package com.appcenter.practice.service;
 
 import com.appcenter.practice.domain.Member;
 import com.appcenter.practice.dto.reqeust.member.SignupMemberReq;
+import com.appcenter.practice.exception.CustomException;
+import com.appcenter.practice.exception.ErrorCode;
 import com.appcenter.practice.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,8 +19,9 @@ public class MemberService {
     @Transactional
     public Long signup(SignupMemberReq reqDto){
         if(memberRepository.existsByEmail(reqDto.getEmail()))
-            throw new IllegalArgumentException("이미 존재하는 member입니다.");
+            throw new CustomException(ErrorCode.DUPLICATED_EMAIL);
         Member member=reqDto.toEntity();
+        member.addUserAuthority();
         return memberRepository.save(member).getId();
     }
 }

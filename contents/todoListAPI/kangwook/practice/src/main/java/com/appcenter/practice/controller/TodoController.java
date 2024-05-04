@@ -6,6 +6,7 @@ import com.appcenter.practice.dto.reqeust.todo.UpdateTodoReq;
 import com.appcenter.practice.dto.response.CommonResponse;
 import com.appcenter.practice.dto.response.todo.ReadTodoRes;
 import com.appcenter.practice.service.TodoService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,14 +30,14 @@ public class TodoController {
     }
 
     @PostMapping
-    public ResponseEntity<CommonResponse<Long>> addTodo(@RequestBody AddTodoReq reqDto){
+    public ResponseEntity<CommonResponse<Long>> addTodo(@RequestBody @Valid AddTodoReq reqDto){
         return ResponseEntity
                 .status(201)
-                .body(CommonResponse.of("Created","Todo가 생성 성공.",todoService.saveTodo(reqDto)));
+                .body(CommonResponse.of("Created","Todo 생성 성공.",todoService.saveTodo(reqDto)));
     }
 
     @PatchMapping(value = "/{id}")
-    public ResponseEntity<CommonResponse<Long>> updateTodo(@PathVariable Long id, @RequestBody UpdateTodoReq reqDto){
+    public ResponseEntity<CommonResponse<Long>> updateTodo(@PathVariable Long id, @RequestBody @Valid UpdateTodoReq reqDto){
         return ResponseEntity
                 .ok(CommonResponse.of("Ok","Todo 수정 성공",todoService.updateTodo(id,reqDto)));
     }

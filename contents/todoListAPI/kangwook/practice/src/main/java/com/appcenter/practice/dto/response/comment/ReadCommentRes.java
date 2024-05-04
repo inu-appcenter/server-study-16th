@@ -6,9 +6,9 @@ import lombok.Getter;
 
 @Getter
 public class ReadCommentRes {
-    private Long id;
-    private String content;
-    private Boolean deleted;
+    private final Long id;
+    private final String content;
+    private final Boolean deleted;
 
     private ReadCommentRes(Long id, String content, Boolean deleted) {
         this.id = id;

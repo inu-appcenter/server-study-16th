@@ -6,6 +6,7 @@ import com.appcenter.practice.dto.reqeust.comment.UpdateCommentReq;
 import com.appcenter.practice.dto.response.CommonResponse;
 import com.appcenter.practice.dto.response.comment.ReadCommentRes;
 import com.appcenter.practice.service.CommentService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,14 +32,14 @@ public class CommentController {
 
 
     @PostMapping(value = "/todos/{id}/comments")
-    public ResponseEntity<CommonResponse<Long>> addComment(@PathVariable("id") Long todoId, @RequestBody AddCommentReq reqDto){
+    public ResponseEntity<CommonResponse<Long>> addComment(@PathVariable("id") Long todoId, @RequestBody @Valid AddCommentReq reqDto){
         return ResponseEntity
                 .status(201)
                 .body(CommonResponse.of("Created","댓글 생성 성공",commentService.saveComment(todoId,reqDto)));
     }
 
     @PatchMapping(value = "/comments/{id}")
-    public ResponseEntity<CommonResponse<Long>> updateComment(@PathVariable Long id, @RequestBody UpdateCommentReq reqDto){
+    public ResponseEntity<CommonResponse<Long>> updateComment(@PathVariable Long id, @RequestBody @Valid UpdateCommentReq reqDto){
         return ResponseEntity
                 .ok(CommonResponse.of("Ok","댓글 수정 성공",commentService.updateComment(id,reqDto)));
     }

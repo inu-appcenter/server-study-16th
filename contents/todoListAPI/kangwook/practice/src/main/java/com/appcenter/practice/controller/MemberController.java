@@ -3,6 +3,7 @@ package com.appcenter.practice.controller;
 import com.appcenter.practice.dto.reqeust.member.SignupMemberReq;
 import com.appcenter.practice.dto.response.CommonResponse;
 import com.appcenter.practice.service.MemberService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +19,7 @@ public class MemberController {
 
 
     @PostMapping
-    public ResponseEntity<CommonResponse<Long>> signup(@RequestBody SignupMemberReq reqDto){
+    public ResponseEntity<CommonResponse<Long>> signup( @RequestBody @Valid SignupMemberReq reqDto){
         return ResponseEntity
                 .status(201)
                 .body(CommonResponse.of("Created","member 생성 성공",memberService.signup(reqDto)));
