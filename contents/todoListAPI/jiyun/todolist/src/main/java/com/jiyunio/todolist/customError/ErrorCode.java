@@ -1,10 +1,8 @@
 package com.jiyunio.todolist.customError;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 @Getter
-@RequiredArgsConstructor
 public enum ErrorCode {
     // 400 Bad Request
     EXIST_USERID("001_EXIST_USERID", "이미 존재하는 아이디입니다."),
@@ -17,8 +15,8 @@ public enum ErrorCode {
     NOT_EXIST_USERID("403_NOT_EXIST_USERID", "아이디가 존재하지 않습니다."),
     WRONG_PASSWORD("404_WRONG_PASSWORD", "비밀번호가 다릅니다.");
 
-    private String code;
-    private String message;
+    private final String code;
+    private final String message;
 
     ErrorCode(String code, String message) {
         this.code = code;
