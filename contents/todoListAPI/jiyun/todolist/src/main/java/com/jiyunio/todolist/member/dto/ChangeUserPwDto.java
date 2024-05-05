@@ -6,13 +6,13 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ChangeUserPwDto {
-    @NotBlank
+public class ChangeUserPwDTO {
+    @NotBlank(message = "비밀번호를 입력하세요.")
     private String userPw;
 
-    @NotBlank
+    @NotBlank(message = "변경 비밀번호를 입력하세요.")
     private String changePw;
 
-    @NotBlank
+    @NotBlank(message = "확인 비밀번호를 입력하세요.")
     private String confirmChangePw;
 }

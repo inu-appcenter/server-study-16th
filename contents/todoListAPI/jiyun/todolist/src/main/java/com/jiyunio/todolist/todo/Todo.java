@@ -1,7 +1,7 @@
 package com.jiyunio.todolist.todo;
 
 import com.jiyunio.todolist.member.Member;
-import com.jiyunio.todolist.todo.dto.UpdateTodoDto;
+import com.jiyunio.todolist.todo.dto.UpdateTodoDTO;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -44,7 +44,7 @@ public class Todo {
         this.setDate = setDate;
     }
 
-    protected void updateTodo(UpdateTodoDto updateTodoDto) {
+    protected void updateTodo(UpdateTodoDTO updateTodoDto) {
         this.content = updateTodoDto.getContent();
         this.checked = updateTodoDto.getChecked();
         this.writeDate = updateTodoDto.getWriteDate();

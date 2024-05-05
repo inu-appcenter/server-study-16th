@@ -1,6 +1,7 @@
 package com.jiyunio.todolist.todo.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,16 +9,16 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-public class CreateTodoDto {
-    @NotBlank
+public class CreateTodoDTO {
+    @NotBlank(message = "todo를 작성해주세요.")
     private String content;
 
     @NotBlank
     private String category;
 
-    @NotBlank
+    @NotNull(message = "작성 일자를 선택해주세요.")
     private LocalDate writeDate;
 
-    @NotBlank
+    @NotNull(message = "설정 일자를 선택해주세요.")
     private LocalDate setDate;
 }

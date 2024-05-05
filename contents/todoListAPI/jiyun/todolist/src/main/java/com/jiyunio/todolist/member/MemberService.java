@@ -1,9 +1,12 @@
 package com.jiyunio.todolist.member;
 
-import com.jiyunio.todolist.member.dto.ChangeUserPwDto;
-import com.jiyunio.todolist.member.dto.SignInDto;
-import com.jiyunio.todolist.member.dto.SignUpDto;
+import com.jiyunio.todolist.customError.CustomException;
+import com.jiyunio.todolist.customError.ErrorCode;
+import com.jiyunio.todolist.member.dto.ChangeUserPwDTO;
+import com.jiyunio.todolist.member.dto.SignInDTO;
+import com.jiyunio.todolist.member.dto.SignUpDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -11,52 +14,67 @@ import org.springframework.stereotype.Service;
 public class MemberService {
     private final MemberRepository memberRepository;
 
-    public boolean signUp(SignUpDto signUpDto) {
-        if (memberRepository.existsByUserEmail(signUpDto.getUserEmail())) { // 이메일 존재
-            return false;
+    public String signUp(SignUpDTO signUpDto) {
+        if (memberRepository.existsByUserEmail(signUpDto.getUserEmail())) {
+            // 이미 존재하는 이메일
+            throw new CustomException(HttpStatus.BAD_REQUEST, ErrorCode.EXIST_EMAIL);
         }
-        if (signUpDto.getUserPw().equals(signUpDto.getConfirmUserPw())) { // 비밀번호 확인이 맞음
+
+        if (memberRepository.existsByUserId(signUpDto.getUserId())) {
+            // 이미 존재하는 아이디
+            throw new CustomException(HttpStatus.BAD_REQUEST, ErrorCode.EXIST_USERID);
+        }
+
+        if (signUpDto.getUserPw().equals(signUpDto.getConfirmUserPw())) {
+            // 회원가입 성공
             Member member = Member.builder()
                     .userId(signUpDto.getUserId())
                     .userPw(signUpDto.getUserPw())
                     .userEmail(signUpDto.getUserEmail())
                     .build();
             memberRepository.save(member);
-            return true;
+            return member.getUserId();
         }
-        return false;
+        // 비밀번호 불일치
+        throw new CustomException(HttpStatus.BAD_REQUEST, ErrorCode.NOT_SAME_CONFIRM_PASSWORD);
     }
 
-    public boolean signIn(SignInDto signInDto) {
-        if (memberRepository.existsByUserId(signInDto.getUserId())) { // 아이디 존재
+    public String signIn(SignInDTO signInDto) {
+        if (memberRepository.existsByUserId(signInDto.getUserId())) {
             Member member = memberRepository.findByUserId(signInDto.getUserId()).get();
-            if (member.getUserPw().equals(signInDto.getUserPw())) { // 비밀번호 맞음
-                return true; // 성공
+            if (member.getUserPw().equals(signInDto.getUserPw())) {
+                // 로그인 성공
+                return member.getUserId();
             }
+            // 회원의 비밀번호와 불일치
+            throw new CustomException(HttpStatus.NOT_FOUND, ErrorCode.WRONG_PASSWORD);
         }
-        return false;
+        // 아이디 없음
+        throw new CustomException(HttpStatus.NOT_FOUND, ErrorCode.NOT_EXIST_USERID);
     }
 
-    public boolean updateUserPw(Long id, ChangeUserPwDto changeUserPwDto) {
+    public void updateUserPw(Long id, ChangeUserPwDTO changeUserPwDto) {
         Member member = memberRepository.findById(id).get();
         if (member.getUserPw().equals(changeUserPwDto.getUserPw())) { // 회원 비밀번호 확인
             if (changeUserPwDto.getChangePw().equals(changeUserPwDto.getConfirmChangePw())) {
-                // confirm password
+                // 비밀번호 업데이트 성공
                 member.updateUserPw(changeUserPwDto.getChangePw());
                 memberRepository.save(member);
-                return true;
             }
-            return false; // NOT_CONFIRM_PASSWORD
+            // 변경 비밀번호 불일치
+            throw new CustomException(HttpStatus.BAD_REQUEST, ErrorCode.NOT_SAME_CONFIRM_PASSWORD);
         }
-        return false; // NOT_SAME_USERPW
+        // 회원의 비밀번호와 불일치
+        throw new CustomException(HttpStatus.NOT_FOUND, ErrorCode.WRONG_PASSWORD);
     }
 
-    public boolean deleteMember(Long id, String userPw) {
+    public void deleteMember(Long id, String userPw) {
         Member member = memberRepository.findById(id).get();
         if (member.getUserPw().equals(userPw)) {
+            // 회원 탈퇴 성공
             memberRepository.deleteById(id);
-            return true;
         }
-        return false;
+        // 비밀번호 불일치
+        throw new CustomException(HttpStatus.NOT_FOUND, ErrorCode.WRONG_PASSWORD);
     }
 }

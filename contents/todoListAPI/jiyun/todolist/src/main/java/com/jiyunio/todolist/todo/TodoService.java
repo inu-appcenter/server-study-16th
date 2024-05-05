@@ -1,11 +1,14 @@
 package com.jiyunio.todolist.todo;
 
+import com.jiyunio.todolist.customError.CustomException;
+import com.jiyunio.todolist.customError.ErrorCode;
 import com.jiyunio.todolist.member.Member;
 import com.jiyunio.todolist.member.MemberRepository;
-import com.jiyunio.todolist.todo.dto.CreateTodoDto;
-import com.jiyunio.todolist.todo.dto.TodoDto;
-import com.jiyunio.todolist.todo.dto.UpdateTodoDto;
+import com.jiyunio.todolist.todo.dto.CreateTodoDTO;
+import com.jiyunio.todolist.todo.dto.GetTodoDTO;
+import com.jiyunio.todolist.todo.dto.UpdateTodoDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,8 +20,11 @@ public class TodoService {
     private final MemberRepository memberRepository;
     private final TodoRepository todoRepository;
 
-    public void createTodo(Long memberId, CreateTodoDto createTodo) {
-        Member member = memberRepository.findById(memberId).get();
+    public void createTodo(Long memberId, CreateTodoDTO createTodo) {
+        Member member = memberRepository.findById(memberId).orElseThrow(
+                // 회원 존재 안함
+                () -> new CustomException(HttpStatus.NOT_FOUND, ErrorCode.NOT_EXIST_MEMBER)
+        );
 
         Todo todo = Todo.builder()
                 .member(member)
@@ -31,26 +37,23 @@ public class TodoService {
         todoRepository.save(todo);
     }
 
-    public List<TodoDto> getTodo(Long memberId) {
+    public List<GetTodoDTO> getTodo(Long memberId) {
         List<Todo> todoList = todoRepository.findByMemberId(memberId);
-        List<TodoDto> returnTodoList = new ArrayList<>();
+        List<GetTodoDTO> getTodoList = new ArrayList<>();
 
-        for (Todo todo :
-                todoList) {
-            TodoDto todoDto = TodoDto.builder()
+        for (Todo todo : todoList) {
+            getTodoList.add(GetTodoDTO.builder()
                     .content(todo.getContent())
                     .category(todo.getCategory())
                     .writeDate(todo.getWriteDate())
                     .setDate(todo.getSetDate())
                     .checked(todo.getChecked())
-                    .build();
-
-            returnTodoList.add(todoDto);
+                    .build());
         }
-        return returnTodoList;
+        return getTodoList;
     }
 
-    public void updateTodo(Long todoId, UpdateTodoDto updateTodo) { //Put
+    public void updateTodo(Long todoId, UpdateTodoDTO updateTodo) {
         Todo todo = todoRepository.findById(todoId).get();
         todo.updateTodo(updateTodo);
         todoRepository.save(todo);

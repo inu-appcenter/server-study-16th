@@ -1,12 +1,18 @@
 package com.jiyunio.todolist.todo;
 
-import com.jiyunio.todolist.todo.dto.CreateTodoDto;
-import com.jiyunio.todolist.todo.dto.TodoDto;
-import com.jiyunio.todolist.todo.dto.UpdateTodoDto;
+import com.jiyunio.todolist.ResponseDTO;
+import com.jiyunio.todolist.todo.dto.CreateTodoDTO;
+import com.jiyunio.todolist.todo.dto.GetTodoDTO;
+import com.jiyunio.todolist.todo.dto.UpdateTodoDTO;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -16,26 +22,55 @@ public class TodoController {
     private final TodoService todoService;
 
     @PostMapping("/{memberId}")
-    public ResponseEntity<String> createTodo(@PathVariable Long memberId, @RequestBody CreateTodoDto createTodo) {
+    public ResponseEntity<?> createTodo(@PathVariable Long memberId, @Valid @RequestBody CreateTodoDTO createTodo, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<ResponseDTO> responseDTOList = returnBindingResult(bindingResult);
+            return new ResponseEntity<>(responseDTOList, HttpStatus.BAD_REQUEST);
+        }
         todoService.createTodo(memberId, createTodo);
-        return ResponseEntity.ok("Todo 생성 성공");
+        ResponseDTO responseDTO = ResponseDTO.builder()
+                .msg("Todo 생성 완료")
+                .build();
+        return ResponseEntity.ok(responseDTO);
     }
 
     @GetMapping("/{memberId}")
-    public List<TodoDto> getTodo(@PathVariable Long memberId) {
-        List<TodoDto> todoList = todoService.getTodo(memberId);
-        return todoList;
+    public List<GetTodoDTO> getTodo(@PathVariable Long memberId) {
+        return todoService.getTodo(memberId);
     }
 
     @PutMapping("/{todoId}")
-    public ResponseEntity<String> updateTodo(@PathVariable Long todoId, @RequestBody UpdateTodoDto updateTodo) {
+    public ResponseEntity<?> updateTodo(@PathVariable Long todoId, @Valid @RequestBody UpdateTodoDTO updateTodo, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<ResponseDTO> responseDTOList = returnBindingResult(bindingResult);
+            return new ResponseEntity<>(responseDTOList, HttpStatus.BAD_REQUEST);
+        }
+
         todoService.updateTodo(todoId, updateTodo);
-        return ResponseEntity.ok("Todo 수정 성공");
+        ResponseDTO responseDTO = ResponseDTO.builder()
+                .msg("Todo 수정 완료")
+                .build();
+        return ResponseEntity.ok(responseDTO);
     }
 
     @DeleteMapping("/{todoId}")
-    public ResponseEntity<String> deleteTodo(@PathVariable Long todoId) {
+    public ResponseEntity<?> deleteTodo(@PathVariable Long todoId) {
         todoService.deleteTodo(todoId);
-        return ResponseEntity.ok("Todo 삭제 성공");
+        ResponseDTO responseDTO = ResponseDTO.builder()
+                .msg("Todo 삭제 완료")
+                .build();
+        return ResponseEntity.ok(responseDTO);
+    }
+
+    public List<ResponseDTO> returnBindingResult(BindingResult bindingResult) {
+        List<FieldError> list = bindingResult.getFieldErrors();
+        List<ResponseDTO> responseDTOList = new ArrayList<>();
+        for (FieldError error : list) {
+            ResponseDTO responseDTO = ResponseDTO.builder()
+                    .msg(error.getDefaultMessage())
+                    .build();
+            responseDTOList.add(responseDTO);
+        }
+        return responseDTOList;
     }
 }

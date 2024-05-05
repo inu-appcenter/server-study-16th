@@ -1,8 +1,11 @@
 package com.jiyunio.todolist.category;
 
+import com.jiyunio.todolist.customError.CustomException;
+import com.jiyunio.todolist.customError.ErrorCode;
 import com.jiyunio.todolist.member.Member;
 import com.jiyunio.todolist.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,7 +18,10 @@ public class CategoryService {
     private final MemberRepository memberRepository;
 
     public void createCategory(Long memberId, String categoryName) {
-        Member member = memberRepository.findById(memberId).get();
+        Member member = memberRepository.findById(memberId).orElseThrow(
+                // 회원 존재 안함
+                () -> new CustomException(HttpStatus.NOT_FOUND, ErrorCode.NOT_EXIST_MEMBER)
+        );
         Category category = Category.builder()
                 .member(member)
                 .category(categoryName)
@@ -23,14 +29,15 @@ public class CategoryService {
         categoryRepository.save(category);
     }
 
-    public List<String> getCategory(Long memberId) {
+    public List<GetCategoryDTO> getCategory(Long memberId) {
         List<Category> categories = categoryRepository.findByMemberId(memberId);
-        List<String> returnCategory = new ArrayList<>();
+        List<GetCategoryDTO> getCategoryDTO = new ArrayList<>();
 
         for (Category category : categories) {
-            returnCategory.add(category.getCategory());
+            getCategoryDTO.add(GetCategoryDTO.builder()
+                    .category(category.getCategory()).build());
         }
-        return returnCategory;
+        return getCategoryDTO;
     }
 
     public void updateCategory(Long categoryId, String categoryName) {
