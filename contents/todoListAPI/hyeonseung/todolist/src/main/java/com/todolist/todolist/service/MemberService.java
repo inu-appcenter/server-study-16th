@@ -77,7 +77,6 @@ public class MemberService {
         member.updateLoginId(request.getLoginId()); ;
         member.updatePassword(request.getPassword());
         member.updateName(request.getName());
-        // 문제점 -> 입력안하면.. 초기값으로 가져오는 듯...
        memberRepository.save(member);
 
        return MemberMapper.INSTANCE.toDto(member);

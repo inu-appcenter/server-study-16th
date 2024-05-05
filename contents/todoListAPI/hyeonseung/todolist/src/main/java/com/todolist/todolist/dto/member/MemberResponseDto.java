@@ -15,7 +15,6 @@ public class MemberResponseDto {
     private Long id;
     private String name;
     private String loginId;
-    private String password;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 

@@ -3,6 +3,7 @@ package com.todolist.todolist.controller;
 import com.todolist.todolist.dto.todo.TodoRequestDto;
 import com.todolist.todolist.dto.todo.TodoResponseDto;
 import com.todolist.todolist.service.TodoService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class TodoController {
 
     // 회원에 따른 Todo 추가
     @PostMapping("/{memberId}")
-    public ResponseEntity<TodoResponseDto> addTodo(@PathVariable Long memberId,@RequestBody TodoRequestDto request){
+    public ResponseEntity<TodoResponseDto> addTodo(@Valid @PathVariable Long memberId, @RequestBody TodoRequestDto request){
         TodoResponseDto responseDto = todoService.add(memberId, request);
 
         return new ResponseEntity<TodoResponseDto>(responseDto, HttpStatus.CREATED);
@@ -26,10 +27,10 @@ public class TodoController {
 
     // Todo 전체 목록 조회
     @GetMapping
-    public List<TodoResponseDto> readAll(){
+    public ResponseEntity<List<TodoResponseDto>> readAll(){
         List<TodoResponseDto>  responseDto = todoService.searchAll();
 
-        return responseDto;
+        return new ResponseEntity<>(responseDto,HttpStatus.OK);
        // return new ResponseEntity<TodoResponseDto>(responseDto_list,HttpStatus.OK);
     }
 
@@ -41,8 +42,8 @@ public class TodoController {
     }
 
     // Todo 수정
-    @PatchMapping("/{memberId}/{todoId}")
-    public ResponseEntity<TodoResponseDto> update(@PathVariable Long memberId, @PathVariable Long todoId, @RequestBody TodoRequestDto request){
+    @PutMapping("/{memberId}/{todoId}")
+    public ResponseEntity<TodoResponseDto> update(@Valid @PathVariable Long memberId, @PathVariable Long todoId, @RequestBody TodoRequestDto request){
         TodoResponseDto responseDto = todoService.update(memberId,todoId,request);
 
         return ResponseEntity.status(200).body(responseDto);
