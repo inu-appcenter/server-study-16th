@@ -1,13 +1,19 @@
 package com.serverstudy.todolist.controller;
 
-import com.serverstudy.todolist.dto.TodoDto;
+import com.serverstudy.todolist.dto.request.TodoReq.TodoGet;
+import com.serverstudy.todolist.dto.request.TodoReq.TodoPost;
+import com.serverstudy.todolist.dto.response.TodoRes;
 import com.serverstudy.todolist.service.TodoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static com.serverstudy.todolist.dto.request.TodoReq.TodoFolderPatch;
+import static com.serverstudy.todolist.dto.request.TodoReq.TodoPut;
 
 @RestController
 @RequestMapping("/api/todo")
@@ -18,62 +24,50 @@ public class TodoController {
     private final TodoService todoService;
 
     @PostMapping
-    public ResponseEntity<?> postTodo(@Valid @RequestBody TodoDto.PostReq postReq, Long userId) {
+    public ResponseEntity<?> postTodo(@Valid @RequestBody TodoPost todoPost, Long userId) {
 
-        if (userId == null) throw new IllegalArgumentException("userId 값이 비어있습니다");
+        long todoId = todoService.create(todoPost, userId);
 
-        long todoId = todoService.create(postReq, userId);
-
-        return ResponseEntity.ok(todoId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(todoId);
     }
 
     @GetMapping
-    public ResponseEntity<?> getTodosByRequirements(@Valid @ModelAttribute TodoDto.GetReq getReq, Long userId) {
+    public ResponseEntity<?> getTodosByRequirements(@Valid @ModelAttribute TodoGet todoGet, Long userId) {
 
-        if (userId == null) throw new IllegalArgumentException("userId 값이 비어있습니다");
-
-        List<TodoDto.Response> responseList = todoService.findAllByConditions(getReq, userId);
+        List<TodoRes> responseList = todoService.findAllByConditions(todoGet, userId);
 
         return ResponseEntity.ok(responseList);
     }
 
     @PutMapping("/{todoId}")
-    public ResponseEntity<?> putTodo(@Valid @RequestBody TodoDto.PutReq putReq, @PathVariable Long todoId, Long userId) {
+    public ResponseEntity<?> putTodo(@Valid @RequestBody TodoPut todoPut, @PathVariable Long todoId, Long userId) {
 
-        if (userId == null) throw new IllegalArgumentException("userId 값이 비어있습니다");
-
-        long updatedTodoId = todoService.update(putReq, todoId, userId);
+        long updatedTodoId = todoService.update(todoPut, todoId, userId);
 
         return ResponseEntity.ok(updatedTodoId);
     }
 
-    @PutMapping("/switch-progress/{todoId}")
+    @PatchMapping("/{todoId}/progress")
     public ResponseEntity<?> switchTodoProgress(@PathVariable Long todoId, Long userId) {
-
-        if (userId == null) throw new IllegalArgumentException("userId 값이 비어있습니다");
 
         long switchedTodoId = todoService.switchProgress(todoId, userId);
 
         return ResponseEntity.ok(switchedTodoId);
     }
 
-    @PutMapping("/{todoId}/folder")
-    public ResponseEntity<?> putTodoFolder(@RequestBody Long folderId, @PathVariable Long todoId, Long userId) {    // TODO folderId 받는 방식 수정이 필요할 듯
+    @PatchMapping("/{todoId}/folder")
+    public ResponseEntity<?> patchTodoFolder(@RequestBody TodoFolderPatch todoFolderPatch, @PathVariable Long todoId, Long userId) {
 
-        if (userId == null) throw new IllegalArgumentException("userId 값이 비어있습니다");
-
-        long movedTodoId = todoService.moveFolder(folderId, todoId, userId);
+        long movedTodoId = todoService.moveFolder(todoFolderPatch.getFolderId(), todoId, userId);
 
         return ResponseEntity.ok(movedTodoId);
     }
 
-    @PutMapping("/move-to-trash/{todoId}")
-    public ResponseEntity<?> moveToTrashTodo(@PathVariable Long todoId, Long userId) {
+    @DeleteMapping("/{todoId}")
+    public ResponseEntity<?> deleteTodo(@PathVariable Long todoId, Boolean restore, Long userId) {
 
-        if (userId == null) throw new IllegalArgumentException("userId 값이 비어있습니다");
+        Long result = todoService.delete(todoId, restore, userId);
 
-        long movedToTrashTodoId = todoService.moveToTrash(todoId, userId);
-
-        return ResponseEntity.ok(movedToTrashTodoId);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 }

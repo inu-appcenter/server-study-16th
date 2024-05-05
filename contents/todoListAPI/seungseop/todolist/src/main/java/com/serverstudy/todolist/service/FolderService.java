@@ -2,7 +2,9 @@ package com.serverstudy.todolist.service;
 
 import com.serverstudy.todolist.domain.Folder;
 import com.serverstudy.todolist.domain.Todo;
-import com.serverstudy.todolist.dto.FolderDto;
+import com.serverstudy.todolist.dto.request.FolderReq;
+import com.serverstudy.todolist.dto.request.FolderReq.FolderPatch;
+import com.serverstudy.todolist.dto.response.FolderRes;
 import com.serverstudy.todolist.repository.FolderRepository;
 import com.serverstudy.todolist.repository.TodoRepository;
 import com.serverstudy.todolist.repository.UserRepository;
@@ -25,23 +27,25 @@ public class FolderService {
     private final TodoRepository todoRepository;
 
     @Transactional
-    public long create(FolderDto.PostReq postReq, long userId) {
+    public long create(FolderReq.FolderPost folderPost, Long userId) {
 
-        //User user = userRepository.getReferenceById(userId);
+        if (userId == null) throw new IllegalArgumentException("userId 값이 비어있습니다.");
         if (!userRepository.existsById(userId)) throw new NoSuchElementException("해당하는 유저가 존재하지 않습니다.");
 
-        Folder folder = postReq.toEntity(userId);
+        Folder folder = folderPost.toEntity(userId);
 
         return folderRepository.save(folder).getId();
     }
 
-    public List<FolderDto.Response> getAllWithTodoCount(long userId) {
+    public List<FolderRes> getAllWithTodoCount(Long userId) {
+
+        if (userId == null) throw new IllegalArgumentException("userId 값이 비어있습니다.");
 
         List<Folder> folderList = folderRepository.findAllByUserIdOrderByNameAsc(userId);
 
         return folderList.stream().map(folder -> {
             int todoCount = todoRepository.countByFolder(folder);
-            return FolderDto.Response.builder()
+            return FolderRes.builder()
                     .folderId(folder.getId())
                     .name(folder.getName())
                     .todoCount(todoCount)
@@ -50,26 +54,24 @@ public class FolderService {
     }
 
     @Transactional
-    public long modify(FolderDto.PutReq putReq, long folderId) {
+    public long modify(FolderPatch folderPatch, long folderId) {
 
         Folder folder = folderRepository.findById(folderId).orElseThrow(() -> new NoSuchElementException("해당하는 폴더가 존재하지 않습니다."));
 
-        folder.changeName(putReq.getName());
+        folder.changeName(folderPatch.getName());
 
         return folder.getId();
     }
 
     @Transactional
-    public long delete(long folderId) {
+    public void delete(long folderId) {
 
         Folder folder = folderRepository.findById(folderId).orElseThrow(() -> new NoSuchElementException("해당하는 폴더가 존재하지 않습니다."));
 
         // 투두 리스트에서 폴더 null 값으로 변경
         List<Todo> todoList = todoRepository.findAllByFolder(folder);
         todoList.forEach(todo -> todo.changeFolder(null));
-        
-        folderRepository.delete(folder);
 
-        return folder.getId();
+        folderRepository.delete(folder);
     }
 }

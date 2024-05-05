@@ -1,6 +1,6 @@
 package com.serverstudy.todolist.domain;
 
-import com.serverstudy.todolist.dto.TodoDto;
+import com.serverstudy.todolist.dto.request.TodoReq.TodoPut;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -44,13 +44,9 @@ public class Todo {
     private Folder folder;
 
     @Builder
-    protected Todo(String title, String description, LocalDateTime deadline, Priority priority, Progress progress, long userId, Folder folder) {
-        if (title == null) this.title = "";
-        else this.title = title;
-
-        if (description == null) this.description = "";
+    private Todo(String title, String description, LocalDateTime deadline, Priority priority, Progress progress, long userId, Folder folder) {
+        this.title = title;
         this.description = description;
-
         this.deadline = deadline;
         this.priority = priority;
         this.progress = progress;
@@ -65,44 +61,23 @@ public class Todo {
         else this.progress = Progress.Todo;
     }
 
-    public void moveToTrash() {
+    public long moveToTrash() {
         this.isDeleted = true;
         this.deletedTime = LocalDateTime.now();
+
+        return this.id;
     }
 
     public void changeFolder(Folder folder) {
         this.folder = folder;
     }
 
-    public void updateTodo(TodoDto.PutReq putReq, Folder folder) {
-        changeTitle(putReq.getTitle());
-        changeDescription(putReq.getDescription());
-        changeDeadline(putReq.getDeadline());
-        changePriority(putReq.getPriority());
-        changeProgress(putReq.getProgress().name());
+    public void updateTodo(TodoPut todoPut, Folder folder) {
+        this.title = todoPut.getTitle();
+        this.description = todoPut.getDescription();
+        this.deadline = todoPut.getDeadline();
+        this.priority = todoPut.getPriority();
+        this.progress = todoPut.getProgress();
         changeFolder(folder);
     }
-
-    private void changeTitle(String title) {
-        if (title == null) this.title = "";
-        else this.title = title;
-    }
-
-    private void changeDescription(String description) {
-        if (description == null) this.description = "";
-        this.description = description;
-    }
-
-    private void changeDeadline(LocalDateTime deadline) {
-        this.deadline = deadline;
-    }
-
-    private void changePriority(Integer priority) {
-        this.priority = priority == null ? null : Priority.getPriority(priority);
-    }
-
-    private void changeProgress(String progress) {
-        this.progress = progress == null ? null : Progress.getProgress(progress);
-    }
-
 }

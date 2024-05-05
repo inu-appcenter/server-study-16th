@@ -1,17 +1,16 @@
-package com.serverstudy.todolist.dto;
+package com.serverstudy.todolist.dto.request;
 
 import com.serverstudy.todolist.domain.Folder;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-public interface FolderDto {
+public interface FolderReq {
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    class PostReq {
+    class FolderPost {
 
         @NotNull
         private String name;
@@ -26,26 +25,9 @@ public interface FolderDto {
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    class PutReq {
+    class FolderPatch {
 
         @NotNull
         private String name;
-    }
-
-    @Getter
-    class Response {
-
-        private final long folderId;
-
-        private final String name;
-
-        private final int todoCount;
-
-        @Builder
-        private Response(long folderId, String name, int todoCount) {
-            this.folderId = folderId;
-            this.name = name;
-            this.todoCount = todoCount;
-        }
     }
 }

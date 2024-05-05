@@ -1,9 +1,13 @@
 package com.serverstudy.todolist.controller;
 
-import com.serverstudy.todolist.dto.FolderDto;
+import com.serverstudy.todolist.dto.request.FolderReq.FolderPatch;
+import com.serverstudy.todolist.dto.request.FolderReq.FolderPost;
+import com.serverstudy.todolist.dto.response.FolderRes;
 import com.serverstudy.todolist.service.FolderService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,30 +21,27 @@ public class FolderController {
 
     private final FolderService folderService;
 
+    @Operation
     @PostMapping
-    public ResponseEntity<?> postFolder (@Valid @RequestBody FolderDto.PostReq postReq, Long userId) {
+    public ResponseEntity<?> postFolder (@Valid @RequestBody FolderPost folderPost, Long userId) {
 
-        if (userId == null) throw new IllegalArgumentException("userId 값이 비어있습니다");
+        long folderId = folderService.create(folderPost, userId);
 
-        long folderId = folderService.create(postReq, userId);
-
-        return ResponseEntity.ok(folderId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(folderId);
     }
 
     @GetMapping
     public ResponseEntity<?> getFoldersByUser(Long userId) {
 
-        if (userId == null) throw new IllegalArgumentException("userId 값이 비어있습니다");
-
-        List<FolderDto.Response> responseList = folderService.getAllWithTodoCount(userId);
+        List<FolderRes> responseList = folderService.getAllWithTodoCount(userId);
 
         return ResponseEntity.ok(responseList);
     }
 
-    @PutMapping("/{folderId}")
-    public ResponseEntity<?> putFolder(@Valid @RequestBody FolderDto.PutReq putReq, @PathVariable Long folderId) {
+    @PatchMapping("/{folderId}")
+    public ResponseEntity<?> patchFolder(@Valid @RequestBody FolderPatch folderPatch, @PathVariable Long folderId) {
 
-        long modifiedFolderId = folderService.modify(putReq, folderId);
+        long modifiedFolderId = folderService.modify(folderPatch, folderId);
 
         return ResponseEntity.ok(modifiedFolderId);
     }
@@ -48,8 +49,8 @@ public class FolderController {
     @DeleteMapping("/{folderId}")
     public ResponseEntity<?> deleteFolder(@PathVariable Long folderId) {
 
-        long deletedFolderId = folderService.delete(folderId);
+        folderService.delete(folderId);
 
-        return ResponseEntity.ok(deletedFolderId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

@@ -1,18 +1,17 @@
-package com.serverstudy.todolist.dto;
+package com.serverstudy.todolist.dto.request;
 
 import com.serverstudy.todolist.domain.User;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-public interface UserDto {
+public interface UserReq {
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    class PostReq {
+    class UserPost {
 
         @NotNull
         @Email(message = "이메일 형식이 아닙니다.")
@@ -35,27 +34,12 @@ public interface UserDto {
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    class PutReq {
+    class UserPut {
 
         private String password;
 
         private String nickname;
     }
 
-    @Getter
-    class Response {
 
-        private final long id;
-
-        private final String email;
-
-        private final String nickname;
-
-        @Builder
-        private Response(long id, String email, String nickname) {
-            this.id = id;
-            this.email = email;
-            this.nickname = nickname;
-        }
-    }
 }

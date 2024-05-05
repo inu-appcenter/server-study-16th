@@ -24,7 +24,7 @@ public class Folder {
     private Long userId;
 
     @Builder
-    protected Folder(String name, long userId) {
+    private Folder(String name, long userId) {
         this.name = name;
         this.userId = userId;
     }

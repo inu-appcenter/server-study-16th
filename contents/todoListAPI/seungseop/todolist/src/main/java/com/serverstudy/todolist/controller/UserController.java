@@ -1,10 +1,13 @@
 package com.serverstudy.todolist.controller;
 
-import com.serverstudy.todolist.dto.UserDto;
+import com.serverstudy.todolist.dto.request.UserReq.UserPost;
+import com.serverstudy.todolist.dto.request.UserReq.UserPut;
+import com.serverstudy.todolist.dto.response.UserRes;
 import com.serverstudy.todolist.service.UserService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,11 +20,11 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<?> postUser(@Valid @RequestBody UserDto.PostReq postReq) {
+    public ResponseEntity<?> postUser(@Valid @RequestBody UserPost userPost) {
 
-        long userId = userService.join(postReq);
+        long userId = userService.join(userPost);
 
-        return ResponseEntity.ok(userId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userId);
     }
 
     @GetMapping("/check-email")
@@ -35,19 +38,15 @@ public class UserController {
     @GetMapping
     public ResponseEntity<?> getUser(Long userId) {
 
-        if (userId == null) throw new IllegalArgumentException("userId 값이 비어있습니다");
-
-        UserDto.Response response = userService.get(userId);
+        UserRes response = userService.get(userId);
 
         return ResponseEntity.ok(response);
     }
 
     @PutMapping
-    public ResponseEntity<?> putUser(@Valid @RequestBody UserDto.PutReq PutReq, Long userId) {
+    public ResponseEntity<?> putUser(@Valid @RequestBody UserPut UserPut, Long userId) {
 
-        if (userId == null) throw new IllegalArgumentException("userId 값이 비어있습니다");
-
-        long modifiedUserId = userService.modify(PutReq, userId);
+        long modifiedUserId = userService.modify(UserPut, userId);
 
         return ResponseEntity.ok(modifiedUserId);
     }
@@ -56,11 +55,9 @@ public class UserController {
     @DeleteMapping
     public ResponseEntity<?> deleteUser(Long userId) {
 
-        if (userId == null) throw new IllegalArgumentException("userId 값이 비어있습니다");
+        userService.delete(userId);
 
-        long deletedUserId = userService.delete(userId);
-
-        return ResponseEntity.ok(deletedUserId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
 }

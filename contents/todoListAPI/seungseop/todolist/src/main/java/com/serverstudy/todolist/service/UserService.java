@@ -1,7 +1,9 @@
 package com.serverstudy.todolist.service;
 
 import com.serverstudy.todolist.domain.User;
-import com.serverstudy.todolist.dto.UserDto;
+import com.serverstudy.todolist.dto.request.UserReq.UserPost;
+import com.serverstudy.todolist.dto.request.UserReq.UserPut;
+import com.serverstudy.todolist.dto.response.UserRes;
 import com.serverstudy.todolist.repository.FolderRepository;
 import com.serverstudy.todolist.repository.TodoRepository;
 import com.serverstudy.todolist.repository.UserRepository;
@@ -21,14 +23,14 @@ public class UserService {
     private final FolderRepository folderRepository;
 
     @Transactional
-    public long join(UserDto.PostReq postReq) {
+    public long join(UserPost userPost) {
 
-        String email = postReq.getEmail();
+        String email = userPost.getEmail();
 
         if (userRepository.existsByEmail(email))
             throw new IllegalArgumentException("해당하는 이메일이 이미 존재합니다.");
 
-        User user = postReq.toEntity();
+        User user = userPost.toEntity();
 
         return userRepository.save(user).getId();
     }
@@ -37,11 +39,12 @@ public class UserService {
         return userRepository.existsByEmail(email);
     }
 
-    public UserDto.Response get(long userId) {
+    public UserRes get(Long userId) {
 
+        if (userId == null) throw new IllegalArgumentException("userId 값이 비어있습니다.");
         User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException("해당하는 유저가 존재하지 않습니다."));
 
-        return UserDto.Response.builder()
+        return UserRes.builder()
                 .id(user.getId())
                 .email(user.getEmail())
                 .nickname(user.getNickname())
@@ -49,12 +52,13 @@ public class UserService {
     }
 
     @Transactional
-    public long modify(UserDto.PutReq putReq, long userId) {
+    public long modify(UserPut userPut, Long userId) {
 
+        if (userId == null) throw new IllegalArgumentException("userId 값이 비어있습니다.");
         User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException("해당하는 유저가 존재하지 않습니다."));
 
-        String password = putReq.getPassword();
-        String nickname = putReq.getNickname();
+        String password = userPut.getPassword();
+        String nickname = userPut.getNickname();
 
         if (password != null) {
             user.changePassword(password);
@@ -67,8 +71,9 @@ public class UserService {
     }
 
     @Transactional
-    public long delete(long userId) {
+    public void delete(Long userId) {
 
+        if (userId == null) throw new IllegalArgumentException("userId 값이 비어있습니다.");
         User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException("해당하는 유저가 존재하지 않습니다."));
 
         // 투두 리스트와 폴더 삭제
@@ -76,7 +81,5 @@ public class UserService {
         folderRepository.deleteAll(folderRepository.findAllByUserId(userId));
 
         userRepository.delete(user);
-
-        return user.getId();
     }
 }
