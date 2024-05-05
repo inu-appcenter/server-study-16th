@@ -1,7 +1,7 @@
 package com.serverstudy.todolist.controller;
 
+import com.serverstudy.todolist.dto.request.UserReq.UserPatch;
 import com.serverstudy.todolist.dto.request.UserReq.UserPost;
-import com.serverstudy.todolist.dto.request.UserReq.UserPut;
 import com.serverstudy.todolist.dto.response.UserRes;
 import com.serverstudy.todolist.service.UserService;
 import jakarta.validation.Valid;
@@ -43,10 +43,10 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping
-    public ResponseEntity<?> putUser(@Valid @RequestBody UserPut UserPut, Long userId) {
+    @PatchMapping
+    public ResponseEntity<?> patchUser(@Valid @RequestBody UserPatch UserPatch, Long userId) {
 
-        long modifiedUserId = userService.modify(UserPut, userId);
+        long modifiedUserId = userService.modify(UserPatch, userId);
 
         return ResponseEntity.ok(modifiedUserId);
     }

@@ -1,8 +1,8 @@
 package com.serverstudy.todolist.service;
 
 import com.serverstudy.todolist.domain.User;
+import com.serverstudy.todolist.dto.request.UserReq.UserPatch;
 import com.serverstudy.todolist.dto.request.UserReq.UserPost;
-import com.serverstudy.todolist.dto.request.UserReq.UserPut;
 import com.serverstudy.todolist.dto.response.UserRes;
 import com.serverstudy.todolist.repository.FolderRepository;
 import com.serverstudy.todolist.repository.TodoRepository;
@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -52,20 +53,14 @@ public class UserService {
     }
 
     @Transactional
-    public long modify(UserPut userPut, Long userId) {
+    public long modify(UserPatch userPatch, Long userId) {
 
         if (userId == null) throw new IllegalArgumentException("userId 값이 비어있습니다.");
         User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException("해당하는 유저가 존재하지 않습니다."));
 
-        String password = userPut.getPassword();
-        String nickname = userPut.getNickname();
-
-        if (password != null) {
-            user.changePassword(password);
-        }
-        if (nickname != null) {
-            user.changeNickname(nickname);
-        }
+        if (Objects.equals(user.getNickname(), userPatch.getNickname()))
+            throw new IllegalArgumentException("이전과 동일한 닉네임입니다.");
+        user.modifyUser(userPatch);
 
         return user.getId();
     }

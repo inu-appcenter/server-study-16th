@@ -34,7 +34,7 @@ public interface UserReq {
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    class UserPut {
+    class UserPatch {
 
         private String password;
 

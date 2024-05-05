@@ -1,5 +1,6 @@
 package com.serverstudy.todolist.domain;
 
+import com.serverstudy.todolist.dto.request.UserReq.UserPatch;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -46,12 +47,9 @@ public class User {
         addRole(Role.USER);
     }
 
-    public void changePassword(String password) {
-        this.password = password;
-    }
-
-    public void changeNickname(String nickname) {
-        this.nickname = nickname;
+    public void modifyUser(UserPatch userPatch) {
+        this.password = userPatch.getPassword();
+        this.nickname = userPatch.getNickname();
     }
 
     public void addRole(Role role) {
