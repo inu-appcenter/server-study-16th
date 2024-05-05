@@ -31,7 +31,7 @@ public class TodoController {
         ResponseDTO responseDTO = ResponseDTO.builder()
                 .msg("Todo 생성 완료")
                 .build();
-        return ResponseEntity.ok(responseDTO);
+        return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
     }
 
     @GetMapping("/{memberId}")
@@ -54,12 +54,12 @@ public class TodoController {
     }
 
     @DeleteMapping("/{todoId}")
-    public ResponseEntity<?> deleteTodo(@PathVariable Long todoId) {
+    public ResponseEntity<ResponseDTO> deleteTodo(@PathVariable Long todoId) {
         todoService.deleteTodo(todoId);
         ResponseDTO responseDTO = ResponseDTO.builder()
                 .msg("Todo 삭제 완료")
                 .build();
-        return ResponseEntity.ok(responseDTO);
+        return new ResponseEntity<>(responseDTO, HttpStatus.NO_CONTENT);
     }
 
     public List<ResponseDTO> returnBindingResult(BindingResult bindingResult) {

@@ -31,7 +31,7 @@ public class MemberController {
                 .userId(memberService.signUp(signUpDto)) // 화면에 "ㅇㅇ님 환영합니다" 글씨 원함
                 .msg("회원가입 성공")
                 .build();
-        return ResponseEntity.ok(responseDTO);
+        return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
     }
 
     @PostMapping("/signIn")
@@ -63,12 +63,12 @@ public class MemberController {
     }
 
     @DeleteMapping("/{id}/delete")
-    public ResponseEntity<?> deleteMember(@PathVariable Long id, @RequestParam String userPw) {
+    public ResponseEntity<ResponseDTO> deleteMember(@PathVariable Long id, @RequestParam String userPw) {
         memberService.deleteMember(id, userPw);
         ResponseDTO responseDTO = ResponseDTO.builder()
                 .msg("회원 탈퇴 성공")
                 .build();
-        return ResponseEntity.ok(responseDTO);
+        return new ResponseEntity<>(responseDTO, HttpStatus.NO_CONTENT);
     }
 
     public List<ResponseDTO> returnBindingResult(BindingResult bindingResult) {
