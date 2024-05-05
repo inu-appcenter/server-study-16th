@@ -9,5 +9,5 @@ public interface FolderRepository extends JpaRepository<Folder, Long> {
 
     List<Folder> findAllByUserIdOrderByNameAsc(long userId);
     List<Folder> findAllByUserId(long userId);
-
+    Boolean existsByNameAndUserId(String name, long userId);
 }

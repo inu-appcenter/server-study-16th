@@ -19,7 +19,7 @@ public class Folder {
 
     @Column
     @NotNull
-    private String name;    // TODO 사용자별 폴더명 중복 검사는 로직에서
+    private String name;
 
     private Long userId;
 

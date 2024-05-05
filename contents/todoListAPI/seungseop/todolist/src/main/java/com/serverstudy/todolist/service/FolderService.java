@@ -26,11 +26,18 @@ public class FolderService {
 
     private final TodoRepository todoRepository;
 
+    private void checkName(String name, long userId) {
+        if (folderRepository.existsByNameAndUserId(name, userId))
+            throw new IllegalArgumentException("이미 존재하는 폴더명입니다.");
+    }
+
     @Transactional
     public long create(FolderReq.FolderPost folderPost, Long userId) {
 
         if (userId == null) throw new IllegalArgumentException("userId 값이 비어있습니다.");
         if (!userRepository.existsById(userId)) throw new NoSuchElementException("해당하는 유저가 존재하지 않습니다.");
+
+        checkName(folderPost.getName(), userId);
 
         Folder folder = folderPost.toEntity(userId);
 
@@ -57,6 +64,8 @@ public class FolderService {
     public long modify(FolderPatch folderPatch, long folderId) {
 
         Folder folder = folderRepository.findById(folderId).orElseThrow(() -> new NoSuchElementException("해당하는 폴더가 존재하지 않습니다."));
+
+        checkName(folderPatch.getName(), folder.getUserId());
 
         folder.changeName(folderPatch.getName());
 
