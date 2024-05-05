@@ -5,7 +5,8 @@ import com.serverstudy.todolist.dto.request.UserReq.UserPost;
 import com.serverstudy.todolist.dto.response.UserRes;
 import com.serverstudy.todolist.service.UserService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +29,11 @@ public class UserController {
     }
 
     @GetMapping("/check-email")
-    public ResponseEntity<?> checkUserEmail(@RequestParam @Email String email) {
+    public ResponseEntity<?> checkUserEmail(
+            @RequestParam
+            @NotBlank(message = "이메일은 공백으로 입력할 수 없습니다.")
+            @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]+$", message = "이메일 형식이 올바르지 않습니다.")
+            String email) {
 
         boolean checked = userService.checkEmail(email);
 

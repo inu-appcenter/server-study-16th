@@ -56,9 +56,9 @@ public class Todo {
     }
 
     public void switchProgress() {
-        if (this.progress.equals(Progress.Todo)) this.progress = Progress.Doing;
-        else if (this.progress.equals(Progress.Doing)) this.progress = Progress.Done;
-        else this.progress = Progress.Todo;
+        if (this.progress.equals(Progress.TODO)) this.progress = Progress.DOING;
+        else if (this.progress.equals(Progress.DOING)) this.progress = Progress.DONE;
+        else this.progress = Progress.TODO;
     }
 
     public long moveToTrash() {

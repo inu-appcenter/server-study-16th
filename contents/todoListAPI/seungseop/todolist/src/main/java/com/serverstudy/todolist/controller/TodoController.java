@@ -5,6 +5,7 @@ import com.serverstudy.todolist.dto.request.TodoReq.TodoPost;
 import com.serverstudy.todolist.dto.response.TodoRes;
 import com.serverstudy.todolist.service.TodoService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -64,7 +65,7 @@ public class TodoController {
     }
 
     @DeleteMapping("/{todoId}")
-    public ResponseEntity<?> deleteTodo(@PathVariable Long todoId, Boolean restore, Long userId) {
+    public ResponseEntity<?> deleteTodo(@PathVariable Long todoId, @NotNull Boolean restore, Long userId) {
 
         Long result = todoService.delete(todoId, restore, userId);
 

@@ -1,5 +1,7 @@
 package com.serverstudy.todolist.dto.response;
 
+import com.serverstudy.todolist.domain.Priority;
+import com.serverstudy.todolist.domain.Progress;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -16,9 +18,9 @@ public class TodoRes {
 
     private final LocalDateTime deadline;
 
-    private final Integer priority;
+    private final Priority priority;
 
-    private final String progress;
+    private final Progress progress;
 
     private final boolean isDeleted;
 
@@ -29,7 +31,7 @@ public class TodoRes {
     private final String folderName;
 
     @Builder
-    private TodoRes(Long id, String title, String description, LocalDateTime deadline, Integer priority, String progress, boolean isDeleted, Integer dateFromDelete, Long folderId, String folderName) {
+    private TodoRes(Long id, String title, String description, LocalDateTime deadline, Priority priority, Progress progress, boolean isDeleted, Integer dateFromDelete, Long folderId, String folderName) {
         this.id = id;
         this.title = title;
         this.description = description;

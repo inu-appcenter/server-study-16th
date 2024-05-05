@@ -1,9 +1,11 @@
 package com.serverstudy.todolist.dto.request;
 
+import com.serverstudy.todolist.common.Enum;
 import com.serverstudy.todolist.domain.Folder;
 import com.serverstudy.todolist.domain.Priority;
 import com.serverstudy.todolist.domain.Progress;
 import com.serverstudy.todolist.domain.Todo;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -18,15 +20,18 @@ public interface TodoReq {
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     class TodoPost {
 
+        @NotEmpty(message = "제목을 작성해주세요.")
         private String title;
 
         private String description;
 
         private LocalDateTime deadline;
 
-        private Integer priority;
+        @Enum(message = "Priority 값이 잘못 되었습니다. 올바른 값을 입력해주세요.")
+        private Priority priority;
 
-        @NotNull
+        @NotNull(message = "Progress 값은 비어있을 수 없습니다. 값을 입력해주세요.")
+        @Enum(message = "Progress 값이 잘못 되었습니다. 올바른 값을 입력해주세요.")
         private Progress progress;
 
         private Long folderId;
@@ -36,8 +41,8 @@ public interface TodoReq {
                     .title(title == null ? "" : title)
                     .description(description == null ? "" : description)
                     .deadline(deadline)
-                    .priority(priority == null ? null : Priority.getPriority(priority))
-                    .progress(Progress.getProgress(progress.name()))
+                    .priority(priority)
+                    .progress(progress)
                     .userId(userId)
                     .folder(folder)
                     .build();
@@ -52,26 +57,38 @@ public interface TodoReq {
 
         private Integer priority;
 
-        private Progress progress;
+        @NotNull(message = "Progress 값은 비어있을 수 없습니다. 값을 입력해주세요.")
+        private String progress;
 
         private Boolean isDeleted;
 
         private Long folderId;
+
+        public Priority getPriority() {
+            return Priority.getPriority(priority);
+        }
+
+        public Progress getProgress() {
+            return Progress.getProgress(progress);
+        }
     }
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     class TodoPut {
 
+        @NotEmpty(message = "제목을 작성해주세요.")
         private String title;
 
         private String description;
 
         private LocalDateTime deadline;
 
-        private Integer priority;
+        @Enum(message = "Priority 값이 잘못 되었습니다. 올바른 값을 입력해주세요.")
+        private Priority priority;
 
-        @NotNull
+        @NotNull(message = "Progress 값은 비어있을 수 없습니다. 값을 입력해주세요.")
+        @Enum(message = "Progress 값이 잘못 되었습니다. 올바른 값을 입력해주세요.")
         private Progress progress;
 
         private Long folderId;
@@ -82,14 +99,6 @@ public interface TodoReq {
 
         public String getDescription() {
             return description == null ? "" : description;
-        }
-
-        public Priority getPriority() {
-            return priority == null ? null : Priority.getPriority(priority);
-        }
-
-        public Progress getProgress() {
-            return Progress.getProgress(progress.name());
         }
     }
 

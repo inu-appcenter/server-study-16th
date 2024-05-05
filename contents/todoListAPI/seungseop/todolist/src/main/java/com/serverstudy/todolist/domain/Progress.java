@@ -1,21 +1,27 @@
 package com.serverstudy.todolist.domain;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Getter;
+
+import java.util.Arrays;
 
 @Getter
 public enum Progress {
-    Todo, Doing, Done;
+    TODO, DOING, DONE;
 
-    public static Progress getProgress(String progress) {
+    public static Progress getProgress(String inputProgress) {
 
-        if (progress == null) {
-            throw new IllegalArgumentException("progrss가 null 값이면 안됩니다.");
-        }
+        return Arrays.stream(Progress.values())
+                .filter(progress -> progress.name().equals(inputProgress))
+                .findAny()
+                .orElseThrow(() -> new IllegalArgumentException("Progress 값이 잘못 되었습니다. 올바른 값을 입력해주세요."));
+    }
+    @JsonCreator    // Enum Validation 을 위한 코드, enum 에 속하지 않으면 null 리턴
+    public static Progress from(String inputProgress) {
 
-        try {
-            return Progress.valueOf(progress);
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("부적절한 progress 값: " + progress);
-        }
+        return Arrays.stream(Progress.values())
+                .filter(progress -> progress.name().equals(inputProgress))
+                .findAny()
+                .orElse(null);
     }
 }
