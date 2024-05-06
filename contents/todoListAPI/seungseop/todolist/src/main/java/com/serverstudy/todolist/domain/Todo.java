@@ -1,5 +1,6 @@
 package com.serverstudy.todolist.domain;
 
+import com.serverstudy.todolist.dto.request.TodoReq.TodoPut;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -36,54 +37,47 @@ public class Todo {
 
     private LocalDateTime deletedTime;
 
-    @ManyToOne(fetch = FetchType.LAZY)    // 안에 들어가는게 무슨 용도인지 확인
-    @JoinColumn(name = "user_id")
-    private User user;
+    private Long userId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "folder_id")
     private Folder folder;
 
     @Builder
-    protected Todo(String title, String description, LocalDateTime deadline, Priority priority, Progress progress, User user, Folder folder) {
+    private Todo(String title, String description, LocalDateTime deadline, Priority priority, Progress progress, long userId, Folder folder) {
         this.title = title;
         this.description = description;
         this.deadline = deadline;
         this.priority = priority;
         this.progress = progress;
         this.isDeleted = false;
-        this.user = user;
+        this.userId = userId;
         this.folder = folder;
     }
 
-    public void changeTitle(String title) {
-        this.title = title;
-    }
-
-    public void changeDescription(String description) {
-       this.description = description;
-    }
-
-    public void changeDeadline(LocalDateTime deadline) {
-        this.deadline = deadline;
-    }
-
-    public void changePriority(Priority priority) {
-        this.priority = priority;
-    }
-
-    public void changeProgress() {
+    public void switchProgress() {
         if (this.progress.equals(Progress.Todo)) this.progress = Progress.Doing;
         else if (this.progress.equals(Progress.Doing)) this.progress = Progress.Done;
         else this.progress = Progress.Todo;
     }
 
-    public void moveToTrash() {
+    public long moveToTrash() {
         this.isDeleted = true;
         this.deletedTime = LocalDateTime.now();
+
+        return this.id;
     }
 
     public void changeFolder(Folder folder) {
         this.folder = folder;
+    }
+
+    public void updateTodo(TodoPut todoPut, Folder folder) {
+        this.title = todoPut.getTitle();
+        this.description = todoPut.getDescription();
+        this.deadline = todoPut.getDeadline();
+        this.priority = todoPut.getPriority();
+        this.progress = todoPut.getProgress();
+        changeFolder(folder);
     }
 }
