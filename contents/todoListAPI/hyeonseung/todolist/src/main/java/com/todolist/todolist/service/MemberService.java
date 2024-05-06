@@ -6,6 +6,8 @@ import com.todolist.todolist.dto.member.MemberRequestDto;
 import com.todolist.todolist.dto.member.MemberResponseDto;
 import com.todolist.todolist.repository.MemberRepository;
 
+import com.todolist.todolist.validators.BaseException;
+import com.todolist.todolist.validators.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -32,6 +34,9 @@ public class MemberService {
 
     // 1. 회원가입
     public MemberResponseDto create(MemberRequestDto request) {
+        if (memberRepository.existsByLoginId(request.getLoginId()))
+            throw new BaseException(ErrorCode.INVALID_ID);
+
        Member member = MemberMapper.INSTANCE.toEntity(request);
        memberRepository.save(member);
 
@@ -42,14 +47,14 @@ public class MemberService {
     // 2. 로그인
     public boolean signIn(MemberRequestDto request){
        Member member = memberRepository.findByLoginId(request.getLoginId())
-               .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
+               .orElseThrow(()-> new BaseException(ErrorCode.NOT_EXIST_ID));
        return member.getPassword().equals(request.getPassword());
     }
 
     // 3. 회원 검색
     public MemberResponseDto searchId(Long id){
         Member member =  memberRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() ->  new BaseException(ErrorCode.NOT_EXIST_ID));
 
         return MemberMapper.INSTANCE.toDto(member);
     }
@@ -63,17 +68,12 @@ public class MemberService {
                 .map(MemberMapper.INSTANCE::toDto)
                 .collect(Collectors.toList());
 
-//        for (Member member : members){
-//            MemberResponseDto responseDto = MemberMapper.INSTANCE.toDto(member);
-//            memberList.add(responseDto);
-//        }
-//        return memberList;
     }
 
     // 5. 정보수정
     public MemberResponseDto update(Long id, MemberRequestDto request){
         Member member = memberRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new BaseException(ErrorCode.NOT_EXIST_ID));
         member.updateLoginId(request.getLoginId()); ;
         member.updatePassword(request.getPassword());
         member.updateName(request.getName());

@@ -3,26 +3,35 @@ package com.todolist.todolist.controller;
 import com.todolist.todolist.dto.todo.TodoRequestDto;
 import com.todolist.todolist.dto.todo.TodoResponseDto;
 import com.todolist.todolist.service.TodoService;
+import com.todolist.todolist.validators.ErrorMessageHandler;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
-@RequestMapping("/todo")
+@RequestMapping("api/todo")
 @RestController
 @RequiredArgsConstructor
 public class TodoController {
     private final TodoService todoService;
+    private final ErrorMessageHandler messageHandler;
 
     // 회원에 따른 Todo 추가
     @PostMapping("/{memberId}")
-    public ResponseEntity<TodoResponseDto> addTodo(@Valid @PathVariable Long memberId, @RequestBody TodoRequestDto request){
-        TodoResponseDto responseDto = todoService.add(memberId, request);
+    public ResponseEntity<?> addTodo(@PathVariable Long memberId, @RequestBody @Valid TodoRequestDto request, BindingResult bindingResult){
 
-        return new ResponseEntity<TodoResponseDto>(responseDto, HttpStatus.CREATED);
+        if(bindingResult.hasErrors()) {
+            Map<String,String> errorMessages = messageHandler.errorResult(bindingResult);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessages);
+        }
+
+        TodoResponseDto responseDto = todoService.add(memberId, request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
     // Todo 전체 목록 조회
@@ -30,23 +39,27 @@ public class TodoController {
     public ResponseEntity<List<TodoResponseDto>> readAll(){
         List<TodoResponseDto>  responseDto = todoService.searchAll();
 
-        return new ResponseEntity<>(responseDto,HttpStatus.OK);
-       // return new ResponseEntity<TodoResponseDto>(responseDto_list,HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 
     // 회원-> Todo 목록 조회
     @GetMapping("/{memberId}")
     public ResponseEntity<List<TodoResponseDto>> readMemberTodo (@PathVariable Long memberId){
         List<TodoResponseDto> responseDto = todoService.searchById(memberId);
-        return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 
     // Todo 수정
     @PutMapping("/{memberId}/{todoId}")
-    public ResponseEntity<TodoResponseDto> update(@Valid @PathVariable Long memberId, @PathVariable Long todoId, @RequestBody TodoRequestDto request){
-        TodoResponseDto responseDto = todoService.update(memberId,todoId,request);
+    public ResponseEntity<?> update(@PathVariable Long memberId, @PathVariable Long todoId, @RequestBody @Valid TodoRequestDto request,BindingResult bindingResult){
 
-        return ResponseEntity.status(200).body(responseDto);
+        if(bindingResult.hasErrors()){
+            Map<String,String> errorMessages = messageHandler.errorResult(bindingResult);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessages);
+        }
+
+        TodoResponseDto responseDto = todoService.update(memberId,todoId,request);
+        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 
     // Todo 단일 삭제
@@ -55,4 +68,5 @@ public class TodoController {
         todoService.delete(todoId);
         return ResponseEntity.noContent().build();
     }
+
 }

@@ -7,6 +7,8 @@ import com.todolist.todolist.dto.todo.TodoRequestDto;
 import com.todolist.todolist.dto.todo.TodoResponseDto;
 import com.todolist.todolist.repository.MemberRepository;
 import com.todolist.todolist.repository.TodoRepository;
+import com.todolist.todolist.validators.BaseException;
+import com.todolist.todolist.validators.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -47,14 +49,15 @@ public class TodoService {
     // 2. Todo 수정
     public TodoResponseDto update(Long memberId,Long todoId, TodoRequestDto requestDto) {
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"존재하는 회원이 없습니다."));
+                .orElseThrow(() -> new BaseException(ErrorCode.NOT_EXIST_ID));
         // 회원과 할일 간에 -> 관계가 매핑되어 있지 않음
-        List<Todo> todos = todoRepository.findByMember(member);
+        List<Todo> todos = todoRepository.findByMember(member)
+                .orElseThrow(()-> new BaseException(ErrorCode.NOT_EXIST_TODO));
 
         Todo targetTodo = todos.stream()
                         .filter(todo-> todo.getId().equals(todoId))
                         .findFirst()
-                                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"회원과 일치하는 TodoList가 없습니다."));
+                                .orElseThrow(() -> new BaseException(ErrorCode.NOT_MATCH_TODO_ID));
 
         targetTodo.updateTitle(requestDto.getTitle());
         targetTodo.updateContents(requestDto.getContents());
@@ -85,9 +88,10 @@ public class TodoService {
     public List<TodoResponseDto> searchById(Long id){
         // 회원찾기
         Member member = memberRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new BaseException(ErrorCode.NOT_EXIST_ID));
         // 회원으로
-        List<Todo> todo  = todoRepository.findByMember(member);
+        List<Todo> todo  = todoRepository.findByMember(member)
+                .orElseThrow(()->new BaseException(ErrorCode.NOT_EXIST_TODO));
 
         List<TodoResponseDto> todoList = new ArrayList<>();
         for(Todo todo_one : todo){

@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MemberRequestDto {
 
-    @NotBlank (message = "이름은 필수 입력값입니다.")
+    @NotBlank(message = "이름은 필수 입력값입니다.")
     @Pattern(message = "잘못된 이름 형식입니다.",
             regexp = "^(?:[가-힣]{3,6}|[A-Za-z]{3,12})$")
     private String name;
