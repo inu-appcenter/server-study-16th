@@ -12,6 +12,7 @@ import com.todolist.todolist.validators.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class TodoService {
 
     private final TodoRepository todoRepository;
@@ -61,7 +63,7 @@ public class TodoService {
 
         targetTodo.updateTitle(requestDto.getTitle());
         targetTodo.updateContents(requestDto.getContents());
-        targetTodo.updateIsCompleted(requestDto.isCompleted());
+        targetTodo.updateIsCompleted(requestDto.getIsCompleted());
         targetTodo.updateDueAt(requestDto.getDueAt());
         todoRepository.save(targetTodo);
 
@@ -76,12 +78,6 @@ public class TodoService {
                 .map(TodoMapper.INSTANCE::toDto)
                 .collect(Collectors.toList());
 
-//        List<TodoResponseDto> todoList = new ArrayList<>();
-//        for (Todo todo : todos){
-//            TodoResponseDto responseDto = TodoMapper.INSTANCE.toDto(todo);
-//            todoList.add(responseDto);
-//        }
-//        return todoList;
     }
 
     // 4. Todo 리스트 조회 (memberId로 조회)
@@ -90,16 +86,13 @@ public class TodoService {
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new BaseException(ErrorCode.NOT_EXIST_ID));
         // 회원으로
-        List<Todo> todo  = todoRepository.findByMember(member)
+        List<Todo> todos  = todoRepository.findByMember(member)
                 .orElseThrow(()->new BaseException(ErrorCode.NOT_EXIST_TODO));
 
-        List<TodoResponseDto> todoList = new ArrayList<>();
-        for(Todo todo_one : todo){
-            TodoResponseDto responseDto = TodoMapper.INSTANCE.toDto(todo_one);
-            todoList.add(responseDto);
-        }
+        return todos.stream()
+                .map(TodoMapper.INSTANCE::toDto)
+                .collect(Collectors.toList());
 
-        return todoList;
     }
 
     // 5. Todo 삭제

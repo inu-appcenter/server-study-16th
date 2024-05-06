@@ -21,7 +21,8 @@ public class TodoRequestDto {
 
     private String contents;
 
-    private boolean isCompleted;
+    private Boolean isCompleted;
 
     private LocalDateTime dueAt;
+
 }

@@ -1,5 +1,6 @@
 package com.todolist.todolist.dto.todo;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.todolist.todolist.domain.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,5 +18,5 @@ public class TodoResponseDto {
     private String contents;
     private boolean isCompleted;
     private LocalDateTime dueAt;
-    private Member member;
+    private Long memberId;
 }
