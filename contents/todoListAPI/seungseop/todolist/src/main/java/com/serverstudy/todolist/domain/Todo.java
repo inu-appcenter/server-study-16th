@@ -1,5 +1,7 @@
 package com.serverstudy.todolist.domain;
 
+import com.serverstudy.todolist.domain.enums.Priority;
+import com.serverstudy.todolist.domain.enums.Progress;
 import com.serverstudy.todolist.dto.request.TodoReq.TodoPut;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;

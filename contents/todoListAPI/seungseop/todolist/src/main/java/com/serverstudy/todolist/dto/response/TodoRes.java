@@ -1,7 +1,7 @@
 package com.serverstudy.todolist.dto.response;
 
-import com.serverstudy.todolist.domain.Priority;
-import com.serverstudy.todolist.domain.Progress;
+import com.serverstudy.todolist.domain.enums.Priority;
+import com.serverstudy.todolist.domain.enums.Progress;
 import lombok.Builder;
 import lombok.Getter;
 

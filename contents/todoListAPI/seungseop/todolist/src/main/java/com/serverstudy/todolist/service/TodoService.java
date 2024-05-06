@@ -1,13 +1,15 @@
 package com.serverstudy.todolist.service;
 
 import com.serverstudy.todolist.domain.Folder;
-import com.serverstudy.todolist.domain.Priority;
-import com.serverstudy.todolist.domain.Progress;
 import com.serverstudy.todolist.domain.Todo;
+import com.serverstudy.todolist.domain.enums.Priority;
+import com.serverstudy.todolist.domain.enums.Progress;
 import com.serverstudy.todolist.dto.request.TodoReq.TodoGet;
 import com.serverstudy.todolist.dto.request.TodoReq.TodoPost;
 import com.serverstudy.todolist.dto.request.TodoReq.TodoPut;
 import com.serverstudy.todolist.dto.response.TodoRes;
+import com.serverstudy.todolist.exception.CustomException;
+import com.serverstudy.todolist.exception.ErrorCode;
 import com.serverstudy.todolist.repository.FolderRepository;
 import com.serverstudy.todolist.repository.TodoRepository;
 import com.serverstudy.todolist.repository.UserRepository;
@@ -19,7 +21,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.NoSuchElementException;
+
+import static com.serverstudy.todolist.exception.ErrorCode.FOLDER_NOT_FOUND;
+import static com.serverstudy.todolist.exception.ErrorCode.TODO_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +37,7 @@ public class TodoService {
     public long create(TodoPost todoPost, Long userId) {
 
         if (userId == null) throw new IllegalArgumentException("userId 값이 비어있습니다");
-        if (!userRepository.existsById(userId)) throw new NoSuchElementException("해당하는 유저가 존재하지 않습니다.");
+        if (!userRepository.existsById(userId)) throw new CustomException(ErrorCode.USER_NOT_FOUND);
 
         Folder folder = null;
 
@@ -93,12 +97,12 @@ public class TodoService {
     public long update(TodoPut todoPut, long todoId, Long userId) {
 
         if (userId == null) throw new IllegalArgumentException("userId 값이 비어있습니다.");
-        Todo todo = todoRepository.findById(todoId).orElseThrow(() -> new NoSuchElementException("해당하는 todo가 존재하지 않습니다."));
+        Todo todo = todoRepository.findById(todoId).orElseThrow(() -> new CustomException(TODO_NOT_FOUND));
 
         Folder folder = null;
 
         if (todoPut.getFolderId() != null)
-            folder = folderRepository.findById(todoPut.getFolderId()).orElseThrow(() -> new NoSuchElementException("해당하는 folder가 존재하지 않습니다."));
+            folder = folderRepository.findById(todoPut.getFolderId()).orElseThrow(() -> new CustomException(FOLDER_NOT_FOUND));
 
         todo.updateTodo(todoPut, folder);
 
@@ -109,7 +113,7 @@ public class TodoService {
     public long switchProgress(long todoId, Long userId) {
 
         if (userId == null) throw new IllegalArgumentException("userId 값이 비어있습니다");
-        Todo todo = todoRepository.findById(todoId).orElseThrow(() -> new NoSuchElementException("해당하는 todo가 존재하지 않습니다."));
+        Todo todo = todoRepository.findById(todoId).orElseThrow(() -> new CustomException(TODO_NOT_FOUND));
 
         todo.switchProgress();
 
@@ -120,9 +124,9 @@ public class TodoService {
     public long moveFolder(Long folderId, long todoId, Long userId) {
 
         if (userId == null) throw new IllegalArgumentException("userId 값이 비어있습니다.");
-        Todo todo = todoRepository.findById(todoId).orElseThrow(() -> new NoSuchElementException("해당하는 todo가 존재하지 않습니다."));
+        Todo todo = todoRepository.findById(todoId).orElseThrow(() -> new CustomException(TODO_NOT_FOUND));
 
-        Folder folder = folderRepository.findById(folderId).orElseThrow(() -> new NoSuchElementException("해당하는 folder가 존재하지 않습니다."));
+        Folder folder = folderRepository.findById(folderId).orElseThrow(() -> new CustomException(FOLDER_NOT_FOUND));
 
         todo.changeFolder(folder);
 
@@ -130,11 +134,10 @@ public class TodoService {
     }
 
     @Transactional
-    public Long delete(long todoId, Boolean restore, Long userId) {
+    public Long delete(long todoId, boolean restore, Long userId) {
 
         if (userId == null) throw new IllegalArgumentException("userId 값이 비어있습니다.");
-        if (restore == null) throw new IllegalArgumentException("restore 값이 비어있습니다.");
-        Todo todo = todoRepository.findById(todoId).orElseThrow(() -> new NoSuchElementException("해당하는 todo가 존재하지 않습니다."));
+        Todo todo = todoRepository.findById(todoId).orElseThrow(() -> new CustomException(TODO_NOT_FOUND));
 
         Long result = null;
         if (restore)

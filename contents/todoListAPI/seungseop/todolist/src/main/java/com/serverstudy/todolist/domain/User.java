@@ -1,5 +1,6 @@
 package com.serverstudy.todolist.domain;
 
+import com.serverstudy.todolist.domain.enums.Role;
 import com.serverstudy.todolist.dto.request.UserReq.UserPatch;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;

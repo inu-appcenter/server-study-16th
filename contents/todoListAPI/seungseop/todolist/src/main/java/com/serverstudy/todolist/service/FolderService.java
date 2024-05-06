@@ -5,6 +5,7 @@ import com.serverstudy.todolist.domain.Todo;
 import com.serverstudy.todolist.dto.request.FolderReq;
 import com.serverstudy.todolist.dto.request.FolderReq.FolderPatch;
 import com.serverstudy.todolist.dto.response.FolderRes;
+import com.serverstudy.todolist.exception.CustomException;
 import com.serverstudy.todolist.repository.FolderRepository;
 import com.serverstudy.todolist.repository.TodoRepository;
 import com.serverstudy.todolist.repository.UserRepository;
@@ -14,6 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+
+import static com.serverstudy.todolist.exception.ErrorCode.DUPLICATE_FOLDER_NAME;
+import static com.serverstudy.todolist.exception.ErrorCode.USER_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
@@ -28,14 +32,14 @@ public class FolderService {
 
     private void checkName(String name, long userId) {
         if (folderRepository.existsByNameAndUserId(name, userId))
-            throw new IllegalArgumentException("이미 존재하는 폴더명입니다.");
+            throw new CustomException(DUPLICATE_FOLDER_NAME);
     }
 
     @Transactional
     public long create(FolderReq.FolderPost folderPost, Long userId) {
 
         if (userId == null) throw new IllegalArgumentException("userId 값이 비어있습니다.");
-        if (!userRepository.existsById(userId)) throw new NoSuchElementException("해당하는 유저가 존재하지 않습니다.");
+        if (!userRepository.existsById(userId)) throw new CustomException(USER_NOT_FOUND);
 
         checkName(folderPost.getName(), userId);
 

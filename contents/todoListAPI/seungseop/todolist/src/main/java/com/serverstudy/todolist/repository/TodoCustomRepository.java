@@ -1,8 +1,8 @@
 package com.serverstudy.todolist.repository;
 
-import com.serverstudy.todolist.domain.Priority;
-import com.serverstudy.todolist.domain.Progress;
 import com.serverstudy.todolist.domain.Todo;
+import com.serverstudy.todolist.domain.enums.Priority;
+import com.serverstudy.todolist.domain.enums.Progress;
 
 import java.util.List;
 

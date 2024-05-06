@@ -2,9 +2,9 @@ package com.serverstudy.todolist.dto.request;
 
 import com.serverstudy.todolist.common.Enum;
 import com.serverstudy.todolist.domain.Folder;
-import com.serverstudy.todolist.domain.Priority;
-import com.serverstudy.todolist.domain.Progress;
 import com.serverstudy.todolist.domain.Todo;
+import com.serverstudy.todolist.domain.enums.Priority;
+import com.serverstudy.todolist.domain.enums.Progress;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;

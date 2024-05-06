@@ -1,4 +1,4 @@
-package com.serverstudy.todolist.domain;
+package com.serverstudy.todolist.domain.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Getter;

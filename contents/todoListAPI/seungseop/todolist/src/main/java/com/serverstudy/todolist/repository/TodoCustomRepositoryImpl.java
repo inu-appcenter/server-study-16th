@@ -2,10 +2,10 @@ package com.serverstudy.todolist.repository;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.serverstudy.todolist.domain.Priority;
-import com.serverstudy.todolist.domain.Progress;
 import com.serverstudy.todolist.domain.QTodo;
 import com.serverstudy.todolist.domain.Todo;
+import com.serverstudy.todolist.domain.enums.Priority;
+import com.serverstudy.todolist.domain.enums.Progress;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
