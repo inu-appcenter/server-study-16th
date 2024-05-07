@@ -1,13 +1,12 @@
 package com.appcenter.practice.exception;
 
 
+import com.appcenter.practice.common.StatusCode;
 import com.appcenter.practice.dto.response.ErrorResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import java.util.ArrayList;
 
 @RestControllerAdvice
 public class ExceptionControllerAdvice{
@@ -22,11 +21,10 @@ public class ExceptionControllerAdvice{
     public ResponseEntity<ErrorResponse> handleMethodArgumentNotValid(MethodArgumentNotValidException e){
 
         ErrorResponse errorResponse= ErrorResponse.builder()
-                .status(ErrorCode.INVALID_INPUT_VALUE.getStatus().toString())
-                .message(ErrorCode.INVALID_INPUT_VALUE.getMessage())
-                .errors(ErrorResponse.ValidationError.from(e.getBindingResult()))
+                .message(StatusCode.INPUT_VALUE_INVALID.getMessage())
+                .validationErrors(ErrorResponse.ValidationError.from(e.getBindingResult()))
                 .build();
-        return ResponseEntity.status(ErrorCode.INVALID_INPUT_VALUE.getStatus())
+        return ResponseEntity.status(StatusCode.INPUT_VALUE_INVALID.getStatus())
                 .body(errorResponse);
     }
 
@@ -34,11 +32,9 @@ public class ExceptionControllerAdvice{
     @ExceptionHandler(CustomException.class)
     public ResponseEntity<ErrorResponse> handleCustomException(CustomException e){
         ErrorResponse errorResponse=ErrorResponse.builder()
-                .status(e.getErrorCode().getStatus().toString())
-                .message(e.getErrorCode().getMessage())
-                .errors(new ArrayList<>())
+                .message(e.getStatusCode().getMessage())
                 .build();
-        return ResponseEntity.status(e.getErrorCode().getStatus())
+        return ResponseEntity.status(e.getStatusCode().getStatus())
                 .body(errorResponse);
     }
 }

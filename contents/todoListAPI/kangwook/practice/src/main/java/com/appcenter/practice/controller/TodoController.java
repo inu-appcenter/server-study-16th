@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.appcenter.practice.common.StatusCode.*;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/todos")
@@ -21,37 +23,37 @@ public class TodoController {
 
     @GetMapping
     public ResponseEntity<CommonResponse<List<ReadTodoRes>>> getTodoList(){
-        return ResponseEntity.ok(CommonResponse.of("Ok","TodoList 조회 성공",todoService.getTodoList()));
+        return ResponseEntity.ok(CommonResponse.of(TODO_FOUND.getMessage(), todoService.getTodoList()));
     }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<CommonResponse<ReadTodoRes>> getTodo(@PathVariable Long id){
-        return ResponseEntity.ok(CommonResponse.of("Ok","Todo 조회 성공",todoService.getTodo(id)));
+        return ResponseEntity.ok(CommonResponse.of(TODO_FOUND.getMessage(),todoService.getTodo(id)));
     }
 
     @PostMapping
     public ResponseEntity<CommonResponse<Long>> addTodo(@RequestBody @Valid AddTodoReq reqDto){
         return ResponseEntity
-                .status(201)
-                .body(CommonResponse.of("Created","Todo 생성 성공.",todoService.saveTodo(reqDto)));
+                .status(TODO_CREATE.getStatus())
+                .body(CommonResponse.of(TODO_CREATE.getMessage(),todoService.saveTodo(reqDto)));
     }
 
     @PatchMapping(value = "/{id}")
     public ResponseEntity<CommonResponse<Long>> updateTodo(@PathVariable Long id, @RequestBody @Valid UpdateTodoReq reqDto){
         return ResponseEntity
-                .ok(CommonResponse.of("Ok","Todo 수정 성공",todoService.updateTodo(id,reqDto)));
+                .ok(CommonResponse.of(TODO_UPDATE.getMessage(),todoService.updateTodo(id,reqDto)));
     }
 
     @PatchMapping(value = "/{id}/complete")
     public ResponseEntity<CommonResponse<Long>> completeTodo(@PathVariable Long id){
         return ResponseEntity
-                .ok(CommonResponse.of("Ok","Todo 완료 성공",todoService.completeTodo(id)));
+                .ok(CommonResponse.of(TODO_UPDATE.getMessage(),todoService.completeTodo(id)));
     }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<CommonResponse<Long>> deleteTodo(@PathVariable Long id){
         return ResponseEntity
-                .ok(CommonResponse.of("Ok","Todo 삭제 성공",todoService.deleteTodo(id)));
+                .ok(CommonResponse.of(TODO_DELETE.getMessage(),todoService.deleteTodo(id)));
     }
 
 }

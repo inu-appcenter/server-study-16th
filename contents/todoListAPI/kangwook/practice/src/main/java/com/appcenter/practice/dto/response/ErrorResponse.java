@@ -1,5 +1,6 @@
 package com.appcenter.practice.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.validation.BindingResult;
@@ -9,16 +10,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
+@JsonInclude(JsonInclude.Include.NON_NULL)// Null 값인 필드 json으로 보낼 시 제외
 public class ErrorResponse {
-    private final String status;
     private final String message;
-    private final List<ValidationError> errors;
+    private final List<ValidationError> validationErrors;
 
     @Builder
-    private ErrorResponse(String status, String message, List<ValidationError> errors) {
-        this.status = status;
+    private ErrorResponse(String message, List<ValidationError> validationErrors) {
         this.message = message;
-        this.errors=errors;
+        this.validationErrors = validationErrors;
     }
 
     @Getter

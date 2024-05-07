@@ -1,6 +1,7 @@
 package com.appcenter.practice.exception;
 
 
+import com.appcenter.practice.common.StatusCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -8,5 +9,5 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CustomException extends RuntimeException{
 
-    private final ErrorCode errorCode;
+    private final StatusCode statusCode;
 }

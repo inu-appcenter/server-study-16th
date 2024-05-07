@@ -7,7 +7,7 @@ import com.appcenter.practice.dto.reqeust.comment.AddCommentReq;
 import com.appcenter.practice.dto.reqeust.comment.UpdateCommentReq;
 import com.appcenter.practice.dto.response.comment.ReadCommentRes;
 import com.appcenter.practice.exception.CustomException;
-import com.appcenter.practice.exception.ErrorCode;
+import com.appcenter.practice.common.StatusCode;
 import com.appcenter.practice.repository.CommentRepository;
 import com.appcenter.practice.repository.TodoRepository;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +39,7 @@ public class CommentService {
     @Transactional
     public Long saveComment(Long todoId, AddCommentReq reqDto){
         Todo todo= todoRepository.findById(todoId)
-                .orElseThrow(()-> new CustomException(ErrorCode.NOT_EXIST_TODO));
+                .orElseThrow(()-> new CustomException(StatusCode.TODO_NOT_EXIST));
         return commentRepository.save(reqDto.toEntity(todo)).getId();
     }
 
@@ -59,6 +59,6 @@ public class CommentService {
 
     private Comment findByCommentId(Long id){
        return commentRepository.findById(id)
-                .orElseThrow(()->new CustomException(ErrorCode.NOT_EXIST_COMMENT));
+                .orElseThrow(()->new CustomException(StatusCode.COMMENT_NOT_EXIST));
     }
 }

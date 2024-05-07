@@ -7,7 +7,7 @@ import com.appcenter.practice.dto.reqeust.todo.AddTodoReq;
 import com.appcenter.practice.dto.reqeust.todo.UpdateTodoReq;
 import com.appcenter.practice.dto.response.todo.ReadTodoRes;
 import com.appcenter.practice.exception.CustomException;
-import com.appcenter.practice.exception.ErrorCode;
+import com.appcenter.practice.common.StatusCode;
 import com.appcenter.practice.repository.MemberRepository;
 import com.appcenter.practice.repository.TodoRepository;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +40,7 @@ public class TodoService {
     @Transactional
     public Long saveTodo(AddTodoReq reqDto){
         Member member=memberRepository.findByEmail(reqDto.getEmail())
-                .orElseThrow(()->new CustomException(ErrorCode.NOT_EXIST_MEMBER));
+                .orElseThrow(()->new CustomException(StatusCode.MEMBER_NOT_EXIST));
         return todoRepository.save(reqDto.toEntity(member)).getId();
     }
 
@@ -66,6 +66,6 @@ public class TodoService {
 
     private Todo findByTodoId(Long todoId) {
         return todoRepository.findById(todoId)
-                .orElseThrow(()->new CustomException(ErrorCode.NOT_EXIST_TODO));
+                .orElseThrow(()->new CustomException(StatusCode.TODO_NOT_EXIST));
     }
 }

@@ -22,7 +22,7 @@ public class QTodo extends EntityPathBase<Todo> {
 
     public static final QTodo todo = new QTodo("todo");
 
-    public final QBaseEntity _super = new QBaseEntity(this);
+    public final com.appcenter.practice.common.QBaseEntity _super = new com.appcenter.practice.common.QBaseEntity(this);
 
     public final ListPath<Comment, QComment> commentList = this.<Comment, QComment>createList("commentList", Comment.class, QComment.class, PathInits.DIRECT2);
 

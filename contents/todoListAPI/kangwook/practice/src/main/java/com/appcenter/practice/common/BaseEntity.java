@@ -1,4 +1,4 @@
-package com.appcenter.practice.domain;
+package com.appcenter.practice.common;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
