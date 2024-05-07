@@ -37,10 +37,10 @@ public class TodoService {
      */
 
     // 1. Todo 추가
-    public TodoResponseDto add(Long id,TodoRequestDto requestDto) {
+    public TodoResponseDto add(Long id, TodoRequestDto requestDto) {
         Todo todo = TodoMapper.INSTANCE.toEntity(requestDto);
         Member member = memberRepository.findById(id)
-                        .orElseThrow( ()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         todo.matchMember(member);
 
         todoRepository.save(todo);
@@ -49,17 +49,20 @@ public class TodoService {
     }
 
     // 2. Todo 수정
-    public TodoResponseDto update(Long memberId,Long todoId, TodoRequestDto requestDto) {
+    public TodoResponseDto update(Long memberId, Long todoId, TodoRequestDto requestDto) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BaseException(ErrorCode.NOT_EXIST_ID));
         // 회원과 할일 간에 -> 관계가 매핑되어 있지 않음
-        List<Todo> todos = todoRepository.findByMember(member)
-                .orElseThrow(()-> new BaseException(ErrorCode.NOT_EXIST_TODO));
+        List<Todo> todos = todoRepository.findAllByMember(member);
+        if (todos.isEmpty()) {
+            throw new BaseException(ErrorCode.NOT_MATCH_TODO_ID);
+        }
+
 
         Todo targetTodo = todos.stream()
-                        .filter(todo-> todo.getId().equals(todoId))
-                        .findFirst()
-                                .orElseThrow(() -> new BaseException(ErrorCode.NOT_MATCH_TODO_ID));
+                .filter(todo -> todo.getId().equals(todoId))
+                .findFirst()
+                .orElseThrow(() -> new BaseException(ErrorCode.NOT_MATCH_TODO_ID));
 
         targetTodo.updateTitle(requestDto.getTitle());
         targetTodo.updateContents(requestDto.getContents());
@@ -81,13 +84,15 @@ public class TodoService {
     }
 
     // 4. Todo 리스트 조회 (memberId로 조회)
-    public List<TodoResponseDto> searchById(Long id){
+    public List<TodoResponseDto> searchById(Long id) {
         // 회원찾기
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new BaseException(ErrorCode.NOT_EXIST_ID));
         // 회원으로
-        List<Todo> todos  = todoRepository.findByMember(member)
-                .orElseThrow(()->new BaseException(ErrorCode.NOT_EXIST_TODO));
+        List<Todo> todos = todoRepository.findAllByMember(member);
+        if (todos.isEmpty()) {
+            throw new BaseException(ErrorCode.NOT_MATCH_TODO_ID);
+        }
 
         return todos.stream()
                 .map(TodoMapper.INSTANCE::toDto)
@@ -96,12 +101,8 @@ public class TodoService {
     }
 
     // 5. Todo 삭제
-    public void delete(Long id){
+    public void delete(Long id) {
         todoRepository.deleteById(id);
     }
 
-//    // 6. Todo 전체 삭제
-//    public void deleteAll(){
-//        todoRepository.deleteAll();
-//    }
 }

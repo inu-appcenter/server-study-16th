@@ -12,6 +12,7 @@ public interface TodoRepository  extends JpaRepository<Todo,Long> {
     List<Todo> findAll ();
     Optional<Todo> findById(Long id);
 
-    Optional<List<Todo>> findByMember(Member member);
+    List<Todo> findAllByMember(Member member);
+
 
 }

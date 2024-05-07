@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class MemberService {
 
     private final MemberRepository memberRepository;
@@ -48,16 +47,13 @@ public class MemberService {
 
     // 2. 로그인
     public boolean signIn(MemberRequestDto request){
-       Member member = memberRepository.findByLoginId(request.getLoginId())
-               .orElseThrow(()-> new BaseException(ErrorCode.NOT_EXIST_ID));
+       Member member = findbyLoginId(request.getLoginId());
        return member.getPassword().equals(request.getPassword());
     }
 
     // 3. 회원 검색
     public MemberResponseDto searchId(Long id){
-        Member member =  memberRepository.findById(id)
-                .orElseThrow(() ->  new BaseException(ErrorCode.NOT_EXIST_ID));
-
+        Member member = findbyId(id);
         return MemberMapper.INSTANCE.toDto(member);
     }
 
@@ -74,8 +70,7 @@ public class MemberService {
 
     // 5. 정보수정
     public MemberResponseDto update(Long id, MemberRequestDto request){
-        Member member = memberRepository.findById(id)
-                .orElseThrow(() -> new BaseException(ErrorCode.NOT_EXIST_ID));
+        Member member = findbyId(id);
         member.updateLoginId(request.getLoginId()); ;
         member.updatePassword(request.getPassword());
         member.updateName(request.getName());
@@ -90,4 +85,16 @@ public class MemberService {
 
     }
 
+
+    // 회원 조회 메서드
+    private Member findbyId(Long id){
+        return memberRepository.findById(id)
+                .orElseThrow(() ->  new BaseException(ErrorCode.NOT_EXIST_ID));
+    }
+
+    // 회원 조회 - 로그인 아이디 조회 메서드
+    private Member findbyLoginId(String loginId){
+        return  memberRepository.findByLoginId(loginId)
+                .orElseThrow(()-> new BaseException(ErrorCode.NOT_EXIST_ID));
+    }
 }
