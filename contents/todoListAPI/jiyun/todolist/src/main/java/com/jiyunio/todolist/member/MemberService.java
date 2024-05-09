@@ -5,6 +5,7 @@ import com.jiyunio.todolist.customError.ErrorCode;
 import com.jiyunio.todolist.member.dto.ChangeUserPwDTO;
 import com.jiyunio.todolist.member.dto.SignInDTO;
 import com.jiyunio.todolist.member.dto.SignUpDTO;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Service;
 public class MemberService {
     private final MemberRepository memberRepository;
 
-    public String signUp(SignUpDTO signUpDto) {
+    public String signUp(@Valid SignUpDTO signUpDto) {
         if (memberRepository.existsByUserEmail(signUpDto.getUserEmail())) {
             // 이미 존재하는 이메일
             throw new CustomException(HttpStatus.BAD_REQUEST, ErrorCode.EXIST_EMAIL);
@@ -39,7 +40,7 @@ public class MemberService {
         throw new CustomException(HttpStatus.BAD_REQUEST, ErrorCode.NOT_SAME_CONFIRM_PASSWORD);
     }
 
-    public String signIn(SignInDTO signInDto) {
+    public String signIn(@Valid SignInDTO signInDto) {
         if (memberRepository.existsByUserId(signInDto.getUserId())) {
             Member member = memberRepository.findByUserId(signInDto.getUserId()).get();
             if (member.getUserPw().equals(signInDto.getUserPw())) {
@@ -53,7 +54,7 @@ public class MemberService {
         throw new CustomException(HttpStatus.NOT_FOUND, ErrorCode.NOT_EXIST_USERID);
     }
 
-    public void updateUserPw(Long id, ChangeUserPwDTO changeUserPwDto) {
+    public void updateUserPw(Long id, @Valid ChangeUserPwDTO changeUserPwDto) {
         Member member = memberRepository.findById(id).get();
         if (member.getUserPw().equals(changeUserPwDto.getUserPw())) { // 회원 비밀번호 확인
             if (changeUserPwDto.getChangePw().equals(changeUserPwDto.getConfirmChangePw())) {
