@@ -22,7 +22,7 @@ public class MemberRequestDto {
     @Schema(example = "alex")
     @NotBlank(message = "아이디는 필수 입력값입니다.")
     @Pattern(message = "잘못된 아이디 형식입니다.",
-            regexp = "^[a-z0-9]{3,12}" )
+            regexp = "^[A-Za-z0-9]{3,12}" )
     private String loginId;
 
     @Schema(example = "Q1w2e3r4!")
