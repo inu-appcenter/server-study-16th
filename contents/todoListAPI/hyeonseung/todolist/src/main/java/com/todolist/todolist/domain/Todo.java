@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
 
@@ -22,7 +23,8 @@ public class Todo extends BaseEntity {
 
     private String contents;
 
-    private Boolean isCompleted;
+    @ColumnDefault("false")
+    private Boolean isCompleted = false;
 
     private LocalDateTime dueAt;
 

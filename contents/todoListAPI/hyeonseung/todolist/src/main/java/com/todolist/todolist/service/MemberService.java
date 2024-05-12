@@ -1,6 +1,7 @@
 package com.todolist.todolist.service;
 
 import com.todolist.todolist.domain.Member;
+import com.todolist.todolist.dto.member.MemberLoginResponseDto;
 import com.todolist.todolist.dto.member.MemberMapper;
 import com.todolist.todolist.dto.member.MemberRequestDto;
 import com.todolist.todolist.dto.member.MemberResponseDto;
@@ -9,12 +10,8 @@ import com.todolist.todolist.repository.MemberRepository;
 import com.todolist.todolist.validators.BaseException;
 import com.todolist.todolist.validators.ErrorCode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,9 +43,11 @@ public class MemberService {
     }
 
     // 2. 로그인
-    public boolean signIn(MemberRequestDto request){
+    public MemberLoginResponseDto login(MemberRequestDto.LoginRequestDto request){
        Member member = throwFindbyLoginId(request.getLoginId());
-       return member.getPassword().equals(request.getPassword());
+       if (!member.getPassword().equals(request.getPassword()))
+           throw new BaseException(ErrorCode.UNAUTHORIZED_LOGIN);
+       return new MemberLoginResponseDto(member.getId());
     }
 
     // 3. 회원 검색
@@ -70,9 +69,15 @@ public class MemberService {
     // 5. 정보수정
     public MemberResponseDto update(Long id, MemberRequestDto request){
         Member member = throwFindbyId(id);
-        member.updateLoginId(request.getLoginId()); ;
-        member.updatePassword(request.getPassword());
-        member.updateName(request.getName());
+
+        if(memberRepository.existsByLoginId(request.getLoginId()))
+            throw new BaseException(ErrorCode.DUPLICATE_LOGINID);
+        else {
+            member.updateLoginId(request.getLoginId());
+            member.updatePassword(request.getPassword());
+            member.updateName(request.getName());
+        }
+
        memberRepository.save(member);
 
        return MemberMapper.INSTANCE.toDto(member);
@@ -80,10 +85,10 @@ public class MemberService {
 
     // 6. 회원 삭제
     public void delete(Long id){
+        Member member = throwFindbyId(id);
         memberRepository.deleteById(id);
 
     }
-
 
     // 회원 조회 메서드
     private Member throwFindbyId(Long id){

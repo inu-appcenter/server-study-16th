@@ -102,7 +102,9 @@ public class TodoService {
 
     // 5. Todo 삭제
     public void delete(Long id) {
-        todoRepository.deleteById(id);
+       Todo todo = todoRepository.findById(id)
+                       .orElseThrow(()-> new BaseException(ErrorCode.NOT_EXIST_TODO));
+        todoRepository.deleteById(todo.getId());
     }
 
 }
