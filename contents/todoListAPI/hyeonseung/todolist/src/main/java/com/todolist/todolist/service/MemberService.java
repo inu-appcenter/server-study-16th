@@ -36,7 +36,7 @@ public class MemberService {
     // 1. 회원가입
     public MemberResponseDto create(MemberRequestDto request) {
         if (memberRepository.existsByLoginId(request.getLoginId()))
-            throw new BaseException(ErrorCode.INVALID_ID);
+            throw new BaseException(ErrorCode.DUPLICATE_LOGINID);
 
        Member member = MemberMapper.INSTANCE.toEntity(request);
        memberRepository.save(member);
@@ -47,20 +47,19 @@ public class MemberService {
 
     // 2. 로그인
     public boolean signIn(MemberRequestDto request){
-       Member member = findbyLoginId(request.getLoginId());
+       Member member = throwFindbyLoginId(request.getLoginId());
        return member.getPassword().equals(request.getPassword());
     }
 
     // 3. 회원 검색
     public MemberResponseDto searchId(Long id){
-        Member member = findbyId(id);
+        Member member = throwFindbyId(id);
         return MemberMapper.INSTANCE.toDto(member);
     }
 
     // 4. 회원 전체 검색
     public List<MemberResponseDto> searchAll(){
         List<Member> members = memberRepository.findAll();
-        List<MemberResponseDto>  memberList = new ArrayList<>();
 
         return members.stream()
                 .map(MemberMapper.INSTANCE::toDto)
@@ -70,7 +69,7 @@ public class MemberService {
 
     // 5. 정보수정
     public MemberResponseDto update(Long id, MemberRequestDto request){
-        Member member = findbyId(id);
+        Member member = throwFindbyId(id);
         member.updateLoginId(request.getLoginId()); ;
         member.updatePassword(request.getPassword());
         member.updateName(request.getName());
@@ -87,13 +86,13 @@ public class MemberService {
 
 
     // 회원 조회 메서드
-    private Member findbyId(Long id){
+    private Member throwFindbyId(Long id){
         return memberRepository.findById(id)
                 .orElseThrow(() ->  new BaseException(ErrorCode.NOT_EXIST_ID));
     }
 
     // 회원 조회 - 로그인 아이디 조회 메서드
-    private Member findbyLoginId(String loginId){
+    private Member throwFindbyLoginId(String loginId){
         return  memberRepository.findByLoginId(loginId)
                 .orElseThrow(()-> new BaseException(ErrorCode.NOT_EXIST_ID));
     }

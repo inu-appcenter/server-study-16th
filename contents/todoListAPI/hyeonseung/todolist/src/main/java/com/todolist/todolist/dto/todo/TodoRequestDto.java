@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-@Builder
 public class TodoRequestDto {
 
     @NotBlank(message = "제목을 입력해주세요.")

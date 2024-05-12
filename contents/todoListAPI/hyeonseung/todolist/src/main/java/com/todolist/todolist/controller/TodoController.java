@@ -22,8 +22,7 @@ public class TodoController {
 
     // 회원에 따른 Todo 추가
     @PostMapping("/{memberId}")
-    public ResponseEntity<?> addTodo(@PathVariable Long memberId, @RequestBody @Valid TodoRequestDto request){
-
+    public ResponseEntity<TodoResponseDto> addTodo(@PathVariable Long memberId, @RequestBody @Valid TodoRequestDto request){
 
         TodoResponseDto responseDto = todoService.add(memberId, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
@@ -46,7 +45,7 @@ public class TodoController {
 
     // Todo 수정
     @PutMapping("/{memberId}/{todoId}")
-    public ResponseEntity<?> update(@PathVariable Long memberId, @PathVariable Long todoId, @RequestBody @Valid TodoRequestDto request){
+    public ResponseEntity<TodoResponseDto> update(@PathVariable Long memberId, @PathVariable Long todoId, @RequestBody @Valid TodoRequestDto request){
 
         TodoResponseDto responseDto = todoService.update(memberId,todoId,request);
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
