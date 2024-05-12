@@ -3,7 +3,6 @@ package com.todolist.todolist.controller;
 import com.todolist.todolist.dto.todo.TodoRequestDto;
 import com.todolist.todolist.dto.todo.TodoResponseDto;
 import com.todolist.todolist.service.TodoService;
-import com.todolist.todolist.validators.ErrorMessageHandler;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,16 +18,12 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class TodoController {
     private final TodoService todoService;
-    private final ErrorMessageHandler messageHandler;
+  //  private final ErrorMessageHandler messageHandler;
 
     // 회원에 따른 Todo 추가
     @PostMapping("/{memberId}")
-    public ResponseEntity<?> addTodo(@PathVariable Long memberId, @RequestBody @Valid TodoRequestDto request, BindingResult bindingResult){
+    public ResponseEntity<?> addTodo(@PathVariable Long memberId, @RequestBody @Valid TodoRequestDto request){
 
-        if(bindingResult.hasErrors()) {
-            Map<String,String> errorMessages = messageHandler.errorResult(bindingResult);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessages);
-        }
 
         TodoResponseDto responseDto = todoService.add(memberId, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
@@ -51,12 +46,7 @@ public class TodoController {
 
     // Todo 수정
     @PutMapping("/{memberId}/{todoId}")
-    public ResponseEntity<?> update(@PathVariable Long memberId, @PathVariable Long todoId, @RequestBody @Valid TodoRequestDto request,BindingResult bindingResult){
-
-        if(bindingResult.hasErrors()){
-            Map<String,String> errorMessages = messageHandler.errorResult(bindingResult);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessages);
-        }
+    public ResponseEntity<?> update(@PathVariable Long memberId, @PathVariable Long todoId, @RequestBody @Valid TodoRequestDto request){
 
         TodoResponseDto responseDto = todoService.update(memberId,todoId,request);
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
