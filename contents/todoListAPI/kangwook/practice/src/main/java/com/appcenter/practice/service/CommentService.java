@@ -6,6 +6,8 @@ import com.appcenter.practice.domain.Todo;
 import com.appcenter.practice.dto.reqeust.comment.AddCommentReq;
 import com.appcenter.practice.dto.reqeust.comment.UpdateCommentReq;
 import com.appcenter.practice.dto.response.comment.ReadCommentRes;
+import com.appcenter.practice.exception.CustomException;
+import com.appcenter.practice.common.StatusCode;
 import com.appcenter.practice.repository.CommentRepository;
 import com.appcenter.practice.repository.TodoRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,31 +32,33 @@ public class CommentService {
     }
 
     public ReadCommentRes getComment(Long id){
-        Comment comment=commentRepository.findById(id)
-                .orElseThrow(()-> new IllegalArgumentException("존재하지 않는 comment입니다."));
+        Comment comment=findByCommentId(id);
         return ReadCommentRes.from(comment);
     }
 
     @Transactional
     public Long saveComment(Long todoId, AddCommentReq reqDto){
         Todo todo= todoRepository.findById(todoId)
-                .orElseThrow(()-> new IllegalArgumentException("존재하지 않는 todo입니다."));
+                .orElseThrow(()-> new CustomException(StatusCode.TODO_NOT_EXIST));
         return commentRepository.save(reqDto.toEntity(todo)).getId();
     }
 
     @Transactional
     public Long updateComment(Long id, UpdateCommentReq reqDto){
-        Comment comment= commentRepository.findById(id)
-                .orElseThrow(()-> new IllegalArgumentException("존재하지 않는 comment입니다."));
+        Comment comment= findByCommentId(id);
         comment.changeContent(reqDto.getContent());
         return id;
     }
 
     @Transactional
     public Long deleteComment(Long id){
-        Comment comment=commentRepository.findById(id)
-                .orElseThrow(()->new IllegalArgumentException("존재하지 않는 comment입니다."));
+        Comment comment=findByCommentId(id);
         comment.changeDeleted(true);
         return id;
+    }
+
+    private Comment findByCommentId(Long id){
+       return commentRepository.findById(id)
+                .orElseThrow(()->new CustomException(StatusCode.COMMENT_NOT_EXIST));
     }
 }
