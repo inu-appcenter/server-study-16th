@@ -1,5 +1,6 @@
 package com.jiyunio.todolist.todo.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -9,6 +10,7 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
+@Schema(description = "todo 생성 : todo checked 기본 값 False")
 public class CreateTodoDTO {
     @NotBlank(message = "todo를 작성해주세요.")
     private String content;
