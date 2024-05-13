@@ -48,10 +48,10 @@ public class MemberService {
                 return member.getUserId();
             }
             // 회원의 비밀번호와 불일치
-            throw new CustomException(HttpStatus.NOT_FOUND, ErrorCode.WRONG_PASSWORD);
+            throw new CustomException(HttpStatus.NOT_FOUND, ErrorCode.WRONG_USERID_PASSWORD);
         }
         // 아이디 없음
-        throw new CustomException(HttpStatus.NOT_FOUND, ErrorCode.NOT_EXIST_USERID);
+        throw new CustomException(HttpStatus.NOT_FOUND, ErrorCode.WRONG_USERID_PASSWORD);
     }
 
     public void updateUserPw(Long id, @Valid ChangeUserPwDTO changeUserPwDto) {
@@ -66,7 +66,7 @@ public class MemberService {
             throw new CustomException(HttpStatus.BAD_REQUEST, ErrorCode.NOT_SAME_CONFIRM_PASSWORD);
         }
         // 회원의 비밀번호와 불일치
-        throw new CustomException(HttpStatus.NOT_FOUND, ErrorCode.WRONG_PASSWORD);
+        throw new CustomException(HttpStatus.NOT_FOUND, ErrorCode.WRONG_USERID_PASSWORD);
     }
 
     public void deleteMember(Long id, String userPw) {
@@ -76,6 +76,6 @@ public class MemberService {
             memberRepository.deleteById(id);
         }
         // 비밀번호 불일치
-        throw new CustomException(HttpStatus.NOT_FOUND, ErrorCode.WRONG_PASSWORD);
+        throw new CustomException(HttpStatus.NOT_FOUND, ErrorCode.WRONG_USERID_PASSWORD);
     }
 }
