@@ -17,7 +17,6 @@ public interface MemberMapper extends EntityMapper<MemberRequestDto, MemberRespo
     MemberMapper INSTANCE = Mappers.getMapper(MemberMapper.class);
 
     @Override
-    @Mapping(target = "id", ignore = true)
     @Mapping(target = "todoList",ignore = true) // Member 엔티티가 @Builder 이다 보니. 제거 대상
     Member toEntity(final MemberRequestDto requestDto);
     @Override

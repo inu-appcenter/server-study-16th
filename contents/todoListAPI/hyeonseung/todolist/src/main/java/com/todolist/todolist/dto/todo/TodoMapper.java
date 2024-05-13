@@ -23,6 +23,6 @@ public interface TodoMapper extends EntityMapper<TodoRequestDto,TodoResponseDto,
     Todo toEntity(final TodoRequestDto todoRequestDto);
 
     @Override
-    @Mapping(target = "member", ignore = true)
+    @Mapping(target = "memberId", source = "member.id")
     TodoResponseDto toDto(final Todo todo);
 }
