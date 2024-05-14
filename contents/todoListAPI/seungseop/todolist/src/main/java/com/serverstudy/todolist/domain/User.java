@@ -3,7 +3,6 @@ package com.serverstudy.todolist.domain;
 import com.serverstudy.todolist.domain.enums.Role;
 import com.serverstudy.todolist.dto.request.UserReq.UserPatch;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -25,7 +24,6 @@ public class User {
 
     @Column(unique = true)
     @NotNull
-    @Email(message = "이메일 형식이 올바르지 않습니다.")
     private String email;
 
     @Column

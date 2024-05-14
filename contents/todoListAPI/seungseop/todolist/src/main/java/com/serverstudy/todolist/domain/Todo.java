@@ -63,11 +63,9 @@ public class Todo {
         else this.progress = Progress.TODO;
     }
 
-    public long moveToTrash() {
+    public void moveToTrash() {
         this.isDeleted = true;
         this.deletedTime = LocalDateTime.now();
-
-        return this.id;
     }
 
     public void changeFolder(Folder folder) {

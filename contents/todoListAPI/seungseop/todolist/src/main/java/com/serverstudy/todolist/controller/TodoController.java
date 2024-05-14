@@ -9,6 +9,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
 import static com.serverstudy.todolist.dto.request.TodoReq.TodoFolderPatch;
 import static com.serverstudy.todolist.dto.request.TodoReq.TodoPut;
 
+@Validated
 @RestController
 @RequestMapping("/api/todo")
 @CrossOrigin(origins = "*")
@@ -25,15 +27,15 @@ public class TodoController {
     private final TodoService todoService;
 
     @PostMapping
-    public ResponseEntity<?> postTodo(@Valid @RequestBody TodoPost todoPost, Long userId) {
+    public ResponseEntity<Long> postTodo(@Valid @RequestBody TodoPost todoPost, @NotNull Long userId) {
 
-        long todoId = todoService.create(todoPost, userId);
+        Long todoId = todoService.create(todoPost, userId);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(todoId);
     }
 
     @GetMapping
-    public ResponseEntity<?> getTodosByRequirements(@Valid @ModelAttribute TodoGet todoGet, Long userId) {
+    public ResponseEntity<List<TodoRes>> getTodosByRequirements(@Valid @ModelAttribute TodoGet todoGet, @NotNull Long userId) {
 
         List<TodoRes> responseList = todoService.findAllByConditions(todoGet, userId);
 
@@ -41,34 +43,36 @@ public class TodoController {
     }
 
     @PutMapping("/{todoId}")
-    public ResponseEntity<?> putTodo(@Valid @RequestBody TodoPut todoPut, @PathVariable Long todoId, Long userId) {
+    public ResponseEntity<Long> putTodo(@Valid @RequestBody TodoPut todoPut, @PathVariable Long todoId) {
 
-        long updatedTodoId = todoService.update(todoPut, todoId, userId);
+        Long updatedTodoId = todoService.update(todoPut, todoId);
 
         return ResponseEntity.ok(updatedTodoId);
     }
 
     @PatchMapping("/{todoId}/progress")
-    public ResponseEntity<?> switchTodoProgress(@PathVariable Long todoId, Long userId) {
+    public ResponseEntity<Long> switchTodoProgress(@PathVariable Long todoId) {
 
-        long switchedTodoId = todoService.switchProgress(todoId, userId);
+        Long switchedTodoId = todoService.switchProgress(todoId);
 
         return ResponseEntity.ok(switchedTodoId);
     }
 
     @PatchMapping("/{todoId}/folder")
-    public ResponseEntity<?> patchTodoFolder(@RequestBody TodoFolderPatch todoFolderPatch, @PathVariable Long todoId, Long userId) {
+    public ResponseEntity<Long> patchTodoFolder(@RequestBody TodoFolderPatch todoFolderPatch, @PathVariable Long todoId) {
 
-        long movedTodoId = todoService.moveFolder(todoFolderPatch.getFolderId(), todoId, userId);
+        Long movedTodoId = todoService.moveFolder(todoFolderPatch.getFolderId(), todoId);
 
         return ResponseEntity.ok(movedTodoId);
     }
 
     @DeleteMapping("/{todoId}")
-    public ResponseEntity<?> deleteTodo(@PathVariable Long todoId, @NotNull Boolean restore, Long userId) {
+    public ResponseEntity<Long> deleteTodo(@PathVariable Long todoId, @NotNull Boolean restore) {
 
-        Long result = todoService.delete(todoId, restore, userId);
+        Long result = todoService.delete(todoId, restore);
 
-        return ResponseEntity.status(HttpStatus.OK).body(result);
+        return (result != null)
+                ? ResponseEntity.status(HttpStatus.OK).body(result)
+                : ResponseEntity.noContent().build();
     }
 }

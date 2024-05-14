@@ -27,24 +27,23 @@ public class UserService {
     @Transactional
     public long join(UserPost userPost) {
 
-        String email = userPost.getEmail();
-
-        if (userRepository.existsByEmail(email))
-            throw new CustomException(DUPLICATE_USER_EMAIL);
+        checkEmailDuplicated(userPost.getEmail());
 
         User user = userPost.toEntity();
 
         return userRepository.save(user).getId();
     }
 
-    public boolean checkEmail(String email) {
-        return userRepository.existsByEmail(email);
+    public void checkEmailDuplicated(String email) {
+
+        if (userRepository.existsByEmail(email)) {
+            throw new CustomException(DUPLICATE_USER_EMAIL);
+        }
     }
 
     public UserRes get(Long userId) {
 
-        if (userId == null) throw new IllegalArgumentException("userId 값이 비어있습니다.");
-        User user = userRepository.findById(userId).orElseThrow(() -> new CustomException(USER_NOT_FOUND));
+        User user = getUser(userId);
 
         return UserRes.builder()
                 .id(user.getId())
@@ -56,8 +55,7 @@ public class UserService {
     @Transactional
     public long modify(UserPatch userPatch, Long userId) {
 
-        if (userId == null) throw new IllegalArgumentException("userId 값이 비어있습니다.");
-        User user = userRepository.findById(userId).orElseThrow(() -> new CustomException(USER_NOT_FOUND));
+        User user = getUser(userId);
 
         user.modifyUser(userPatch);
 
@@ -67,13 +65,16 @@ public class UserService {
     @Transactional
     public void delete(Long userId) {
 
-        if (userId == null) throw new IllegalArgumentException("userId 값이 비어있습니다.");
-        User user = userRepository.findById(userId).orElseThrow(() -> new CustomException(USER_NOT_FOUND));
+        User user = getUser(userId);
 
         // 투두 리스트와 폴더 삭제
         todoRepository.deleteAll(todoRepository.findAllByUserId(userId));
         folderRepository.deleteAll(folderRepository.findAllByUserId(userId));
 
         userRepository.delete(user);
+    }
+
+    private User getUser(Long userId) {
+        return userRepository.findById(userId).orElseThrow(() -> new CustomException(USER_NOT_FOUND));
     }
 }

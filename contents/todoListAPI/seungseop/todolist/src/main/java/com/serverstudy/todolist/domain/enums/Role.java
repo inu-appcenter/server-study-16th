@@ -1,6 +1,5 @@
 package com.serverstudy.todolist.domain.enums;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Getter;
 
 import java.util.Arrays;
@@ -15,11 +14,10 @@ public enum Role {
         this.role = role;
     }
 
-    @JsonCreator    // Enum Validation 을 위한 코드, enum 에 속하지 않으면 null 리턴
     public static Role getRole(String inputRole) {
         return Arrays.stream(values())
                 .filter(role -> role.getRole().equals(inputRole))
                 .findAny()
-                .orElse(null);
+                .orElseThrow(() -> new IllegalArgumentException("Role 값이 잘못 되었습니다. 올바른 값을 입력해주세요."));
     }
 }

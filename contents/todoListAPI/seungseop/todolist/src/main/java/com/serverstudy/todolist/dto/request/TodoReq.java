@@ -27,12 +27,13 @@ public interface TodoReq {
 
         private LocalDateTime deadline;
 
-        @Enum(message = "Priority 값이 잘못 되었습니다. 올바른 값을 입력해주세요.")
-        private Priority priority;
+        @NotNull(message = "Priority 값은 비어있을 수 없습니다. 값을 입력해주세요.")
+        @Enum(message = "Priority 값이 잘못 되었습니다. 올바른 값을 입력해주세요.", enumClass = Priority.class, ignoreCase = true)
+        private String priority;
 
         @NotNull(message = "Progress 값은 비어있을 수 없습니다. 값을 입력해주세요.")
-        @Enum(message = "Progress 값이 잘못 되었습니다. 올바른 값을 입력해주세요.")
-        private Progress progress;
+        @Enum(message = "Progress 값이 잘못 되었습니다. 올바른 값을 입력해주세요.", enumClass = Progress.class, ignoreCase = true)
+        private String progress;
 
         private Long folderId;
 
@@ -41,8 +42,8 @@ public interface TodoReq {
                     .title(title == null ? "" : title)
                     .description(description == null ? "" : description)
                     .deadline(deadline)
-                    .priority(priority)
-                    .progress(progress)
+                    .priority(Priority.valueOf(priority))
+                    .progress(Progress.valueOf(progress))
                     .userId(userId)
                     .folder(folder)
                     .build();
@@ -55,21 +56,23 @@ public interface TodoReq {
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     class TodoGet {
 
-        private Integer priority;
+        @Enum(message = "Priority 값이 잘못 되었습니다. 올바른 값을 입력해주세요.", enumClass = Priority.class, ignoreCase = true)
+        private String priority;
 
-        @NotNull(message = "Progress 값은 비어있을 수 없습니다. 값을 입력해주세요.")
+        @Enum(message = "Progress 값이 잘못 되었습니다. 올바른 값을 입력해주세요.", enumClass = Progress.class, ignoreCase = true)
         private String progress;
 
+        @NotNull(message = "idDeleted 값은 비어있을 수 없습니다. 값을 입력해주세요.")
         private Boolean isDeleted;
 
         private Long folderId;
 
         public Priority getPriority() {
-            return Priority.getPriority(priority);
+            return (priority == null) ? null : Priority.valueOf(priority);
         }
 
         public Progress getProgress() {
-            return Progress.getProgress(progress);
+            return (progress == null) ? null : Progress.valueOf(progress);
         }
     }
 
@@ -84,12 +87,13 @@ public interface TodoReq {
 
         private LocalDateTime deadline;
 
-        @Enum(message = "Priority 값이 잘못 되었습니다. 올바른 값을 입력해주세요.")
-        private Priority priority;
+        @NotNull(message = "Priority 값은 비어있을 수 없습니다. 값을 입력해주세요.")
+        @Enum(message = "Priority 값이 잘못 되었습니다. 올바른 값을 입력해주세요.", enumClass = Priority.class, ignoreCase = true)
+        private String priority;
 
         @NotNull(message = "Progress 값은 비어있을 수 없습니다. 값을 입력해주세요.")
-        @Enum(message = "Progress 값이 잘못 되었습니다. 올바른 값을 입력해주세요.")
-        private Progress progress;
+        @Enum(message = "Progress 값이 잘못 되었습니다. 올바른 값을 입력해주세요.", enumClass = Progress.class, ignoreCase = true)
+        private String progress;
 
         private Long folderId;
 
@@ -99,6 +103,14 @@ public interface TodoReq {
 
         public String getDescription() {
             return description == null ? "" : description;
+        }
+
+        public Priority getPriority() {
+            return Priority.valueOf(priority);
+        }
+
+        public Progress getProgress() {
+            return Progress.valueOf(progress);
         }
     }
 

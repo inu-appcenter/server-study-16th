@@ -15,7 +15,7 @@ public interface FolderReq {
 
         @NotBlank(message = "폴더명은 공백으로 입력할 수 없습니다.")
         @Pattern(regexp = "^[ㄱ-ㅎ가-힣a-z0-9-_][ㄱ-ㅎ가-힣a-z0-9-_\\s]*$",
-                message = "폴더명은 공백으로 시작해선 안되며, -_을 제외한 특수문자를 사용할 수 없습니다.")
+                 message = "폴더명은 공백으로 시작해선 안되며, -_을 제외한 특수문자를 사용할 수 없습니다.")
         private String name;
 
         public Folder toEntity(long userId) {
@@ -30,9 +30,9 @@ public interface FolderReq {
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     class FolderPatch {
 
-        @NotBlank
+        @NotBlank(message = "폴더명은 공백으로 입력할 수 없습니다.")
         @Pattern(regexp = "^[ㄱ-ㅎ가-힣a-z0-9-_][ㄱ-ㅎ가-힣a-z0-9-_\\s]*$",
-                message = "폴더명은 공백으로 시작해선 안되며, -_을 제외한 특수문자를 사용할 수 없습니다.")
+                 message = "폴더명은 공백으로 시작해선 안되며, -_을 제외한 특수문자를 사용할 수 없습니다.")
         private String name;
     }
 }

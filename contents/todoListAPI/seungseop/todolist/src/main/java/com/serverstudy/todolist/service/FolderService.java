@@ -2,8 +2,8 @@ package com.serverstudy.todolist.service;
 
 import com.serverstudy.todolist.domain.Folder;
 import com.serverstudy.todolist.domain.Todo;
-import com.serverstudy.todolist.dto.request.FolderReq;
 import com.serverstudy.todolist.dto.request.FolderReq.FolderPatch;
+import com.serverstudy.todolist.dto.request.FolderReq.FolderPost;
 import com.serverstudy.todolist.dto.response.FolderRes;
 import com.serverstudy.todolist.exception.CustomException;
 import com.serverstudy.todolist.repository.FolderRepository;
@@ -30,18 +30,21 @@ public class FolderService {
 
     private final TodoRepository todoRepository;
 
-    private void checkName(String name, long userId) {
-        if (folderRepository.existsByNameAndUserId(name, userId))
+    private void isNameDuplicated(String name, Long userId) {
+
+        if (folderRepository.existsByNameAndUserId(name, userId)) {
             throw new CustomException(DUPLICATE_FOLDER_NAME);
+        }
     }
 
     @Transactional
-    public long create(FolderReq.FolderPost folderPost, Long userId) {
+    public long create(FolderPost folderPost, Long userId) {
 
-        if (userId == null) throw new IllegalArgumentException("userId 값이 비어있습니다.");
-        if (!userRepository.existsById(userId)) throw new CustomException(USER_NOT_FOUND);
+        if (!userRepository.existsById(userId)) {
+            throw new CustomException(USER_NOT_FOUND);
+        }
 
-        checkName(folderPost.getName(), userId);
+        isNameDuplicated(folderPost.getName(), userId);
 
         Folder folder = folderPost.toEntity(userId);
 
@@ -50,12 +53,11 @@ public class FolderService {
 
     public List<FolderRes> getAllWithTodoCount(Long userId) {
 
-        if (userId == null) throw new IllegalArgumentException("userId 값이 비어있습니다.");
-
         List<Folder> folderList = folderRepository.findAllByUserIdOrderByNameAsc(userId);
 
         return folderList.stream().map(folder -> {
             int todoCount = todoRepository.countByFolder(folder);
+
             return FolderRes.builder()
                     .folderId(folder.getId())
                     .name(folder.getName())
@@ -65,11 +67,12 @@ public class FolderService {
     }
 
     @Transactional
-    public long modify(FolderPatch folderPatch, long folderId) {
+    public long modify(FolderPatch folderPatch, Long folderId) {
 
-        Folder folder = folderRepository.findById(folderId).orElseThrow(() -> new NoSuchElementException("해당하는 폴더가 존재하지 않습니다."));
+        Folder folder = folderRepository.findById(folderId)
+                .orElseThrow(() -> new NoSuchElementException("해당하는 폴더가 존재하지 않습니다."));
 
-        checkName(folderPatch.getName(), folder.getUserId());
+        isNameDuplicated(folderPatch.getName(), folder.getUserId());
 
         folder.changeName(folderPatch.getName());
 
@@ -77,14 +80,14 @@ public class FolderService {
     }
 
     @Transactional
-    public void delete(long folderId) {
+    public void delete(Long folderId) {
 
-        Folder folder = folderRepository.findById(folderId).orElseThrow(() -> new NoSuchElementException("해당하는 폴더가 존재하지 않습니다."));
+        folderRepository.findById(folderId).ifPresent(folder -> {
+            // 투두 리스트에서 폴더 null 값으로 변경
+            List<Todo> todoList = todoRepository.findAllByFolder(folder);
+            todoList.forEach(todo -> todo.changeFolder(null));
 
-        // 투두 리스트에서 폴더 null 값으로 변경
-        List<Todo> todoList = todoRepository.findAllByFolder(folder);
-        todoList.forEach(todo -> todo.changeFolder(null));
-
-        folderRepository.delete(folder);
+            folderRepository.delete(folder);
+        });
     }
 }

@@ -3,17 +3,34 @@ package com.serverstudy.todolist.common;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-import java.util.Arrays;
+public class EnumValidator implements ConstraintValidator<Enum, String> {
 
-public class EnumValidator implements ConstraintValidator<Enum, java.lang.Enum> {
+    private Enum annotation;
 
     @Override
-    public boolean isValid(java.lang.Enum value, ConstraintValidatorContext context) {
-        if (value == null) {
-            return false; //null 값 허용 여부, true: 허용
-        }
-
-        Class<?> reflectionEnumClass = value.getDeclaringClass();
-        return Arrays.asList(reflectionEnumClass.getEnumConstants()).contains(value);
+    public void initialize(Enum constraintAnnotation) {
+        this.annotation = constraintAnnotation;
     }
+
+    @Override
+    public boolean isValid(String value, ConstraintValidatorContext context) {
+
+        if (value == null)
+            return true;
+        else if (value.isEmpty())
+            return false;
+
+        Object[] enumValues = this.annotation.enumClass().getEnumConstants();
+
+        if (enumValues != null) {
+            for (Object enumValue : enumValues) {
+                if (value.equals(enumValue.toString())
+                        || (this.annotation.ignoreCase() && value.equalsIgnoreCase(enumValue.toString()))) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 }

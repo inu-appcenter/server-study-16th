@@ -36,13 +36,13 @@ public class TodoService {
 
     public long create(TodoPost todoPost, Long userId) {
 
-        if (userId == null) throw new IllegalArgumentException("userId 값이 비어있습니다");
-        if (!userRepository.existsById(userId)) throw new CustomException(ErrorCode.USER_NOT_FOUND);
+        if (!userRepository.existsById(userId)) {
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+        }
 
-        Folder folder = null;
-
-        if (todoPost.getFolderId() != null)
-            folder = folderRepository.findById(todoPost.getFolderId()).orElse(null);
+        Folder folder = (todoPost.getFolderId() != null)
+                ? getFolder(todoPost.getFolderId())
+                : null;
 
         Todo todo = todoPost.toEntity(userId, folder);
 
@@ -51,32 +51,26 @@ public class TodoService {
 
     public List<TodoRes> findAllByConditions(TodoGet todoGet, Long userId) {
 
-        if (userId == null) throw new IllegalArgumentException("userId 값이 비어있습니다");
-
         Long folderId = todoGet.getFolderId();
-        Priority priority = todoGet.getPriority() == null ? null : Priority.getPriority(0);
-        Progress progress = todoGet.getProgress() == null ? null : Progress.getProgress(todoGet.getProgress().name());
-        boolean isDeleted = todoGet.getIsDeleted() != null && todoGet.getIsDeleted();
+        Priority priority = todoGet.getPriority();
+        Progress progress = todoGet.getProgress();
+        Boolean isDeleted = todoGet.getIsDeleted();
 
         List<Todo> todoList = todoRepository.findAllByConditions(folderId, userId, priority, progress, isDeleted);
 
         return todoList.stream().map(todo -> {
-            Integer dateFromDelete;
-            if (todo.getIsDeleted())
-                dateFromDelete = (int) ChronoUnit.DAYS.between(todo.getDeletedTime(), LocalDateTime.now());
-            else
-                dateFromDelete = null;
 
-            Long foundFolderId;
-            String folderName;
-            if (todo.getFolder() != null){
-                foundFolderId = todo.getFolder().getId();
-                folderName = todo.getFolder().getName();
-            }
-            else {
-                foundFolderId = null;
-                folderName = null;
-            }
+            Integer dateFromDelete = (todo.getIsDeleted())
+                    ? (int) ChronoUnit.DAYS.between(todo.getDeletedTime(), LocalDateTime.now())
+                    : null;
+
+            Long foundFolderId = (todo.getFolder() != null)
+                    ? todo.getFolder().getId()
+                    : null;
+
+            String folderName = (todo.getFolder() != null)
+                    ? todo.getFolder().getName()
+                    : null;
 
             return TodoRes.builder()
                     .id(todo.getId())
@@ -94,15 +88,13 @@ public class TodoService {
     }
 
     @Transactional
-    public long update(TodoPut todoPut, long todoId, Long userId) {
+    public long update(TodoPut todoPut, Long todoId) {
 
-        if (userId == null) throw new IllegalArgumentException("userId 값이 비어있습니다.");
-        Todo todo = todoRepository.findById(todoId).orElseThrow(() -> new CustomException(TODO_NOT_FOUND));
+        Todo todo = getTodo(todoId);
 
-        Folder folder = null;
-
-        if (todoPut.getFolderId() != null)
-            folder = folderRepository.findById(todoPut.getFolderId()).orElseThrow(() -> new CustomException(FOLDER_NOT_FOUND));
+        Folder folder = (todoPut.getFolderId() != null)
+                ? getFolder(todoPut.getFolderId())
+                : null;
 
         todo.updateTodo(todoPut, folder);
 
@@ -110,10 +102,9 @@ public class TodoService {
     }
 
     @Transactional
-    public long switchProgress(long todoId, Long userId) {
+    public long switchProgress(long todoId) {
 
-        if (userId == null) throw new IllegalArgumentException("userId 값이 비어있습니다");
-        Todo todo = todoRepository.findById(todoId).orElseThrow(() -> new CustomException(TODO_NOT_FOUND));
+        Todo todo = getTodo(todoId);
 
         todo.switchProgress();
 
@@ -121,12 +112,11 @@ public class TodoService {
     }
 
     @Transactional
-    public long moveFolder(Long folderId, long todoId, Long userId) {
+    public long moveFolder(Long folderId, Long todoId) {
 
-        if (userId == null) throw new IllegalArgumentException("userId 값이 비어있습니다.");
-        Todo todo = todoRepository.findById(todoId).orElseThrow(() -> new CustomException(TODO_NOT_FOUND));
+        Todo todo = getTodo(todoId);
 
-        Folder folder = folderRepository.findById(folderId).orElseThrow(() -> new CustomException(FOLDER_NOT_FOUND));
+        Folder folder = getFolder(folderId);
 
         todo.changeFolder(folder);
 
@@ -134,16 +124,19 @@ public class TodoService {
     }
 
     @Transactional
-    public Long delete(long todoId, boolean restore, Long userId) {
+    public Long delete(Long todoId, Boolean restore) {
 
-        if (userId == null) throw new IllegalArgumentException("userId 값이 비어있습니다.");
-        Todo todo = todoRepository.findById(todoId).orElseThrow(() -> new CustomException(TODO_NOT_FOUND));
+        Todo todo = getTodo(todoId);
 
-        Long result = null;
-        if (restore)
-            result = todo.moveToTrash();
-        else
+        Long result;
+        if (restore) {
+            todo.moveToTrash();
+            result = todoId;
+        }
+        else {
             todoRepository.delete(todo);
+            result = null;
+        }
 
         return result;
     }
@@ -158,9 +151,23 @@ public class TodoService {
         for (Todo todo : todoList) {
             int dateFromDelete = (int) ChronoUnit.DAYS.between(todo.getDeletedTime(), LocalDateTime.now());
 
-            if (dateFromDelete < 30) break;
+            if (dateFromDelete < 30) {
+                break;
+            }
             todoRepository.delete(todo);
         }
+    }
+
+    private Todo getTodo(Long todoId) {
+
+        return todoRepository.findById(todoId)
+                .orElseThrow(() -> new CustomException(TODO_NOT_FOUND));
+    }
+
+    private Folder getFolder(Long folderId) {
+
+        return folderRepository.findById(folderId)
+                .orElseThrow(() -> new CustomException(FOLDER_NOT_FOUND));
     }
 
 }
