@@ -116,7 +116,9 @@ public class TodoService {
 
         Todo todo = getTodo(todoId);
 
-        Folder folder = getFolder(folderId);
+        Folder folder = (folderId != null)
+                ? getFolder(folderId)
+                : null;
 
         todo.changeFolder(folder);
 
