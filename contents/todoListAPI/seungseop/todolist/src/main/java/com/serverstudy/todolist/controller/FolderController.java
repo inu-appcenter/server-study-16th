@@ -43,7 +43,9 @@ public class FolderController implements ExampleData {
             @ApiResponse(responseCode = "404", description = "유저가 존재하지 않음", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = {
                     @ExampleObject(name = "USER_NOT_FOUND", value = USER_NOT_FOUND_DATA),
             })),
-            @ApiResponse(responseCode = "409", description = "중복된 폴더 이름", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+            @ApiResponse(responseCode = "409", description = "중복된 폴더 이름", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = {
+                    @ExampleObject(name = "DUPLICATE_FOLDER_NAME", value = DUPLICATE_FOLDER_NAME_DATA),
+            }))
     })
     @PostMapping
     public ResponseEntity<Long> postFolder(@Valid @RequestBody FolderPost folderPost, @NotNull Long userId) {  // @RequestParam만 붙여도 null 값 입력 시 예외 발생
@@ -79,7 +81,9 @@ public class FolderController implements ExampleData {
             @ApiResponse(responseCode = "404", description = "폴더가 존재하지 않음", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = {
                     @ExampleObject(name = "FOLDER_NOT_FOUND", value = FOLDER_NOT_FOUND_DATA),
             })),
-            @ApiResponse(responseCode = "409", description = "중복된 폴더 이름", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+            @ApiResponse(responseCode = "409", description = "중복된 폴더 이름", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = {
+                    @ExampleObject(name = "DUPLICATE_FOLDER_NAME", value = DUPLICATE_FOLDER_NAME_DATA),
+            }))
     })
     @PatchMapping("/{folderId}")
     public ResponseEntity<Long> patchFolder(@Valid @RequestBody FolderPatch folderPatch, @PathVariable Long folderId) {
