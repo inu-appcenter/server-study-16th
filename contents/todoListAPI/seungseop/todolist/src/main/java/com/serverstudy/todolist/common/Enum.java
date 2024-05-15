@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = {EnumValidator.class})
 public @interface Enum {
-    String message() default "Invalid Enum Value.";
+    String message() default "값이 잘못 되었습니다. 올바른 값을 입력해주세요.";
 
     Class<?>[] groups() default {};
 

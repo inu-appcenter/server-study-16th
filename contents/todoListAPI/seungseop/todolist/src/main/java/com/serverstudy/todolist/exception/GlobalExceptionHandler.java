@@ -62,7 +62,10 @@ public class GlobalExceptionHandler /*extends ResponseEntityExceptionHandler*/ {
         List<String> messageList = new ArrayList<>();
 
         for (FieldError fieldError : bindingResult.getFieldErrors()) {
-            String messageBuilder = fieldError.getDefaultMessage() +
+            String messageBuilder = "[" +
+                    fieldError.getField() +
+                    "] " +
+                    fieldError.getDefaultMessage() +
                     " 입력된 값: [" +
                     fieldError.getRejectedValue() +
                     "]";
@@ -82,7 +85,13 @@ public class GlobalExceptionHandler /*extends ResponseEntityExceptionHandler*/ {
 
         while (iterator.hasNext()) {
             final ConstraintViolation<?> constraintViolation = iterator.next();
-            String messageBuilder = constraintViolation.getMessage() +
+            String propertyPath = constraintViolation.getPropertyPath().toString();
+            String propertyName = propertyPath.substring(propertyPath.lastIndexOf('.') + 1); // 전체 속성 경로에서 속성 이름만 가져온다.
+
+            String messageBuilder = "[" +
+                    propertyName +
+                    "] " +
+                    constraintViolation.getMessage() +
                     " 입력된 값: [" +
                     constraintViolation.getInvalidValue() +
                     "]";
@@ -100,7 +109,7 @@ public class GlobalExceptionHandler /*extends ResponseEntityExceptionHandler*/ {
             String message = mismatchedInputException.getPath().get(0).getFieldName() + " 필드의 타입이 올바르지 않습니다.";
             return ErrorResponse.of(INVALID_PARAMETER, message);
         }
-        return ErrorResponse.of(INVALID_PARAMETER, "확인할 수 없는 형태의 데이터가 들어왔습니다");
+        return ErrorResponse.of(INVALID_PARAMETER, "확인할 수 없는 형태의 데이터가 들어왔습니다.");
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)

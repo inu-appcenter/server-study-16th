@@ -14,10 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
-import static com.serverstudy.todolist.exception.ErrorCode.DUPLICATE_FOLDER_NAME;
-import static com.serverstudy.todolist.exception.ErrorCode.USER_NOT_FOUND;
+import static com.serverstudy.todolist.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -70,7 +68,7 @@ public class FolderService {
     public long modify(FolderPatch folderPatch, Long folderId) {
 
         Folder folder = folderRepository.findById(folderId)
-                .orElseThrow(() -> new NoSuchElementException("해당하는 폴더가 존재하지 않습니다."));
+                .orElseThrow(() -> new CustomException(FOLDER_NOT_FOUND));
 
         isNameDuplicated(folderPatch.getName(), folder.getUserId());
 
