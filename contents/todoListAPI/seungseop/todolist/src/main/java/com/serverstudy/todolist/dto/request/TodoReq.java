@@ -82,7 +82,7 @@ public interface TodoReq {
         private String progress;
 
         @Schema(title = "임시 삭제 여부", description = "(true|false) 중 하나를 입력",
-                example = "TODO", allowableValues = {"TODO", "DOING", "DONE"})
+                example = "false", allowableValues = {"true", "false"})
         @NotNull(message = "값이 비어있을 수 없습니다. 값을 입력해주세요.")
         private Boolean isDeleted;
 
