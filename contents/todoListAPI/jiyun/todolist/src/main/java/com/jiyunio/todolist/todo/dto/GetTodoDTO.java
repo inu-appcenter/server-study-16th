@@ -9,6 +9,7 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
+@Builder
 @Schema(description = "todo 조회")
 public class GetTodoDTO {
     private String content;

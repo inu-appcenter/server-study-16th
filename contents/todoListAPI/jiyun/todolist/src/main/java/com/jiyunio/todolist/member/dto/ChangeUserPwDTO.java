@@ -3,12 +3,12 @@ package com.jiyunio.todolist.member.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @Schema(description = "회원 비밀번호 수정")
+@Builder
 public class ChangeUserPwDTO {
     @NotBlank(message = "비밀번호를 입력하세요.")
     @Schema(description = "회원 비밀번호")

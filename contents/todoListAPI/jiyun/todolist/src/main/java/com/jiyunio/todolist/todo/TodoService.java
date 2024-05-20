@@ -20,7 +20,7 @@ public class TodoService {
     private final MemberRepository memberRepository;
     private final TodoRepository todoRepository;
 
-    public void createTodo(Long memberId, CreateTodoDTO createTodo) {
+    public String createTodo(Long memberId, CreateTodoDTO createTodo) {
         Member member = memberRepository.findById(memberId).orElseThrow(
                 // 회원 존재 안함
                 () -> new CustomException(HttpStatus.NOT_FOUND, ErrorCode.NOT_EXIST_MEMBER)
@@ -35,6 +35,8 @@ public class TodoService {
                 .checked(false)
                 .build();
         todoRepository.save(todo);
+
+        return todo.getMember().getUserId();
     }
 
     public List<GetTodoDTO> getTodo(Long memberId) {
