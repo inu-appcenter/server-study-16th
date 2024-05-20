@@ -34,6 +34,10 @@ dependencies {
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final' // Dto Mapper
     implementation 'org.springframework.boot:spring-boot-starter-validation' //유효성검사
     implementation 'org.mariadb.jdbc:mariadb-java-client:2.7.11'
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+
+    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.0'
 }
 
 tasks.named('test') {

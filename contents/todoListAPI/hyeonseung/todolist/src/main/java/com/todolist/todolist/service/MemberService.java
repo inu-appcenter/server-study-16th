@@ -47,7 +47,7 @@ public class MemberService {
        Member member = throwFindbyLoginId(request.getLoginId());
        if (!member.getPassword().equals(request.getPassword()))
            throw new BaseException(ErrorCode.UNAUTHORIZED_LOGIN);
-       return new MemberLoginResponseDto(member.getId());
+       return new MemberLoginResponseDto(member.getLoginId());
     }
 
     // 3. 회원 검색

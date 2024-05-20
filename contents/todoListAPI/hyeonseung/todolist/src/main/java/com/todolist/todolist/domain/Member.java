@@ -36,13 +36,11 @@ public class Member extends BaseEntity{
         this.todoList = todoList;
     }
 
-
-
     public void updateLoginId(String loginId){
         this.loginId = loginId;
     }
 
-    public void updatePassword(String Password){
+    public void updatePassword(String password){
         this.password = password;
     }
 
