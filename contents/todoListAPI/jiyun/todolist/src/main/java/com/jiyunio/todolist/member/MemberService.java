@@ -70,7 +70,12 @@ public class MemberService {
             // 회원의 비밀번호와 불일치
             throw new CustomException(HttpStatus.NOT_FOUND, ErrorCode.WRONG_USERID_PASSWORD);
         }
+<<<<<<< HEAD
 
+=======
+        // 회원의 비밀번호와 불일치
+        throw new CustomException(HttpStatus.NOT_FOUND, ErrorCode.WRONG_USERID_PASSWORD);
+>>>>>>> 22a000ba52704fbf78c6e07ecff4aed83785374c
     }
 
     public void deleteMember(Long id, String userPw) {
@@ -81,5 +86,10 @@ public class MemberService {
         } else { // 비밀번호 불일치
             throw new CustomException(HttpStatus.NOT_FOUND, ErrorCode.WRONG_USERID_PASSWORD);
         }
+<<<<<<< HEAD
+=======
+        // 비밀번호 불일치
+        throw new CustomException(HttpStatus.NOT_FOUND, ErrorCode.WRONG_USERID_PASSWORD);
+>>>>>>> 22a000ba52704fbf78c6e07ecff4aed83785374c
     }
 }
