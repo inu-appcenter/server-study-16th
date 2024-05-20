@@ -19,6 +19,4 @@ public class TodoResponseDto {
     private boolean isCompleted;
     private LocalDateTime dueAt;
     private Long memberId;
-
-
 }
