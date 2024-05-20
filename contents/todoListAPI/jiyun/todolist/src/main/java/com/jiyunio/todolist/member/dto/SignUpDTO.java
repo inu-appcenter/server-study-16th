@@ -11,10 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Schema(description = "회원가입")
-<<<<<<< HEAD
 @Builder
-=======
->>>>>>> 22a000ba52704fbf78c6e07ecff4aed83785374c
 public class SignUpDTO {
 
     @NotBlank(message = "아이디를 입력하세요.")
