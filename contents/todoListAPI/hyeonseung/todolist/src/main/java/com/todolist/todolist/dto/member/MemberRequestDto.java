@@ -4,9 +4,7 @@ import com.todolist.todolist.domain.Member;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
 @AllArgsConstructor
@@ -33,6 +31,8 @@ public class MemberRequestDto {
 
 
     @Getter
+    @RequiredArgsConstructor
+    @AllArgsConstructor
     public static class LoginRequestDto{
         @NotBlank(message = "아이디를 입력해주세요.")
         private String loginId;

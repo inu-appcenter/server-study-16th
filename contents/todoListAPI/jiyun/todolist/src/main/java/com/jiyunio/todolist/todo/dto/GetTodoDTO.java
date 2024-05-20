@@ -1,5 +1,6 @@
 package com.jiyunio.todolist.todo.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,6 +9,7 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
+@Schema(description = "todo 조회")
 public class GetTodoDTO {
     private String content;
 

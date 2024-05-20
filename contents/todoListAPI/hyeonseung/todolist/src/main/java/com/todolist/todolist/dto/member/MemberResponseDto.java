@@ -17,6 +17,4 @@ public class MemberResponseDto {
     private String loginId;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
-
-
 }

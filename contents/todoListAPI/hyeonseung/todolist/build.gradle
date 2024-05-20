@@ -34,6 +34,10 @@ dependencies {
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final' // Dto Mapper
     implementation 'org.springframework.boot:spring-boot-starter-validation' //유효성검사
     implementation 'org.mariadb.jdbc:mariadb-java-client:2.7.11'
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+  //  implementation 'com.google.code.gson:gson:2.8.8'
 }
 
 tasks.named('test') {

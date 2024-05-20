@@ -6,5 +6,5 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class MemberLoginResponseDto {
-    private Long id;
+    private String loginId;
 }
