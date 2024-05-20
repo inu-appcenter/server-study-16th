@@ -54,7 +54,7 @@ public class TodoService {
     @Transactional
     public Long completeTodo(Long id){
         Todo todo=findByTodoId(id);
-        todo.changeCompleted(true);
+        todo.changeCompleted();
         return id;
     }
 

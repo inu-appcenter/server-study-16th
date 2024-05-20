@@ -5,9 +5,12 @@ import com.appcenter.practice.domain.Member;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class SignupMemberReq {
 
     @NotBlank(message = "이메일은 필수 입력 값입니다.")
@@ -23,6 +26,12 @@ public class SignupMemberReq {
     @Pattern(regexp = "^[가-힣a-zA-Z0-9]{2,10}$" , message = "닉네임은 특수문자를 포함하지 않은 2~10자리여야 합니다.")
     private String nickname;
 
+    @Builder
+    public SignupMemberReq(String email, String password, String nickname) {
+        this.email = email;
+        this.password = password;
+        this.nickname = nickname;
+    }
 
     public Member toEntity(){
         return Member.builder()

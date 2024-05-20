@@ -53,7 +53,7 @@ public class CommentService {
     @Transactional
     public Long deleteComment(Long id){
         Comment comment=findByCommentId(id);
-        comment.changeDeleted(true);
+        comment.changeDeleted();
         return id;
     }
 
