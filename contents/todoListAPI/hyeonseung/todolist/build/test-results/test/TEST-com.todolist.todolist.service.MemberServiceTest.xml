@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.todolist.todolist.service.MemberServiceTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-05-20T08:43:06" hostname="everywin.local" time="0.506">
+  <properties/>
+  <testcase name="회원정보 수정" classname="com.todolist.todolist.service.MemberServiceTest" time="0.506"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
