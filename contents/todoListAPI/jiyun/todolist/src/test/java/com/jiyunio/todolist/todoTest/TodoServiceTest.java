@@ -30,7 +30,7 @@ public class TodoServiceTest {
         Long memberId = 2L;
         CreateTodoDTO createTodoDTO = CreateTodoDTO.builder()
                 .content("코딩")
-                .category("과제")
+                .category("시험")
                 .writeDate(LocalDate.now())
                 .setDate(LocalDate.of(2024, 5, 28))
                 .build();

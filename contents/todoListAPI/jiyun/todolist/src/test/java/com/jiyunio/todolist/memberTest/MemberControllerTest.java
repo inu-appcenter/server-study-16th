@@ -17,8 +17,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @SpringBootTest
@@ -42,7 +42,7 @@ public class MemberControllerTest {
     void SignUpTest() throws Exception {
         //given
         SignUpDTO signUpDTO = SignUpDTO.builder()
-                .userId("wldbs")
+                .userId("wldbswldbs")
                 .userPw("qwer1234!")
                 .userEmail("wldbs@naver.com")
                 .confirmUserPw("qwer1234!")

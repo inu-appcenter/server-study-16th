@@ -28,7 +28,7 @@ public class MemberServiceTest {
     void SignUpTest() {
         //given
         SignUpDTO signUpDTO = SignUpDTO.builder()
-                .userId("wldbs")
+                .userId("wldbswldbs")
                 .userPw("qwe123!")
                 .confirmUserPw("qwe123!")
                 .userEmail("wldbs@google.com")

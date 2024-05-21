@@ -11,10 +11,7 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-<<<<<<< HEAD
 @Builder
-=======
->>>>>>> 22a000ba52704fbf78c6e07ecff4aed83785374c
 @Schema(description = "todo 수정")
 public class UpdateTodoDTO {
     @NotBlank(message = "todo를 작성해주세요.")

@@ -77,7 +77,7 @@ public class TodoControllerTest {
     void UpdateTodoTest() throws Exception {
         //given
         UpdateTodoDTO updateTodoDTO = UpdateTodoDTO.builder()
-                .content("잘가")
+                .content("하이")
                 .category("약속")
                 .checked(true)
                 .writeDate(LocalDate.now())
