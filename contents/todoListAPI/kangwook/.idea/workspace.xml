@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="e042f83b-5b24-4453-89d0-fdc9a839a4e1" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../hyeonseung/todolist/src/main/java/com/todolist/todolist/dto/member/MemberLoginResponseDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../hyeonseung/todolist/src/main/java/com/todolist/todolist/validators/BaseException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../hyeonseung/todolist/src/main/java/com/todolist/todolist/validators/ErrorCode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../hyeonseung/todolist/src/main/java/com/todolist/todolist/validators/ErrorResponseDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../hyeonseung/todolist/src/main/java/com/todolist/todolist/validators/GlobalExceptionHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/practice/src/main/java/com/appcenter/practice/common/StatusCode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/practice/src/main/java/com/appcenter/practice/config/SwaggerConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/practice/src/main/java/com/appcenter/practice/dto/response/ErrorResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/practice/src/main/java/com/appcenter/practice/exception/CustomException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/practice/src/main/java/com/appcenter/practice/exception/ExceptionControllerAdvice.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../concepts/.idea/uiDesigner.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../concepts/.idea/uiDesigner.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hyeonseung/todolist/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../hyeonseung/todolist/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hyeonseung/todolist/src/main/java/com/todolist/todolist/controller/MemberController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hyeonseung/todolist/src/main/java/com/todolist/todolist/controller/MemberController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hyeonseung/todolist/src/main/java/com/todolist/todolist/controller/TodoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hyeonseung/todolist/src/main/java/com/todolist/todolist/controller/TodoController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hyeonseung/todolist/src/main/java/com/todolist/todolist/domain/Member.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hyeonseung/todolist/src/main/java/com/todolist/todolist/domain/Member.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hyeonseung/todolist/src/main/java/com/todolist/todolist/domain/Todo.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hyeonseung/todolist/src/main/java/com/todolist/todolist/domain/Todo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hyeonseung/todolist/src/main/java/com/todolist/todolist/dto/member/MemberMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hyeonseung/todolist/src/main/java/com/todolist/todolist/dto/member/MemberMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hyeonseung/todolist/src/main/java/com/todolist/todolist/dto/member/MemberRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hyeonseung/todolist/src/main/java/com/todolist/todolist/dto/member/MemberRequestDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hyeonseung/todolist/src/main/java/com/todolist/todolist/dto/todo/TodoMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hyeonseung/todolist/src/main/java/com/todolist/todolist/dto/todo/TodoMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hyeonseung/todolist/src/main/java/com/todolist/todolist/dto/todo/TodoRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hyeonseung/todolist/src/main/java/com/todolist/todolist/dto/todo/TodoRequestDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hyeonseung/todolist/src/main/java/com/todolist/todolist/dto/todo/TodoResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hyeonseung/todolist/src/main/java/com/todolist/todolist/dto/todo/TodoResponseDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hyeonseung/todolist/src/main/java/com/todolist/todolist/repository/MemberRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hyeonseung/todolist/src/main/java/com/todolist/todolist/repository/MemberRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hyeonseung/todolist/src/main/java/com/todolist/todolist/repository/TodoRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hyeonseung/todolist/src/main/java/com/todolist/todolist/repository/TodoRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hyeonseung/todolist/src/main/java/com/todolist/todolist/service/MemberService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hyeonseung/todolist/src/main/java/com/todolist/todolist/service/MemberService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hyeonseung/todolist/src/main/java/com/todolist/todolist/service/TodoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hyeonseung/todolist/src/main/java/com/todolist/todolist/service/TodoService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hyeonseung/todolist/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../hyeonseung/todolist/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/practice/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/practice/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/practice/src/main/generated/com/appcenter/practice/common/QBaseEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/practice/src/main/generated/com/appcenter/practice/common/QBaseEntity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/practice/src/main/generated/com/appcenter/practice/domain/QComment.java" beforeDir="false" afterPath="$PROJECT_DIR$/practice/src/main/generated/com/appcenter/practice/domain/QComment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/practice/src/main/generated/com/appcenter/practice/domain/QMember.java" beforeDir="false" afterPath="$PROJECT_DIR$/practice/src/main/generated/com/appcenter/practice/domain/QMember.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/practice/src/main/generated/com/appcenter/practice/domain/QTodo.java" beforeDir="false" afterPath="$PROJECT_DIR$/practice/src/main/generated/com/appcenter/practice/domain/QTodo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/practice/src/main/java/com/appcenter/practice/common/BaseEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/practice/src/main/java/com/appcenter/practice/common/BaseEntity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/practice/src/main/java/com/appcenter/practice/controller/CommentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/practice/src/main/java/com/appcenter/practice/controller/CommentController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/practice/src/main/java/com/appcenter/practice/controller/MemberController.java" beforeDir="false" afterPath="$PROJECT_DIR$/practice/src/main/java/com/appcenter/practice/controller/MemberController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/practice/src/main/java/com/appcenter/practice/controller/TodoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/practice/src/main/java/com/appcenter/practice/controller/TodoController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/practice/src/main/java/com/appcenter/practice/domain/Comment.java" beforeDir="false" afterPath="$PROJECT_DIR$/practice/src/main/java/com/appcenter/practice/domain/Comment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/practice/src/main/java/com/appcenter/practice/domain/Member.java" beforeDir="false" afterPath="$PROJECT_DIR$/practice/src/main/java/com/appcenter/practice/domain/Member.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/practice/src/main/java/com/appcenter/practice/domain/Todo.java" beforeDir="false" afterPath="$PROJECT_DIR$/practice/src/main/java/com/appcenter/practice/domain/Todo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/practice/src/main/java/com/appcenter/practice/dto/reqeust/comment/AddCommentReq.java" beforeDir="false" afterPath="$PROJECT_DIR$/practice/src/main/java/com/appcenter/practice/dto/reqeust/comment/AddCommentReq.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/practice/src/main/java/com/appcenter/practice/dto/reqeust/comment/UpdateCommentReq.java" beforeDir="false" afterPath="$PROJECT_DIR$/practice/src/main/java/com/appcenter/practice/dto/reqeust/comment/UpdateCommentReq.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/practice/src/main/java/com/appcenter/practice/dto/reqeust/member/SignupMemberReq.java" beforeDir="false" afterPath="$PROJECT_DIR$/practice/src/main/java/com/appcenter/practice/dto/reqeust/member/SignupMemberReq.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/practice/src/main/java/com/appcenter/practice/dto/reqeust/todo/AddTodoReq.java" beforeDir="false" afterPath="$PROJECT_DIR$/practice/src/main/java/com/appcenter/practice/dto/reqeust/todo/AddTodoReq.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/practice/src/main/java/com/appcenter/practice/dto/reqeust/todo/UpdateTodoReq.java" beforeDir="false" afterPath="$PROJECT_DIR$/practice/src/main/java/com/appcenter/practice/dto/reqeust/todo/UpdateTodoReq.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/practice/src/main/java/com/appcenter/practice/dto/response/CommonResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/practice/src/main/java/com/appcenter/practice/dto/response/CommonResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/practice/src/main/java/com/appcenter/practice/dto/response/comment/ReadCommentRes.java" beforeDir="false" afterPath="$PROJECT_DIR$/practice/src/main/java/com/appcenter/practice/dto/response/comment/ReadCommentRes.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/practice/src/main/java/com/appcenter/practice/dto/response/todo/ReadTodoRes.java" beforeDir="false" afterPath="$PROJECT_DIR$/practice/src/main/java/com/appcenter/practice/dto/response/todo/ReadTodoRes.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/practice/src/main/java/com/appcenter/practice/service/CommentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/practice/src/main/java/com/appcenter/practice/service/CommentService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/practice/src/main/java/com/appcenter/practice/service/MemberService.java" beforeDir="false" afterPath="$PROJECT_DIR$/practice/src/main/java/com/appcenter/practice/service/MemberService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/practice/src/main/java/com/appcenter/practice/service/TodoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/practice/src/main/java/com/appcenter/practice/service/TodoService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/practice/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/practice/src/main/resources/application.properties" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../.." />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "customColor": "",
+  "associatedIndex": 6
+}]]></component>
+  <component name="ProjectId" id="2gn2twXBMpUKtyqvlmp32rpeAp0" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "Merging jiyun",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="e042f83b-5b24-4453-89d0-fdc9a839a4e1" name="Changes" comment="" />
+      <created>1716319242501</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1716319242501</updated>
+      <workItem from="1716319246642" duration="30000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
