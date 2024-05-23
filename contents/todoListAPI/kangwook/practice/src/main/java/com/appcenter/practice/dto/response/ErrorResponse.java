@@ -7,6 +7,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Getter
@@ -23,9 +24,9 @@ public class ErrorResponse {
 
     @Getter
     public static class ValidationError{
-        private String field;
-        private String value;
-        private String reason;
+        private final String field;
+        private final String value;
+        private final String reason;
 
         private ValidationError(String field, String value, String reason) {
             this.field = field;

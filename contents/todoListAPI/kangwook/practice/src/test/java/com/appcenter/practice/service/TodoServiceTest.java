@@ -75,7 +75,7 @@ class TodoServiceTest {
         given(memberRepository.findByEmail(any())).willThrow(new CustomException(StatusCode.MEMBER_NOT_EXIST));
 
         CustomException exception=assertThrows(CustomException.class, () ->{
-            todoService.saveTodo(addTodoReq);
+            todoService.saveTodo(1L,addTodoReq);
         });
 
         assertEquals(StatusCode.MEMBER_NOT_EXIST.getMessage(),exception.getStatusCode().getMessage());

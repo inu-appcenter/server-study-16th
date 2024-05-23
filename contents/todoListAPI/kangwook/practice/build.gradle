@@ -26,7 +26,11 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0' // 접속 url: localhost:8080/swagger-ui/index.html
-	implementation 'com.google.code.gson:gson'
+	implementation 'com.google.code.gson:gson' // 객체를 json으로 변환해주는 구글의 라이브러리
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	// JWT
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+	implementation 'javax.xml.bind:jaxb-api:2.3.1' //추가하지 않으면 tokenProvider에서 에러 남
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
 	annotationProcessor 'org.projectlombok:lombok'
