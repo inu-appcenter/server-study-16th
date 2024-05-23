@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 import static com.appcenter.practice.common.StatusCode.*;
@@ -22,8 +23,9 @@ public class TodoController {
     private final TodoService todoService;
 
     @GetMapping
-    public ResponseEntity<CommonResponse<List<ReadTodoRes>>> getTodoList(){
-        return ResponseEntity.ok(CommonResponse.of(TODO_FOUND.getMessage(), todoService.getTodoList()));
+    public ResponseEntity<CommonResponse<List<ReadTodoRes>>> getTodoList(Principal principal){
+        Long memberId=Long.parseLong(principal.getName());
+        return ResponseEntity.ok(CommonResponse.of(TODO_FOUND.getMessage(), todoService.getTodoList(memberId)));
     }
 
     @GetMapping(value = "/{id}")
@@ -32,10 +34,11 @@ public class TodoController {
     }
 
     @PostMapping
-    public ResponseEntity<CommonResponse<Long>> addTodo(@RequestBody @Valid AddTodoReq reqDto){
+    public ResponseEntity<CommonResponse<Long>> addTodo(Principal principal,@RequestBody @Valid AddTodoReq reqDto){
+        Long memberId=Long.parseLong(principal.getName());
         return ResponseEntity
                 .status(TODO_CREATE.getStatus())
-                .body(CommonResponse.of(TODO_CREATE.getMessage(),todoService.saveTodo(reqDto)));
+                .body(CommonResponse.of(TODO_CREATE.getMessage(),todoService.saveTodo(memberId,reqDto)));
     }
 
     @PatchMapping(value = "/{id}")

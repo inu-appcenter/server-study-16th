@@ -36,6 +36,6 @@ public class Comment extends BaseEntity {
         this.toDo = toDo;
     }
 
-    public void changeDeleted(Boolean deleted){ this.deleted=deleted;}
+    public void changeDeleted(){ this.deleted=true;}
     public void changeContent(String content){ this.content=content; }
 }

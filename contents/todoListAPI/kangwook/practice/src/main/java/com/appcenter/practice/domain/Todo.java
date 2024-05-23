@@ -42,8 +42,8 @@ public class Todo extends BaseEntity {
         this.member = member;
     }
 
-    public void changeCompleted(Boolean completed){
-        this.completed = completed;
+    public void changeCompleted(){
+        this.completed = !this.completed;
     }
     public void changeContent(String content){
         this.content= content;

@@ -25,8 +25,9 @@ public class TodoService {
     private final MemberRepository memberRepository;
 
 
-    public List<ReadTodoRes> getTodoList(){
-        return todoRepository.findAll().stream()
+    public List<ReadTodoRes> getTodoList(Long memberId){
+        Member member=findByMemberId(memberId);
+        return member.getTodoList().stream()
                 .map(ReadTodoRes::from)
                 .collect(Collectors.toList());
     }
@@ -38,9 +39,8 @@ public class TodoService {
 
 
     @Transactional
-    public Long saveTodo(AddTodoReq reqDto){
-        Member member=memberRepository.findByEmail(reqDto.getEmail())
-                .orElseThrow(()->new CustomException(StatusCode.MEMBER_NOT_EXIST));
+    public Long saveTodo(Long memberId,AddTodoReq reqDto){
+        Member member=findByMemberId(memberId);
         return todoRepository.save(reqDto.toEntity(member)).getId();
     }
 
@@ -54,7 +54,7 @@ public class TodoService {
     @Transactional
     public Long completeTodo(Long id){
         Todo todo=findByTodoId(id);
-        todo.changeCompleted(true);
+        todo.changeCompleted();
         return id;
     }
 
@@ -67,5 +67,10 @@ public class TodoService {
     private Todo findByTodoId(Long todoId) {
         return todoRepository.findById(todoId)
                 .orElseThrow(()->new CustomException(StatusCode.TODO_NOT_EXIST));
+    }
+
+    private Member findByMemberId(Long memberId){
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(StatusCode.MEMBER_NOT_EXIST));
     }
 }

@@ -25,8 +25,9 @@ public class CommentService {
     private final TodoRepository todoRepository;
 
 
-    public List<ReadCommentRes> getCommentList(){
-        return commentRepository.findAll().stream()
+    public List<ReadCommentRes> getCommentList(Long todoId){
+        Todo todo= findByTodoId(todoId);
+        return todo.getCommentList().stream()
                 .map(comment-> ReadCommentRes.from(comment))
                 .collect(Collectors.toList());
     }
@@ -38,8 +39,7 @@ public class CommentService {
 
     @Transactional
     public Long saveComment(Long todoId, AddCommentReq reqDto){
-        Todo todo= todoRepository.findById(todoId)
-                .orElseThrow(()-> new CustomException(StatusCode.TODO_NOT_EXIST));
+        Todo todo= findByTodoId(todoId);
         return commentRepository.save(reqDto.toEntity(todo)).getId();
     }
 
@@ -53,12 +53,17 @@ public class CommentService {
     @Transactional
     public Long deleteComment(Long id){
         Comment comment=findByCommentId(id);
-        comment.changeDeleted(true);
+        comment.changeDeleted();
         return id;
     }
 
     private Comment findByCommentId(Long id){
        return commentRepository.findById(id)
                 .orElseThrow(()->new CustomException(StatusCode.COMMENT_NOT_EXIST));
+    }
+
+    private Todo findByTodoId(Long todoId){
+        return todoRepository.findById(todoId)
+                .orElseThrow(()-> new CustomException(StatusCode.TODO_NOT_EXIST));
     }
 }

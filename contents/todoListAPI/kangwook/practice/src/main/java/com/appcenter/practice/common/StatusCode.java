@@ -12,6 +12,7 @@ public enum StatusCode {
     /* 2xx: 성공 */
     // Member
     MEMBER_CREATE(CREATED,"회원 가입 완료"),
+    MEMBER_LOGIN(OK,"로그인 완료"),
     // TodoList
     TODO_CREATE(CREATED,"할 일 생성 완료"),
     TODO_FOUND(OK,"할 일 조회 완료"),
@@ -24,8 +25,14 @@ public enum StatusCode {
     COMMENT_DELETE(OK,"할 일 삭제 완료"),
 
     /* 400 BAD_REQUEST : 잘못된 요청 */
-    LOGIN_ID_INVALID(BAD_REQUEST,"아이디가 틀렸습니다."),
+    EMAIL_INVALID(BAD_REQUEST,"이메일이 틀렸습니다."),
     INPUT_VALUE_INVALID(BAD_REQUEST,"유효하지 않은 입력입니다."),
+    PASSWORD_INVALID(BAD_REQUEST,"비밀번호가 틀렸습니다."),
+
+
+    /* 401 UNAUTHORIZED : 비인증 사용자 */
+    ACCESS_TOKEN_INVALID(UNAUTHORIZED,"access 토큰이 유효하지 않습니다."),
+
 
     /* 404 NOT_FOUNT : 존재하지 않는 리소스 */
     MEMBER_NOT_EXIST(NOT_FOUND,"존재하지 않는 멤버입니다."),

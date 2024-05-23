@@ -20,10 +20,10 @@ import static com.appcenter.practice.common.StatusCode.*;
 public class CommentController {
     private final CommentService commentService;
 
-    @GetMapping(value = "/comments")
-    public ResponseEntity<CommonResponse<List<ReadCommentRes>>>getCommentList(){
+    @GetMapping(value = "/comments/{todoId}")
+    public ResponseEntity<CommonResponse<List<ReadCommentRes>>>getCommentList(@PathVariable Long todoId){
         return ResponseEntity
-                .ok(CommonResponse.of(COMMENT_FOUND.getMessage(), commentService.getCommentList()));
+                .ok(CommonResponse.of(COMMENT_FOUND.getMessage(), commentService.getCommentList(todoId)));
     }
 
     @GetMapping(value = "/comments/{id}")
