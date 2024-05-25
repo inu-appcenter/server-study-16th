@@ -65,13 +65,12 @@ public class UserService {
     @Transactional
     public void delete(Long userId) {
 
-        User user = getUser(userId);
-
         // 투두 리스트와 폴더 삭제
         todoRepository.deleteAll(todoRepository.findAllByUserId(userId));
         folderRepository.deleteAll(folderRepository.findAllByUserId(userId));
 
-        userRepository.delete(user);
+        // 유저 삭제
+        userRepository.deleteById(userId);
     }
 
     private User getUser(Long userId) {
