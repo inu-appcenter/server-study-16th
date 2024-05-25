@@ -2,18 +2,29 @@ package com.jiyunio.todolist.member;
 
 import com.jiyunio.todolist.customError.CustomException;
 import com.jiyunio.todolist.customError.ErrorCode;
+import com.jiyunio.todolist.jwt.JwtDTO;
+import com.jiyunio.todolist.jwt.JwtProvider;
 import com.jiyunio.todolist.member.dto.ChangeUserPwDTO;
 import com.jiyunio.todolist.member.dto.SignInDTO;
 import com.jiyunio.todolist.member.dto.SignUpDTO;
+import io.jsonwebtoken.Jwt;
+import io.jsonwebtoken.Jwts;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
+    private final JwtProvider jwtProvider;
 
     public String signUp(@Valid SignUpDTO signUpDto) {
         if (memberRepository.existsByUserEmail(signUpDto.getUserEmail())) {
@@ -30,7 +41,7 @@ public class MemberService {
             // 회원가입 성공
             Member member = Member.builder()
                     .userId(signUpDto.getUserId())
-                    .userPw(signUpDto.getUserPw())
+                    .userPw(passwordEncoder.encode(signUpDto.getUserPw()))
                     .userEmail(signUpDto.getUserEmail())
                     .build();
             memberRepository.save(member);
@@ -41,18 +52,22 @@ public class MemberService {
         }
     }
 
-    public String signIn(@Valid SignInDTO signInDto) {
-        if (memberRepository.existsByUserId(signInDto.getUserId())) {
-            Member member = memberRepository.findByUserId(signInDto.getUserId()).get();
-            if (member.getUserPw().equals(signInDto.getUserPw())) {
+    public JwtDTO signIn(@Valid SignInDTO signInDto) {
+//        if (memberRepository.existsByUserId(signInDto.getUserId())) {
+//            Member member = memberRepository.findByUserId(signInDto.getUserId()).get();
+//            if (passwordEncoder.matches(signInDto.getUserPw(), member.getUserPw())) {
                 // 로그인 성공
-                return member.getUserId();
-            }
-            // 회원의 비밀번호와 불일치
-            throw new CustomException(HttpStatus.NOT_FOUND, ErrorCode.WRONG_USERID_PASSWORD);
-        }
-        // 아이디 없음
-        throw new CustomException(HttpStatus.NOT_FOUND, ErrorCode.WRONG_USERID_PASSWORD);
+                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(signInDto.getUserId(), signInDto.getUserPw());
+                Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+
+                return jwtProvider.createToken(signInDto.getUserId());
+//
+//            }
+//            // 회원의 비밀번호와 불일치
+//            throw new CustomException(HttpStatus.NOT_FOUND, ErrorCode.WRONG_USERID_PASSWORD);
+//        }
+//        // 아이디 없음
+//            throw new CustomException(HttpStatus.NOT_FOUND, ErrorCode.WRONG_USERID_PASSWORD);
     }
 
     public void updateUserPw(Long id, @Valid ChangeUserPwDTO changeUserPwDto) {
