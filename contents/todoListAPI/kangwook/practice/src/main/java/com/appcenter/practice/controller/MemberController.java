@@ -31,10 +31,10 @@ public class MemberController {
     }
 
     @PostMapping(value = "/login")
-    public ResponseEntity<CommonResponse<Void>> login(@RequestBody @Valid LoginMemberReq signInMemberReqDto){
+    public ResponseEntity<CommonResponse<Void>> login(@RequestBody @Valid LoginMemberReq LoginMemberReqDto){
 
         return ResponseEntity.ok()
-                .header(HttpHeaders.AUTHORIZATION,  memberService.login(signInMemberReqDto))
+                .header(HttpHeaders.AUTHORIZATION,  memberService.login(LoginMemberReqDto))
                 .body(CommonResponse.of(MEMBER_LOGIN.getMessage(), null));
     }
 

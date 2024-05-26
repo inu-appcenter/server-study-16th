@@ -25,7 +25,7 @@ public class JwtTokenProvider {
     @Value("${jwt.secret.key}")
     private String secretKey;
     @Value("${jwt.expire-time}")
-    private static long ACCESS_TOKEN_EXPIRE_TIME; // 테스트를 수월하게 하기위해 5분으로 설정
+    private long ACCESS_TOKEN_EXPIRE_TIME; // 테스트를 수월하게 하기위해 5분으로 설정
 
 
     @PostConstruct // 객체 의존설정이 끝난 뒤 자동으로 실행

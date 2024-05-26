@@ -8,6 +8,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -21,6 +22,7 @@ import java.io.IOException;
        이를 해결하기 위해서는 GenericFilterBean이 아닌 OncePerRequestFilter을 상속받으면 된다.
 */
 @RequiredArgsConstructor
+@Log4j2
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtTokenProvider jwtTokenProvider;
 
@@ -38,7 +40,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     //OncePerRequestFilter을 상속받으면 doFilterInternal을 써야한다.
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String accessToken=jwtTokenProvider.resolveAccessToken(request);
-
+        log.info("jwt 필터 진입");
         if(accessToken==null || !accessToken.startsWith("Bearer ")){
             filterChain.doFilter(request,response);
             return;
@@ -48,7 +50,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 
         if(jwtTokenProvider.validateToken(accessToken)){
-
+            log.info("jwt 검증");
             Authentication authentication=jwtTokenProvider.getAuthentication(accessToken);
 
             /*
