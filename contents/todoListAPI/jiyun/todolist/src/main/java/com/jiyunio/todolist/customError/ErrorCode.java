@@ -9,13 +9,12 @@ public enum ErrorCode {
     WRONG_USERID_PASSWORD("400_Bad_Request", "아이디 및 비밀번호가 맞지 않습니다."),
 
     //401 Unauthorized
-    NO_AUTHENTICATION_MEMBER("401_Unauthorized", "인증된 회원이 아닙니다."),
+    NOT_EXIST_MEMBER("401_Unauthorized", "회원이 존재하지 않습니다."),
 
-    //403 Forbidden
-    NO_AUTHORIZED_MEMBER("403_Forbidden", "인가된 회원이 아닙니다."),
+    //403 Forbidden <- 인증 자체는 성공함
+    NOT_AUTHORIZATION("403_Forbidden", "접근 권한이 없습니다."),
 
     //404 Not Found
-    NOT_EXIST_MEMBER("404_Not_Found", "회원이 존재하지 않습니다."),
     NOT_EXIST_TODO("404_Not_Found", "TODO가 존재하지 않습니다."),
 
     //409 Conflict 중복된 값

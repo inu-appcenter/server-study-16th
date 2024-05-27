@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 @Getter
@@ -25,11 +26,14 @@ public class Member implements UserDetails {
 
     private String userEmail;
 
+    private String role;
+
     @Builder
     protected Member(String userId, String userPw, String userEmail) {
         this.userId = userId;
         this.userPw = userPw;
         this.userEmail = userEmail;
+        this.role = "USER";
     }
 
     protected void updateUserPw(String userPw) {
@@ -38,7 +42,11 @@ public class Member implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        Collection<GrantedAuthority> collecter = new ArrayList<>();
+        collecter.add(() -> {
+            return "ROLE_" + role;
+        });
+        return collecter;
     }
 
     @Override

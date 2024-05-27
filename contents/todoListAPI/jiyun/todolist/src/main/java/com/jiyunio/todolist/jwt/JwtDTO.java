@@ -7,11 +7,13 @@ import lombok.Setter;
 @Getter
 @Setter
 public class JwtDTO {
+    private String grantType;
     private String userId;
     private String accessToken;
 
     @Builder
-    protected JwtDTO(String userId, String accessToken){
+    protected JwtDTO(String grantType, String userId, String accessToken){
+        this.grantType = grantType;
         this.userId = userId;
         this.accessToken = accessToken;
     }
