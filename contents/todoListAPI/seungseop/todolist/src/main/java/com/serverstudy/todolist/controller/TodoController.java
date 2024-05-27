@@ -5,6 +5,7 @@ import com.serverstudy.todolist.dto.request.TodoReq.TodoGet;
 import com.serverstudy.todolist.dto.request.TodoReq.TodoPost;
 import com.serverstudy.todolist.dto.response.TodoRes;
 import com.serverstudy.todolist.exception.ErrorResponse;
+import com.serverstudy.todolist.security.SecurityUser;
 import com.serverstudy.todolist.service.TodoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -18,6 +19,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,16 +31,14 @@ import static com.serverstudy.todolist.dto.request.TodoReq.TodoPut;
 @Tag(name = "Todo", description = "Todo API 입니다.")
 @Validated
 @RestController
-@RequestMapping("/api/todo")
+@RequestMapping("/api/todos")
 @CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 public class TodoController implements ExampleData {
 
     private final TodoService todoService;
 
-    @Operation(summary = "투두 생성", description = "새로운 투두를 생성합니다.", parameters = {
-            @Parameter(name = "userId", description = "유저 id", example = "1")
-    }, responses = {
+    @Operation(summary = "투두 생성", description = "새로운 투두를 생성합니다.", responses = {
             @ApiResponse(responseCode = "201", description = "투두 생성 성공", useReturnTypeSchema = true),
             @ApiResponse(responseCode = "400", description = "잘못된 파라미터 입력", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = {
                     @ExampleObject(name = "INVALID_PARAMETER", value = INVALID_PARAMETER_DATA),
@@ -49,26 +49,24 @@ public class TodoController implements ExampleData {
             }))
     })
     @PostMapping
-    public ResponseEntity<Long> postTodo(@Valid @RequestBody TodoPost todoPost, @NotNull Long userId) {
+    public ResponseEntity<Long> postTodo(@Valid @RequestBody TodoPost todoPost, @AuthenticationPrincipal SecurityUser user) {
 
-        Long todoId = todoService.create(todoPost, userId);
+        Long todoId = todoService.create(todoPost, user.getId());
 
 
         return ResponseEntity.status(HttpStatus.CREATED).body(todoId);
     }
 
-    @Operation(summary = "투두 목록 조회", description = "조건에 맞는 투두 목록을 가져옵니다.", parameters = {
-            @Parameter(name = "userId", description = "유저 id", example = "1")
-    }, responses = {
+    @Operation(summary = "투두 목록 조회", description = "조건에 맞는 투두 목록을 가져옵니다.", responses = {
             @ApiResponse(responseCode = "200", description = "투두 목록 조회 성공", useReturnTypeSchema = true),
             @ApiResponse(responseCode = "400", description = "잘못된 파라미터 입력", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = {
                     @ExampleObject(name = "INVALID_PARAMETER", value = INVALID_PARAMETER_DATA),
             }))
     })
     @GetMapping
-    public ResponseEntity<List<TodoRes>> getTodosByRequirements(@Valid @ModelAttribute TodoGet todoGet, @NotNull Long userId) {
+    public ResponseEntity<List<TodoRes>> getTodosByRequirements(@Valid @ModelAttribute TodoGet todoGet, @AuthenticationPrincipal SecurityUser user) {
 
-        List<TodoRes> responseList = todoService.findAllByConditions(todoGet, userId);
+        List<TodoRes> responseList = todoService.findAllByConditions(todoGet, user.getId());
 
         return ResponseEntity.ok(responseList);
     }

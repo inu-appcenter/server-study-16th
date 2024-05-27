@@ -69,4 +69,16 @@ public interface ExampleData {
             }
             """;
 
+    String BAD_CREDENTIALS_DATA = """
+            {
+              "timestamp": "2024-05-27T21:48:53.1796943",
+              "status": 401,
+              "error": "UNAUTHORIZED",
+              "code": "BAD_CREDENTIALS",
+              "message": [
+                "이메일 또는 비밀번호가 맞지 않습니다."
+              ]
+            }
+            """;
+
 }

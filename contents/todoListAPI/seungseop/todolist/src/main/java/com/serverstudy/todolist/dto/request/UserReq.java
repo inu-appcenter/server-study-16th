@@ -36,13 +36,29 @@ public interface UserReq {
                  message = "닉네임은 특수문자를 제외한 2~10자리여야 합니다.")
         private String nickname;
 
-        public User toEntity() {
+        public User toEntity(String encodedPassword) {
             return User.builder()
                     .email(email)
-                    .password(password)
+                    .password(encodedPassword)
                     .nickname(nickname)
                     .build();
         }
+    }
+
+    @Schema(description = "유저 로그인 요청 DTO")
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    class UserLoginPost {
+
+        @Schema(title = "이메일", description = "이메일 형식에 맞게 입력",
+                example = "example@gmail.com")
+        @NotBlank(message = "이메일은 공백으로 입력할 수 없습니다.")
+        private String email;
+
+        @Schema(title = "비밀번호", description = "영문 대소문자, 숫자가 포함되며 공백이 없는 8~16자로 입력",
+                example = "examplePWD123")
+        @NotBlank(message = "비밀번호는 공백으로 입력할 수 없습니다.")
+        private String password;
     }
 
     @Schema(description = "유저 정보 수정 요청 DTO")
@@ -64,6 +80,4 @@ public interface UserReq {
                  message = "닉네임은 특수문자를 제외한 2~10자리여야 합니다.")
         private String nickname;
     }
-
-
 }

@@ -13,6 +13,7 @@ public enum ErrorCode {
     INVALID_PARAMETER(BAD_REQUEST, "파라미터 값이 유효하지 않습니다."),
 
     /* 401 UNAUTHORIZED : 인증되지 않은 사용자 */
+    BAD_CREDENTIALS(UNAUTHORIZED, "이메일 또는 비밀번호가 맞지 않습니다."),
 
     /* 404 NOT_FOUND : Resource 를 찾을 수 없음 */
     USER_NOT_FOUND(NOT_FOUND, "해당 유저 정보를 찾을 수 없습니다"),

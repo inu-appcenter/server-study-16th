@@ -10,6 +10,7 @@ import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -25,7 +26,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(UserController.class)
+@WebMvcTest(
+        controllers = UserController.class,
+        excludeAutoConfiguration = SecurityAutoConfiguration.class
+)
 class UserControllerTest {
 
     @Autowired

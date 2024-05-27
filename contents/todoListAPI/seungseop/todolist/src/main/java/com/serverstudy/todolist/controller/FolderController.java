@@ -5,6 +5,7 @@ import com.serverstudy.todolist.dto.request.FolderReq.FolderPatch;
 import com.serverstudy.todolist.dto.request.FolderReq.FolderPost;
 import com.serverstudy.todolist.dto.response.FolderRes;
 import com.serverstudy.todolist.exception.ErrorResponse;
+import com.serverstudy.todolist.security.SecurityUser;
 import com.serverstudy.todolist.service.FolderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -18,6 +19,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,16 +28,14 @@ import java.util.List;
 @Tag(name = "Folder", description = "Folder API 입니다.")
 @Validated
 @RestController
-@RequestMapping("/api/folder")
+@RequestMapping("/api/folders")
 @CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 public class FolderController implements ExampleData {
 
     private final FolderService folderService;
 
-    @Operation(summary = "폴더 생성", description = "새로운 폴더를 생성합니다.", parameters = {
-            @Parameter(name = "userId", description = "유저 id", example = "1")
-    }, responses = {
+    @Operation(summary = "폴더 생성", description = "새로운 폴더를 생성합니다.", responses = {
             @ApiResponse(responseCode = "201", description = "폴더 생성 성공", useReturnTypeSchema = true),
             @ApiResponse(responseCode = "400", description = "잘못된 파라미터 입력", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = {
                     @ExampleObject(name = "INVALID_PARAMETER", value = INVALID_PARAMETER_DATA),
@@ -48,25 +48,23 @@ public class FolderController implements ExampleData {
             }))
     })
     @PostMapping
-    public ResponseEntity<Long> postFolder(@Valid @RequestBody FolderPost folderPost, @NotNull Long userId) {  // @RequestParam만 붙여도 null 값 입력 시 예외 발생
+    public ResponseEntity<Long> postFolder(@Valid @RequestBody FolderPost folderPost, @AuthenticationPrincipal SecurityUser user) {  // @RequestParam만 붙여도 null 값 입력 시 예외 발생
 
-        Long folderId = folderService.create(folderPost, userId);
+        Long folderId = folderService.create(folderPost, user.getId());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(folderId);
     }
 
-    @Operation(summary = "폴더 목록 조회", description = "폴더 목록을 가져옵니다.", parameters = {
-            @Parameter(name = "userId", description = "유저 id", example = "1")
-    }, responses = {
+    @Operation(summary = "폴더 목록 조회", description = "폴더 목록을 가져옵니다.", responses = {
             @ApiResponse(responseCode = "200", description = "폴더 목록 조회 성공", useReturnTypeSchema = true),
             @ApiResponse(responseCode = "400", description = "잘못된 파라미터 입력", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = {
                     @ExampleObject(name = "INVALID_PARAMETER", value = INVALID_PARAMETER_DATA),
             }))
     })
     @GetMapping
-    public ResponseEntity<List<FolderRes>> getFoldersByUser(@NotNull Long userId) {
+    public ResponseEntity<List<FolderRes>> getFoldersByUser(@AuthenticationPrincipal SecurityUser user) {
 
-        List<FolderRes> responseList = folderService.getAllWithTodoCount(userId);
+        List<FolderRes> responseList = folderService.getAllWithTodoCount(user.getId());
 
         return ResponseEntity.ok(responseList);
     }
