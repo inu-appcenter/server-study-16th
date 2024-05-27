@@ -91,13 +91,13 @@ public class MemberService {
     }
 
     // 회원 조회 메서드
-    private Member throwFindbyId(Long id){
+    public Member throwFindbyId(Long id){
         return memberRepository.findById(id)
                 .orElseThrow(() ->  new BaseException(ErrorCode.NOT_EXIST_ID));
     }
 
     // 회원 조회 - 로그인 아이디 조회 메서드
-    private Member throwFindbyLoginId(String loginId){
+    public Member throwFindbyLoginId(String loginId){
         return  memberRepository.findByLoginId(loginId)
                 .orElseThrow(()-> new BaseException(ErrorCode.NOT_EXIST_ID));
     }

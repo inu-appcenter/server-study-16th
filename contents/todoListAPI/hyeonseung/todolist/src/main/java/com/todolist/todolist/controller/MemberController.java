@@ -1,15 +1,20 @@
 package com.todolist.todolist.controller;
 
 
+import com.todolist.todolist.config.JwtTokenFilter;
 import com.todolist.todolist.dto.member.MemberLoginResponseDto;
 import com.todolist.todolist.dto.member.MemberResponseDto;
 import com.todolist.todolist.dto.member.MemberRequestDto;
+import com.todolist.todolist.security.CustomUserDetailService;
+import com.todolist.todolist.security.JwtTokenProvider;
 import com.todolist.todolist.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +24,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
+
+    @Value("${jwt.secret")
+    private String key;
+
+    private final JwtTokenProvider jwtTokenProvider;
+
+    private CustomUserDetailService userDetailService;
 
     @Operation(summary = "회원가입")
     @PostMapping
@@ -30,9 +42,13 @@ public class MemberController {
 
     @Operation(summary = "로그인")
     @PostMapping("/login")
-    public ResponseEntity<MemberLoginResponseDto> loginMember(@RequestBody @Valid MemberRequestDto.LoginRequestDto request){
+    public String loginMember(@RequestBody @Valid MemberRequestDto.LoginRequestDto request){
         MemberLoginResponseDto responseDto = memberService.login(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
+
+        String jwtToken = jwtTokenProvider.createToken(request.getLoginId());
+
+        return jwtToken;
+       // return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
     @Operation(summary = "회원정보 수정")
     @PutMapping("/{memberId}")
@@ -64,6 +80,5 @@ public class MemberController {
         memberService.delete(memberId);
         return ResponseEntity.noContent().build();
     }
-
 
 }

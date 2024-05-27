@@ -28,12 +28,16 @@ public class Member extends BaseEntity{
     // 1:N ] N쪽이 FK가진 연관관계의 주인
     private List<Todo> todoList = new ArrayList<>();
 
+    @Enumerated(EnumType.STRING)
+    private Role role = Role.USER;
+
     @Builder
-    private Member(String name, String loginId, String password, List<Todo> todoList){
+    private Member(String name, String loginId, String password, List<Todo> todoList, Role role){
         this.name = name;
         this.loginId = loginId;
         this.password = password;
         this.todoList = todoList;
+        this.role = role;
     }
 
     public void updateLoginId(String loginId){
