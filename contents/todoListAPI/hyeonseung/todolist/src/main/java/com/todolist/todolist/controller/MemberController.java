@@ -42,12 +42,12 @@ public class MemberController {
 
     @Operation(summary = "로그인")
     @PostMapping("/login")
-    public String loginMember(@RequestBody @Valid MemberRequestDto.LoginRequestDto request){
+    public ResponseEntity<String> loginMember(@RequestBody @Valid MemberRequestDto.LoginRequestDto request){
         MemberLoginResponseDto responseDto = memberService.login(request);
 
         String jwtToken = jwtTokenProvider.createToken(request.getLoginId());
 
-        return jwtToken;
+        return ResponseEntity.status(HttpStatus.OK).body(jwtToken);
        // return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
     @Operation(summary = "회원정보 수정")
