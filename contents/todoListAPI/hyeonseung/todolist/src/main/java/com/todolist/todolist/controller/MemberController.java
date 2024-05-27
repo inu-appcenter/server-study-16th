@@ -12,8 +12,14 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,12 +31,11 @@ import java.util.List;
 public class MemberController {
     private final MemberService memberService;
 
-    @Value("${jwt.secret")
-    private String key;
-
     private final JwtTokenProvider jwtTokenProvider;
 
-    private CustomUserDetailService userDetailService;
+    private final CustomUserDetailService userDetailService;
+
+    private final AuthenticationManagerBuilder authenticationManager;
 
     @Operation(summary = "회원가입")
     @PostMapping
@@ -42,13 +47,20 @@ public class MemberController {
 
     @Operation(summary = "로그인")
     @PostMapping("/login")
-    public ResponseEntity<String> loginMember(@RequestBody @Valid MemberRequestDto.LoginRequestDto request){
-        MemberLoginResponseDto responseDto = memberService.login(request);
+    public ResponseEntity<String> loginMember(@RequestBody @Valid MemberRequestDto.LoginRequestDto request) {
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(request.getLoginId(), request.getPassword());
+        Authentication authentication = authenticationManager.getObject().authenticate(authenticationToken);
 
-        String jwtToken = jwtTokenProvider.createToken(request.getLoginId());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        return ResponseEntity.status(HttpStatus.OK).body(jwtToken);
-       // return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
+        String token = jwtTokenProvider.createToken(authentication);
+
+        // 헤더에 담아 리턴
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(JwtTokenFilter.AUTHORIZATION_HEADER, "Bearer " + token);
+
+        return ResponseEntity.status(HttpStatus.OK).headers(httpHeaders).body(token);
     }
     @Operation(summary = "회원정보 수정")
     @PutMapping("/{memberId}")

@@ -1,7 +1,7 @@
 package com.todolist.todolist.config;
 
 import com.todolist.todolist.security.JwtTokenProvider;
-import com.todolist.todolist.service.MemberService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,10 +13,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig  {
 
-    @Autowired
-    private JwtTokenFilter jwtTokenFilter;
+
+   private final JwtTokenProvider jwtTokenProvider;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -33,7 +34,7 @@ public class SecurityConfig  {
                                 .requestMatchers("/","/swagger-ui/**","/v3/api-docs/**").permitAll()
                                 .requestMatchers("/api/members","api/members/login").permitAll()
                                 .anyRequest().authenticated())
-                .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtTokenFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
 
     return http.build();
     }
