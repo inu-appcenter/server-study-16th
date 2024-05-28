@@ -1,7 +1,7 @@
 package com.appcenter.practice.controller;
 
 import com.appcenter.practice.common.StatusCode;
-import com.appcenter.practice.dto.reqeust.member.SignupMemberReq;
+import com.appcenter.practice.dto.request.member.SignupMemberReq;
 import com.appcenter.practice.service.MemberService;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.DisplayName;

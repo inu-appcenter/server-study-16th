@@ -1,8 +1,8 @@
 package com.appcenter.practice.controller;
 
 
-import com.appcenter.practice.dto.reqeust.todo.AddTodoReq;
-import com.appcenter.practice.dto.reqeust.todo.UpdateTodoReq;
+import com.appcenter.practice.dto.request.todo.AddTodoReq;
+import com.appcenter.practice.dto.request.todo.UpdateTodoReq;
 import com.appcenter.practice.dto.response.CommonResponse;
 import com.appcenter.practice.dto.response.todo.ReadTodoRes;
 import com.appcenter.practice.service.TodoService;

@@ -32,7 +32,7 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         //json으로 보낼 body에 해당하는 포맷을 설정함.
-        //response.getWriter().write(...)는 내부적으로 flush()가 발생해서 따로 호출할 필요 없음.
+        //response.getWriter().write(...)는 내부적으로 flush()가 발생해서 flsuh()을 따로 호출할 필요 없음.
         response.getWriter().write(String.format("{\"message\": \"%s\"}", ex.getStatusCode().getMessage()));
     }
 }

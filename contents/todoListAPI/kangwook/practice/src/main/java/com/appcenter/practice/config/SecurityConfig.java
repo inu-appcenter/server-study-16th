@@ -16,11 +16,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
-import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity //spring security의 웹보안을 활성화한다.
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final JwtTokenProvider jwtTokenProvider;
@@ -39,15 +37,13 @@ public class SecurityConfig {
 
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, HandlerMappingIntrospector introspector) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
                 .authorizeHttpRequests(authorizeRequest -> authorizeRequest
-                        .requestMatchers(new MvcRequestMatcher(introspector, "/members/**")).permitAll()
-                        .requestMatchers(new MvcRequestMatcher(introspector, "/swagger-ui/**")).permitAll()
-                        .requestMatchers(new MvcRequestMatcher(introspector, "/v3/api-docs/**")).permitAll()
+                        .requestMatchers("/members/**","/swagger-ui/**","/v3/api-docs/**").permitAll()
                         //스프링 시큐리티는 자동으로 Role_접두어를 붙여준다.
-                        .requestMatchers(new MvcRequestMatcher(introspector, "/**")).hasRole("USER")
+                        .requestMatchers("/**").hasRole("USER")
                         .anyRequest().authenticated())
                 .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)

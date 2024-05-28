@@ -1,4 +1,4 @@
-package com.appcenter.practice.dto.reqeust.comment;
+package com.appcenter.practice.dto.request.comment;
 
 
 import jakarta.validation.constraints.NotBlank;

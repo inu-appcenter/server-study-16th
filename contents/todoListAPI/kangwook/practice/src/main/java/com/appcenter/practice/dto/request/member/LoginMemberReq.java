@@ -1,4 +1,4 @@
-package com.appcenter.practice.dto.reqeust.member;
+package com.appcenter.practice.dto.request.member;
 
 import com.appcenter.practice.domain.Member;
 import jakarta.validation.constraints.Email;

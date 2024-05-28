@@ -1,7 +1,7 @@
 package com.appcenter.practice.controller;
 
-import com.appcenter.practice.dto.reqeust.member.LoginMemberReq;
-import com.appcenter.practice.dto.reqeust.member.SignupMemberReq;
+import com.appcenter.practice.dto.request.member.LoginMemberReq;
+import com.appcenter.practice.dto.request.member.SignupMemberReq;
 import com.appcenter.practice.dto.response.CommonResponse;
 import com.appcenter.practice.service.MemberService;
 import jakarta.validation.Valid;

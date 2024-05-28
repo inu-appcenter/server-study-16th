@@ -2,7 +2,7 @@ package com.appcenter.practice.service;
 
 import com.appcenter.practice.common.StatusCode;
 import com.appcenter.practice.domain.Member;
-import com.appcenter.practice.dto.reqeust.member.SignupMemberReq;
+import com.appcenter.practice.dto.request.member.SignupMemberReq;
 import com.appcenter.practice.exception.CustomException;
 import com.appcenter.practice.repository.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,7 +11,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -23,6 +25,9 @@ import static org.mockito.BDDMockito.given;
 class MemberServiceTest {
     @Mock
     private MemberRepository memberRepository;
+
+    @Spy
+    private PasswordEncoder passwordEncoder;
 
     @InjectMocks// mock 객체들의 의존성을 자동으로 주입해준다.
     private MemberService memberService;
@@ -44,7 +49,7 @@ class MemberServiceTest {
     @DisplayName("회원가입 성공")
     void signupTest1() {
         // Given(사전 조건 설정)
-        Member member=signupMemberReq.toEntity();
+        Member member=signupMemberReq.toEntity(passwordEncoder);
         given(memberRepository.save(any(Member.class))).willReturn(member);
 
         // When(테스트 실행)

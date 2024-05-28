@@ -1,4 +1,4 @@
-package com.appcenter.practice.dto.reqeust.todo;
+package com.appcenter.practice.dto.request.todo;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;

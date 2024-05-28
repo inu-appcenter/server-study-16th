@@ -26,15 +26,6 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtTokenProvider jwtTokenProvider;
 
-//    // url이 포함된 경로에 대해서는 JWT 필터를 적용하지 않고 무시
-//    @Override
-//    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-//
-//        String[] excludePath = {"/member","/swagger-ui"};
-//        String path = request.getRequestURI();
-//        return Arrays.stream(excludePath).anyMatch(path::startsWith);
-//    }
-
 
     @Override
     //OncePerRequestFilter을 상속받으면 doFilterInternal을 써야한다.

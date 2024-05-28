@@ -80,7 +80,6 @@ public class JwtTokenProvider {
        토큰의 조작여부와 유효여부를 판단하는 메소드.
        claims.getBody().getExpiration().before(new Date())를 통해 유효여부를 판단한다.
        Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token)를 통해 조작여부를 판단한다.
-       만약 조작이 의심되면 예외를 던진다.
     */
     public boolean validateToken(String token) {
         try {

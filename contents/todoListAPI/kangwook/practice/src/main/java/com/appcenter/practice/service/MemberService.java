@@ -2,8 +2,8 @@ package com.appcenter.practice.service;
 
 
 import com.appcenter.practice.domain.Member;
-import com.appcenter.practice.dto.reqeust.member.LoginMemberReq;
-import com.appcenter.practice.dto.reqeust.member.SignupMemberReq;
+import com.appcenter.practice.dto.request.member.LoginMemberReq;
+import com.appcenter.practice.dto.request.member.SignupMemberReq;
 import com.appcenter.practice.exception.CustomException;
 import com.appcenter.practice.common.StatusCode;
 import com.appcenter.practice.repository.MemberRepository;
@@ -25,9 +25,7 @@ public class MemberService {
     public Long signup(SignupMemberReq reqDto){
         if(memberRepository.existsByEmail(reqDto.getEmail()))
             throw new CustomException(StatusCode.EMAIL_DUPLICATED);
-        Member member=reqDto.toEntity();
-        member.passwordEncode(passwordEncoder);
-        member.addUserAuthority();
+        Member member=reqDto.toEntity(passwordEncoder);
         return memberRepository.save(member).getId();
     }
 

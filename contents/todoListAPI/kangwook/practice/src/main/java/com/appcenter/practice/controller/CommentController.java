@@ -1,8 +1,8 @@
 package com.appcenter.practice.controller;
 
 
-import com.appcenter.practice.dto.reqeust.comment.AddCommentReq;
-import com.appcenter.practice.dto.reqeust.comment.UpdateCommentReq;
+import com.appcenter.practice.dto.request.comment.AddCommentReq;
+import com.appcenter.practice.dto.request.comment.UpdateCommentReq;
 import com.appcenter.practice.dto.response.CommonResponse;
 import com.appcenter.practice.dto.response.comment.ReadCommentRes;
 import com.appcenter.practice.service.CommentService;

@@ -1,13 +1,15 @@
-package com.appcenter.practice.dto.reqeust.member;
+package com.appcenter.practice.dto.request.member;
 
 
 import com.appcenter.practice.domain.Member;
+import com.appcenter.practice.domain.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Getter
 @NoArgsConstructor
@@ -33,11 +35,12 @@ public class SignupMemberReq {
         this.nickname = nickname;
     }
 
-    public Member toEntity(){
+    public Member toEntity(PasswordEncoder passwordEncoder){
         return Member.builder()
                 .email(email)
-                .password(password)
+                .password(passwordEncoder.encode(password))
                 .nickname(nickname)
+                .role(Role.ROLE_USER)
                 .build();
     }
 }

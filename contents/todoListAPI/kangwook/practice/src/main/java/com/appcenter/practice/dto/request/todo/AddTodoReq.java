@@ -1,4 +1,4 @@
-package com.appcenter.practice.dto.reqeust.todo;
+package com.appcenter.practice.dto.request.todo;
 
 import com.appcenter.practice.domain.Member;
 import com.appcenter.practice.domain.Todo;

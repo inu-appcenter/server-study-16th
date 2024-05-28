@@ -3,8 +3,8 @@ package com.appcenter.practice.service;
 
 import com.appcenter.practice.domain.Comment;
 import com.appcenter.practice.domain.Todo;
-import com.appcenter.practice.dto.reqeust.comment.AddCommentReq;
-import com.appcenter.practice.dto.reqeust.comment.UpdateCommentReq;
+import com.appcenter.practice.dto.request.comment.AddCommentReq;
+import com.appcenter.practice.dto.request.comment.UpdateCommentReq;
 import com.appcenter.practice.dto.response.comment.ReadCommentRes;
 import com.appcenter.practice.exception.CustomException;
 import com.appcenter.practice.common.StatusCode;
